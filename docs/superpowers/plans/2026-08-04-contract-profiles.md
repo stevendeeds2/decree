@@ -21,4 +21,4 @@
 
 - [x] Set MUI trial contract to `profile: "app"`
 - [x] Update TRIALS.md / AGENTS.md
-- [ ] Push PR
+- [x] Push PR (#7)
