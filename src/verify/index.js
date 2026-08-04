@@ -72,13 +72,26 @@ export function verifyPath(targetPath) {
   const srcRoot = existsSync(join(targetPath, 'src'))
     ? join(targetPath, 'src')
     : targetPath;
-  const files = walk(srcRoot);
+  const excludePrefixes = Array.isArray(
+    /** @type {{ scan?: { excludePrefixes?: string[] } }} */ (contract).scan
+      ?.excludePrefixes,
+  )
+    ? /** @type {{ scan: { excludePrefixes: string[] } }} */ (contract).scan
+        .excludePrefixes
+    : [];
+  const files = walk(srcRoot).filter((file) => {
+    const rel = relative(targetPath, file).replace(/\\/g, '/');
+    return !excludePrefixes.some((p) => {
+      const prefix = p.endsWith('/') ? p.slice(0, -1) : p;
+      return rel === prefix || rel.startsWith(`${prefix}/`);
+    });
+  });
   /** @type {import('./scan.js').Finding[]} */
   const findings = [];
 
   for (const file of files) {
+    const rel = relative(targetPath, file).replace(/\\/g, '/');
     const source = readFileSync(file, 'utf8');
-    const rel = relative(targetPath, file);
     findings.push(...scanSource(source, rel, contract));
   }
 

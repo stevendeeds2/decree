@@ -17,6 +17,23 @@ const FRAMEWORK_COMPONENTS = new Set([
   'Provider',
   'Consumer',
   'Activity',
+  // Common app-framework hosts (not design-system primitives)
+  'Image',
+  'Link',
+  'Script',
+  'Head',
+  'Html',
+  'Main',
+  'NextScript',
+  'ThemeProvider',
+  'SessionProvider',
+  'QueryClientProvider',
+  'ReactQueryDevtools',
+  'AppRouterCacheProvider',
+  'CacheProvider',
+  'CssBaseline',
+  'GlobalStyles',
+  'StyledEngineProvider',
 ]);
 
 /**

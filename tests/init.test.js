@@ -168,4 +168,23 @@ describe('decree init', () => {
       rmSync(dir, { recursive: true, force: true });
     }
   });
+
+  it('discovers shadcn-style components under a ui/ directory', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'decree-init-shadcn-ui-'));
+    try {
+      mkdirSync(join(dir, 'ui'), { recursive: true });
+      writeFileSync(
+        join(dir, 'package.json'),
+        JSON.stringify({ name: 'shadcn-ui-local', version: '0.0.0', type: 'module' }),
+      );
+      writeFileSync(
+        join(dir, 'ui', 'button.tsx'),
+        'export function Button() { return null }\n',
+      );
+      const contract = buildContractFromPackage(dir);
+      assert.ok(contract.components.includes('Button'), JSON.stringify(contract));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
 });
