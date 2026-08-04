@@ -53,7 +53,7 @@ Generated: 2026-08-04 (re-run locally via `npm run trials`)
 ```bash
 # Apps are vendored under examples/trials/ (sources only; node_modules gitignored)
 npm run trials
-# → examples/trials/_reports/ + docs/TRIALS.md
+# → examples/trials/_reports/ (summary.json + machine TRIALS.md)
 ```
 
-See `examples/trials/README.md`.
+This file (`docs/TRIALS.md`) is the curated narrative; the runner does not overwrite it. See `examples/trials/README.md`.

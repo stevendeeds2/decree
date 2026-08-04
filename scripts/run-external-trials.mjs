@@ -9,7 +9,6 @@ import {
   mkdirSync,
   writeFileSync,
   readFileSync,
-  cpSync,
 } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -258,9 +257,8 @@ md.push(
 md.push('');
 
 writeFileSync(join(reportsDir, 'TRIALS.md'), `${md.join('\n')}\n`);
-// Also publish to docs/
-cpSync(join(reportsDir, 'TRIALS.md'), join(root, 'docs/TRIALS.md'));
+// Machine report only — curated narrative lives in docs/TRIALS.md (do not clobber).
 
 console.log('\nWrote', join(reportsDir, 'summary.json'));
 console.log('Wrote', join(reportsDir, 'TRIALS.md'));
-console.log('Wrote', join(root, 'docs/TRIALS.md'));
+console.log('Curated narrative: docs/TRIALS.md (edit by hand; not overwritten)');

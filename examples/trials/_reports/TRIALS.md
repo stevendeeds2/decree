@@ -1,6 +1,6 @@
 # External trials report
 
-Generated: 2026-08-04T15:25:03.263Z
+Generated: 2026-08-04T15:28:55.427Z
 
 Public third-party apps only. No personal production apps.
 
@@ -58,29 +58,28 @@ Public third-party apps only. No personal production apps.
 - **Title:** next-shadcn-dashboard-starter (Kiranism)
 - **Install:** skipped
 - **Contract:** 387 components, 0 tokens
-- **Verify:** FAIL — 1151 finding(s) across 294 files
+- **Verify:** FAIL — 449 finding(s) across 205 files
 - **Codes:**
-  - `DECREE_UNKNOWN_COMPONENT`: 743
-  - `DECREE_HARDCODED_COLOR`: 253
-  - `DECREE_ARBITRARY_VALUE`: 114
-  - `DECREE_HARDCODED_HEX`: 23
-  - `DECREE_NATIVE_ELEMENT`: 18
+  - `DECREE_UNKNOWN_COMPONENT`: 364
+  - `DECREE_ARBITRARY_VALUE`: 68
+  - `DECREE_NATIVE_ELEMENT`: 10
+  - `DECREE_HARDCODED_HEX`: 7
 - **Top files:**
-  - `src/styles/themes/astro-vista.css`: 28
-  - `src/styles/themes/light-green.css`: 28
-  - `src/styles/themes/mono.css`: 28
-  - `src/styles/themes/notebook.css`: 28
-  - `src/styles/themes/supabase.css`: 28
-  - `src/styles/themes/vercel.css`: 28
-  - `src/styles/themes/whatsapp.css`: 28
-  - `src/styles/themes/zen.css`: 28
-  - `src/styles/themes/claude.css`: 26
-  - `src/components/ui/combobox.tsx`: 25
-  - `src/components/ui/kanban.tsx`: 25
-  - `src/components/ui/dropdown-menu.tsx`: 21
-  - `src/components/ui/context-menu.tsx`: 20
-  - `src/components/ui/select.tsx`: 19
-  - `src/components/ui/toast.tsx`: 18
+  - `src/hooks/use-data-table.ts`: 18
+  - `src/features/overview/components/overview.tsx`: 17
+  - `src/app/dashboard/overview/layout.tsx`: 13
+  - `src/components/forms/demo-form.tsx`: 12
+  - `src/components/layout/app-sidebar.tsx`: 12
+  - `src/features/chat/components/message-composer.tsx`: 11
+  - `src/features/forms/components/sheet-form-demo.tsx`: 10
+  - `src/lib/compose-refs.ts`: 10
+  - `src/components/kbar/index.tsx`: 9
+  - `src/features/overview/components/bar-graph.tsx`: 9
+  - `src/hooks/use-controllable-state.tsx`: 9
+  - `src/components/org-switcher.tsx`: 8
+  - `src/features/chat/components/chat-area.tsx`: 8
+  - `src/features/chat/components/conversation-list.tsx`: 8
+  - `src/features/chat/components/conversation-select.tsx`: 8
 - Sample components from init: Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertAction, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger, AlertTitle
 
 ## Interpretation notes
