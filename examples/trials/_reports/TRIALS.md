@@ -1,6 +1,6 @@
 # External trials report
 
-Generated: 2026-08-04T15:28:55.427Z
+Generated: 2026-08-04T22:55:37.464Z
 
 Public third-party apps only. No personal production apps.
 
@@ -10,16 +10,10 @@ Public third-party apps only. No personal production apps.
 - **Title:** Official MUI Next.js TypeScript example
 - **Install:** ok
 - **Contract:** 219 components, 0 tokens
-- **Verify:** FAIL — 9 finding(s) across 8 files
+- **Verify:** FAIL — 1 finding(s) across 8 files
 - **Codes:**
-  - `DECREE_UNKNOWN_COMPONENT`: 8
   - `DECREE_HARDCODED_HEX`: 1
 - **Top files:**
-  - `src/app/page.tsx`: 3
-  - `src/app/about/page.tsx`: 2
-  - `src/app/layout.tsx`: 1
-  - `src/components/Copyright.tsx`: 1
-  - `src/components/ProTip.tsx`: 1
   - `src/theme.ts`: 1
 - Sample components from init: Accordion, AccordionActions, AccordionContext, AccordionDetails, AccordionSummary, Add, Alert, AlertTitle, AppBar, ArrowDownward, ArrowDropDown, Autocomplete, Avatar, AvatarGroup, Backdrop, Badge, BasePopper, BottomNavigation, BottomNavigationAction, Box
 
@@ -29,27 +23,27 @@ Public third-party apps only. No personal production apps.
 - **Title:** Radix Themes official playground (apps/playground)
 - **Install:** ok
 - **Contract:** 90 components, 1484 tokens
-- **Verify:** FAIL — 638 finding(s) across 103 files
+- **Verify:** FAIL — 621 finding(s) across 103 files
 - **Codes:**
-  - `DECREE_UNKNOWN_COMPONENT`: 563
+  - `DECREE_UNKNOWN_COMPONENT`: 546
   - `DECREE_NATIVE_ELEMENT`: 64
   - `DECREE_HARDCODED_COLOR`: 11
 - **Top files:**
   - `app/(themeable)/test/textfield/page.tsx`: 83
   - `app/(themeable)/sink/page.tsx`: 61
   - `app/(themeable)/test/reset/page.tsx`: 39
-  - `app/(themeable)/test/as-child/page.tsx`: 20
   - `app/(themeable)/test/grid-align-content/page.tsx`: 18
   - `app/(themeable)/test/appearance/page.tsx`: 16
   - `app/(themeable)/ghost-balance/page.tsx`: 14
   - `app/(themeable)/sink/select/page.tsx`: 14
   - `app/(themeable)/sink/skeleton/page.tsx`: 14
   - `app/(themeable)/sink/callout/page.tsx`: 12
-  - `app/(themeable)/sink/sink-layout.navigation.tsx`: 12
   - `app/(themeable)/test/grid-justify-items/page.tsx`: 12
   - `app/(themeable)/sink/button/page.tsx`: 11
   - `app/(themeable)/sink/dropdown-menu/page.tsx`: 11
   - `app/(themeable)/sink/icon-button/page.tsx`: 11
+  - `app/(themeable)/test/as-child/page.tsx`: 11
+  - `app/(themeable)/sink/sink-layout.navigation.tsx`: 10
 - Sample components from init: AccessibleIcon, Action, AlertDialog, Anchor, AspectRatio, Avatar, Badge, BaseButton, Blockquote, Body, Box, Button, Callout, Cancel, Card, Cell, Checkbox, CheckboxCards, CheckboxGroup, CheckboxItem
 
 ## shadcn-dashboard-starter
@@ -58,9 +52,9 @@ Public third-party apps only. No personal production apps.
 - **Title:** next-shadcn-dashboard-starter (Kiranism)
 - **Install:** skipped
 - **Contract:** 387 components, 0 tokens
-- **Verify:** FAIL — 449 finding(s) across 205 files
+- **Verify:** FAIL — 452 finding(s) across 205 files
 - **Codes:**
-  - `DECREE_UNKNOWN_COMPONENT`: 364
+  - `DECREE_UNKNOWN_COMPONENT`: 367
   - `DECREE_ARBITRARY_VALUE`: 68
   - `DECREE_NATIVE_ELEMENT`: 10
   - `DECREE_HARDCODED_HEX`: 7

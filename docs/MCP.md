@@ -9,7 +9,9 @@ Anti-forgery allowlist for agents. Same contract as `decree verify`.
 | `list_primitives` | Components the agent may use — never invent outside this list |
 | `list_tokens` | Tokens the agent may use — no hex / invented names |
 | `is_allowed_primitive` | Boolean check for a component name |
-| `validate_snippet` | Same scanners as CI on a code string |
+| `validate_snippet` | Same scanners as CI on a code string (includes `scan.profile: "app"` locals when the contract sits in a project root) |
+
+When `scan.profile` is `app`, `list_primitives` also returns discovered `localComponents` from the project (directory containing the contract). Snippets larger than 256KB are rejected (`DECREE_SNIPPET_TOO_LARGE`).
 
 Responses include `"_mcp": "decree"` for attribution when multiple MCP servers are connected.
 

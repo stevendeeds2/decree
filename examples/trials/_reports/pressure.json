@@ -1,0 +1,123 @@
+{
+  "generated": "2026-08-04T22:55:36.199Z",
+  "unitTests": {
+    "status": 0,
+    "ok": true
+  },
+  "fixtures": [
+    {
+      "id": "shadcn-clean",
+      "expectOk": true,
+      "ok": true,
+      "findings": 0,
+      "codes": {},
+      "pass": true
+    },
+    {
+      "id": "shadcn-dirty",
+      "expectOk": false,
+      "ok": false,
+      "findings": 6,
+      "codes": {
+        "DECREE_HARDCODED_HEX": 2,
+        "DECREE_ARBITRARY_VALUE": 2,
+        "DECREE_NATIVE_ELEMENT": 2
+      },
+      "pass": true
+    },
+    {
+      "id": "mui-clean",
+      "expectOk": true,
+      "ok": true,
+      "findings": 0,
+      "codes": {},
+      "pass": true
+    },
+    {
+      "id": "mui-dirty",
+      "expectOk": false,
+      "ok": false,
+      "findings": 8,
+      "codes": {
+        "DECREE_HARDCODED_HEX": 6,
+        "DECREE_NATIVE_ELEMENT": 2
+      },
+      "pass": true
+    },
+    {
+      "id": "radix-themes-clean",
+      "expectOk": true,
+      "ok": true,
+      "findings": 0,
+      "codes": {},
+      "pass": true
+    },
+    {
+      "id": "radix-themes-dirty",
+      "expectOk": false,
+      "ok": false,
+      "findings": 8,
+      "codes": {
+        "DECREE_HARDCODED_HEX": 6,
+        "DECREE_NATIVE_ELEMENT": 2
+      },
+      "pass": true
+    },
+    {
+      "id": "pressure-adversarial",
+      "expectOk": false,
+      "ok": false,
+      "findings": 7,
+      "codes": {
+        "DECREE_UNKNOWN_COMPONENT": 3,
+        "DECREE_NATIVE_ELEMENT": 1,
+        "DECREE_HARDCODED_HEX": 1,
+        "DECREE_HARDCODED_COLOR": 1,
+        "DECREE_ARBITRARY_VALUE": 1
+      },
+      "pass": true
+    }
+  ],
+  "trials": {
+    "status": 0,
+    "ok": true
+  },
+  "gate": {
+    "ok": true,
+    "failures": []
+  },
+  "trialSummary": [
+    {
+      "id": "mui-nextjs-ts",
+      "verifyOk": false,
+      "total": 1,
+      "byCode": {
+        "DECREE_HARDCODED_HEX": 1
+      },
+      "error": null
+    },
+    {
+      "id": "radix-themes-playground",
+      "verifyOk": false,
+      "total": 621,
+      "byCode": {
+        "DECREE_UNKNOWN_COMPONENT": 546,
+        "DECREE_NATIVE_ELEMENT": 64,
+        "DECREE_HARDCODED_COLOR": 11
+      },
+      "error": null
+    },
+    {
+      "id": "shadcn-dashboard-starter",
+      "verifyOk": false,
+      "total": 452,
+      "byCode": {
+        "DECREE_UNKNOWN_COMPONENT": 367,
+        "DECREE_ARBITRARY_VALUE": 68,
+        "DECREE_HARDCODED_HEX": 7,
+        "DECREE_NATIVE_ELEMENT": 10
+      },
+      "error": null
+    }
+  ]
+}

@@ -29,9 +29,10 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 - **Done:** contract profiles (`scan.profile` strict | app + local component discovery)  
 - **Done:** default exclude prefixes (`ui/` + theme dumps) + prefix path safety  
 - **Done:** harden React-runtime-only tags + host-package imports; init path containment  
-- **Next:** MCP ↔ verify parity for `profile: "app"`; packaging  
+- **Done:** MCP ↔ verify parity for `profile: "app"` + pressure gate (`npm run pressure`)  
+- **Next:** packaging / limited outside invite after pressure gate green  
 - **Later:** docs-from-contract / deeper AST scanners  
-- Audit: `docs/AUDIT-2026-08-04.md`
+- Audit: `docs/AUDIT-2026-08-04.md` · Pressure: `docs/PRESSURE.md`
 
 Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`). Get-started path: **init → verify → mcp**.
 
