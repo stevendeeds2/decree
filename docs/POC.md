@@ -1,5 +1,30 @@
 # Decree POC plan
 
+## Decision (locked)
+
+**Slice A — Verify-first (shadcn A/B).**
+
+We prove potency with contracts + CI gates first. We are **not** shrinking the product: MCP allowlists, docs-from-contract, multi-framework fixtures, and SD33DS dogfood stay in the full story — sequenced after the verify wedge is green.
+
+| Slice | Status |
+|-------|--------|
+| A. Contract + `decree verify` + shadcn clean/dirty | **In progress** |
+| B. Decree MCP allowlist (anti-forgery) | Next |
+| C. Demo narrative (dirty PR → fail → fix) | With A |
+| D. Phase 2 frameworks + SD33DS dogfood | After A+B |
+
+## Full product story (do not lose)
+
+Decree’s end state remains:
+
+1. **Contract** — tokens + component manifest + composition / a11y required states + deprecations  
+2. **Verify** — CI fails on invented primitives, fake tokens, hex bypass  
+3. **MCP** — agents may only assemble from the allowlist  
+4. **Docs (later)** — generated from the contract  
+5. **Measurement (later)** — adoption/drift tied to the same gates  
+
+Soft context tools explain. Decree enforces. Slice A is the first proof, not the whole product.
+
 ## Goal
 
 Show that Decree can catch the failure modes that kill design systems when AI writes UI — against **major, real frameworks**, not toy demos.
@@ -9,68 +34,64 @@ Show that Decree can catch the failure modes that kill design systems when AI wr
 shadcn is the default gravity well for AI UI (v0, Cursor, Claude). Proving Decree here is the highest-signal demo.
 
 **Fixture A — clean**  
-Minimal Vite/React app that only uses allowlisted shadcn components + CSS variables from the contract.
+Source that only uses allowlisted shadcn-shaped components + CSS variables from the contract.
 
 **Fixture B — contaminated**  
-Same app with planted violations:
+Same shape with planted violations:
 
-- Hand-rolled `<button className="...">` instead of `Button`
+- Hand-rolled `<button>` instead of `Button`
 - `bg-[#1a1a2e]` / `p-[17px]` arbitrary values
-- Invented `variant="super-primary"`
-- Raw `div` card instead of `Card`
+- Invented / off-contract patterns that scanners flag
 
-**Decree must:** pass A, fail B with stable codes (`DECREE_INVENTED_COMPONENT`, `DECREE_HARDCODED_TOKEN`, etc.).
+**Decree must:** pass A, fail B with stable codes (`DECREE_NATIVE_ELEMENT`, `DECREE_HARDCODED_HEX`, `DECREE_ARBITRARY_VALUE`, etc.).
 
-## Stretch fixtures (phase 2)
+## Stretch fixtures (phase 2 — full story)
 
 | System | Why |
 |--------|-----|
 | **Radix Themes** / raw Radix | Primitives without shadcn cosmetics |
 | **MUI** | Enterprise volume; different prop model |
 | **Chakra / Park UI** | Token + component coupling patterns |
-| **SD33DS (`@stevendeeds/sd33ds`)** | Dogfood — personal/system of record for Steven |
+| **SD33DS (`@stevendeeds/sd33ds`)** | Dogfood — personal system of record |
 
-Phase 2 starts after shadcn A/B is green and documented.
+Phase 2 starts after shadcn A/B is green and MCP allowlist ships.
 
-## POC architecture (minimum)
+## Architecture
 
 ```
-packages/decree-core     contract schema + load/validate
-packages/decree-verify   scanners → exit codes
-packages/decree-mcp      allowlist tools for agents
+src/contract     load + validate decree.contract.json
+src/verify       scanners → findings + exit codes
+src/mcp          (next) allowlist tools for agents
 fixtures/shadcn-clean
 fixtures/shadcn-dirty
 ```
 
-CLI surface (target):
+CLI:
 
 ```bash
-npx @stevendeeds/decree init
-npx @stevendeeds/decree build      # emit contract from sources
-npx @stevendeeds/decree verify    # CI gate
+npx @stevendeeds/decree verify [path]
+npx @stevendeeds/decree help
+# later: init · build · mcp
 ```
 
-## Tests (must exist before claiming potency)
+## Tests (potency gate)
 
 1. **Contract schema unit tests** — valid/invalid manifests  
 2. **Verify golden tests** — clean fixture exit 0; dirty fixture exit ≠ 0 + expected codes  
-3. **MCP tool contract tests** — `list_primitives` ⊆ allowlist; no invented names returned  
+3. **MCP tool contract tests** (slice B) — `list_primitives` ⊆ allowlist  
 4. **Regression** — each new scanner adds a dirty fixture file  
 
-## Demo narrative (for humans)
+## Demo narrative (full story beat)
 
 1. Show dirty PR: looks fine in the browser  
 2. Run `decree verify` → fails with clear codes  
-3. Show agent session: MCP only offers real `Button` / tokens  
+3. Show agent session: MCP only offers real `Button` / tokens *(slice B)*  
 4. Fix → green  
 
-## Out of scope for POC
+## Out of scope for Slice A
 
 - Hosted Cloud SaaS  
 - Figma write-back  
 - Full docs portal  
 - Multi-brand Enterprise RBAC  
-
-## Decision needed
-
-See README / Corvy: choose POC approach A/B/C for first implementation slice.
+- MCP server *(tracked — not abandoned)*  

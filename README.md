@@ -30,7 +30,16 @@ So the design system stops being a hope — and starts being the law.
 
 ## Status
 
-Greenfield. Thesis and POC plan live in `docs/`. Corvy project: **DECREE**.
+Greenfield. **POC slice A (verify-first)** in progress. Full product story preserved in thesis/POC — MCP, docs-from-contract, and multi-framework dogfood are sequenced, not cut.
+
+Corvy project: **DECREE**.
+
+## Roadmap (full story)
+
+1. **Now — Verify** — contract + CI against shadcn clean/dirty fixtures  
+2. **Next — MCP** — agent allowlist (anti-forgery)  
+3. **Then — Dogfood** — SD33DS + a second major framework  
+4. **Later — Docs / measurement** — generated from the same contract  
 
 ## Package name
 

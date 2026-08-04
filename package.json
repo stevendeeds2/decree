@@ -8,7 +8,9 @@
     "decree": "./bin/decree.js"
   },
   "scripts": {
-    "test": "node --test",
+    "test": "node --test tests/**/*.test.js",
+    "verify:clean": "node ./bin/decree.js verify fixtures/shadcn-clean",
+    "verify:dirty": "node ./bin/decree.js verify fixtures/shadcn-dirty",
     "verify": "node ./bin/decree.js verify"
   },
   "engines": {
