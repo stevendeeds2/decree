@@ -27,4 +27,11 @@ describe('decree verify', () => {
     assert.ok(codes.has(CODES.HARDCODED_HEX), 'expected hardcoded hex finding');
     assert.ok(codes.has(CODES.ARBITRARY_VALUE), 'expected arbitrary value finding');
   });
+
+  it('skips *.test.* source files (dogfood: tests are not shipping UI)', () => {
+    const fixture = join(root, 'fixtures/verify-skip-tests');
+    const result = verifyPath(fixture);
+    assert.equal(result.ok, true, JSON.stringify(result.findings, null, 2));
+    assert.equal(result.filesScanned, 1);
+  });
 });
