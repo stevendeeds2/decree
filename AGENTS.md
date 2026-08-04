@@ -28,8 +28,10 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 - **Done:** external trials (MUI / Radix / shadcn) + import-aware allowlisting (same-file package aliases)  
 - **Done:** contract profiles (`scan.profile` strict | app + local component discovery)  
 - **Done:** default exclude prefixes (`ui/` + theme dumps) + prefix path safety  
-- **Next:** harden `FRAMEWORK_COMPONENTS` silent-allow + init path containment (see `docs/AUDIT-2026-08-04.md`)  
-- **Later:** packaging / docs-from-contract / deeper AST scanners  
+- **Done:** harden React-runtime-only tags + host-package imports; init path containment  
+- **Next:** MCP ↔ verify parity for `profile: "app"`; packaging  
+- **Later:** docs-from-contract / deeper AST scanners  
+- Audit: `docs/AUDIT-2026-08-04.md`
 
 Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`). Get-started path: **init → verify → mcp**.
 

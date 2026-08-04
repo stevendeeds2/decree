@@ -1,8 +1,19 @@
 /**
  * Same-file import alias → export/component name (package imports only).
+ * Host package bindings (next/*, @mui/material-nextjs/*) are tracked separately.
  */
 
 const PASCAL = /^[A-Z][A-Za-z0-9]*$/;
+
+/** Specifiers whose imports are app/framework hosts, not DS forgeries. */
+const HOST_PACKAGE_PREFIXES = [
+  'next/',
+  'next',
+  'react-dom/',
+  'react-dom',
+  '@mui/material-nextjs/',
+  '@mui/material-nextjs',
+];
 
 /**
  * True for package-like specifiers we resolve in v1.
@@ -17,6 +28,18 @@ export function isPackageSpecifier(spec) {
   }
   if (spec.startsWith('@/')) return false;
   return true;
+}
+
+/**
+ * @param {string} spec
+ */
+export function isHostPackageSpecifier(spec) {
+  if (!isPackageSpecifier(spec)) return false;
+  return HOST_PACKAGE_PREFIXES.some((p) => {
+    if (spec === p) return true;
+    const prefix = p.endsWith('/') ? p : `${p}/`;
+    return spec.startsWith(prefix);
+  });
 }
 
 /**
@@ -62,8 +85,48 @@ function parseNamedClause(clause, out) {
  * @returns {Map<string, string>} local binding → contract component / export name
  */
 export function collectImportAliases(source) {
+  return collectImportBindings(source).aliases;
+}
+
+/**
+ * @param {string} source
+ * @returns {{ aliases: Map<string, string>, hosts: Set<string> }}
+ */
+export function collectImportBindings(source) {
   /** @type {Map<string, string>} */
-  const out = new Map();
+  const aliases = new Map();
+  /** @type {Set<string>} */
+  const hosts = new Set();
+
+  /**
+   * @param {string} local
+   * @param {string} spec
+   * @param {string | null} exported
+   */
+  function recordDefault(local, spec, exported) {
+    if (isHostPackageSpecifier(spec)) {
+      if (PASCAL.test(local)) hosts.add(local);
+      return;
+    }
+    if (exported && !aliases.has(local)) aliases.set(local, exported);
+  }
+
+  /**
+   * @param {string} clause
+   * @param {string} spec
+   */
+  function recordNamed(clause, spec) {
+    if (isHostPackageSpecifier(spec)) {
+      /** @type {Map<string, string>} */
+      const tmp = new Map();
+      parseNamedClause(clause, tmp);
+      for (const local of tmp.keys()) {
+        if (PASCAL.test(local)) hosts.add(local);
+      }
+      return;
+    }
+    parseNamedClause(clause, aliases);
+  }
 
   // import Default from '…'
   const defaultRe =
@@ -72,8 +135,7 @@ export function collectImportAliases(source) {
     const local = m[1];
     const spec = m[2];
     if (!isPackageSpecifier(spec)) continue;
-    const exported = exportNameFromDefaultPath(spec);
-    if (exported && !out.has(local)) out.set(local, exported);
+    recordDefault(local, spec, exportNameFromDefaultPath(spec));
   }
 
   // import Default, { Named } from '…'
@@ -84,24 +146,21 @@ export function collectImportAliases(source) {
     const clause = m[2];
     const spec = m[3];
     if (!isPackageSpecifier(spec)) continue;
-    const exported = exportNameFromDefaultPath(spec);
-    if (exported && !out.has(local)) out.set(local, exported);
-    parseNamedClause(clause, out);
+    recordDefault(local, spec, exportNameFromDefaultPath(spec));
+    recordNamed(clause, spec);
   }
 
   // import { Named } from '…'  (skip import type { … })
   const namedRe =
     /^\s*import\s+(?!type\b)(?:type\s+)?\{([^}]*)\}\s*from\s+['"]([^'"]+)['"]/gm;
   for (const m of source.matchAll(namedRe)) {
-    // If the match started with `import type {`, the negative lookahead should skip —
-    // also skip when entire statement is type-only via separate check:
     const full = m[0];
     if (/^\s*import\s+type\b/.test(full)) continue;
     const clause = m[1];
     const spec = m[2];
     if (!isPackageSpecifier(spec)) continue;
-    parseNamedClause(clause, out);
+    recordNamed(clause, spec);
   }
 
-  return out;
+  return { aliases, hosts };
 }
