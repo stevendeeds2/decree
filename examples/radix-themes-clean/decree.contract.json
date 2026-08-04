@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "name": "radix-themes-clean",
+  "package": "@radix-ui/themes",
+  "components": [
+    "Button",
+    "Card",
+    "Flex",
+    "Heading",
+    "Text",
+    "TextField"
+  ],
+  "tokens": [
+    { "name": "--accent-9" },
+    { "name": "--accent-contrast" },
+    { "name": "--gray-12" },
+    { "name": "--gray-2" },
+    { "name": "--radius-3" }
+  ],
+  "nativeElementMap": {
+    "button": "Button",
+    "input": "TextField"
+  }
+}

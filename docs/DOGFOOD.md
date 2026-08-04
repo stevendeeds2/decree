@@ -1,23 +1,23 @@
-# Dogfood fixtures
+# Third-party proof fixtures
 
-Phase 2 proves Decree is not shadcn-only.
+Decree proves potency on **established foreign design systems** via isolated fixtures / `examples/` in this repo.
 
-## SD33DS (`@stevendeeds/sd33ds`)
+## Policy (2026-08-04)
 
-Personal system of record. Fixtures model **consumer apps** (htm/Preact), not the package internals (SD33DS `Button` itself renders a native `<button>` — that is the library’s job; Decree gates product code).
+**Out of scope:** Corvy, stevendeeds.com, SD33DS production consumers, any personal production app.
 
-- Clean: `Button`, `SectionHeader`, `var(--light-…)` theme vars  
-- Dirty: invented `<button>` + hex lookalike  
+**In scope:** shadcn-shaped, MUI, Radix Themes, and similar third-party systems.
 
-## MUI (`@mui/material`)
+## Matrix
 
-Enterprise-shaped second framework.
-
-- Clean: `Button`, `Card`, `Typography`, MUI CSS variables  
-- Dirty: native controls + Material-blue hex soup  
+| System | Clean | Dirty |
+|--------|-------|-------|
+| shadcn/ui-shaped | `fixtures/shadcn-clean` | `fixtures/shadcn-dirty` |
+| MUI (`@mui/material`) | `fixtures/mui-clean` | `fixtures/mui-dirty` |
+| Radix Themes | `examples/radix-themes-clean` | `examples/radix-themes-dirty` |
 
 ## Shared potency
 
-Same CLI, same MCP allowlist shape, same stable codes across all three systems:
+Same CLI, same MCP allowlist shape, same stable codes:
 
 `DECREE_NATIVE_ELEMENT` · `DECREE_HARDCODED_HEX` · `DECREE_ARBITRARY_VALUE`
