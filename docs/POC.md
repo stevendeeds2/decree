@@ -45,16 +45,17 @@ Same shape with planted violations:
 
 **Decree must:** pass A, fail B with stable codes (`DECREE_NATIVE_ELEMENT`, `DECREE_HARDCODED_HEX`, `DECREE_ARBITRARY_VALUE`, etc.).
 
-## Stretch fixtures (phase 2 — full story)
+## Stretch fixtures (phase 2 — 3rd-party only)
 
 | System | Why |
 |--------|-----|
 | **Radix Themes** / raw Radix | Primitives without shadcn cosmetics |
 | **MUI** | Enterprise volume; different prop model |
 | **Chakra / Park UI** | Token + component coupling patterns |
-| **SD33DS (`@stevendeeds/sd33ds`)** | Dogfood — personal system of record |
 
-Phase 2 starts after shadcn A/B is green and MCP allowlist ships.
+**Not POC targets:** personal production (Corvy, stevendeeds.com, SD33DS consumers).
+
+Phase 2 = more foreign systems after shadcn A/B is green and MCP allowlist ships.
 
 ## Architecture
 

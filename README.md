@@ -30,9 +30,13 @@ So the design system stops being a hope — and starts being the law.
 
 ## Status
 
-POC slices **A (verify)** and **B (MCP allowlist)** plus **dogfood** and **`decree init`** are on the product path. Full story preserved — docs-from-contract and measurement are sequenced, not cut.
+POC slices **A (verify)** and **B (MCP allowlist)** plus **`decree init`** are on the product path. Proof target: **third-party design systems** via isolated fixtures / `examples/` — not personal production apps.
 
-Corvy project: **DECREE**.
+Corvy project: **DECREE** (board only).
+
+### Hard rule
+
+Do **not** dogfood on Corvy, stevendeeds.com, or SD33DS production. Prove Decree on established foreign systems first.
 
 ## Get started
 
@@ -53,17 +57,18 @@ node bin/decree.js mcp decree.contract.json
 
 1. **Done — Verify** — contract + CI against shadcn clean/dirty fixtures  
 2. **Done — MCP** — agent allowlist (`list_primitives`, `list_tokens`, `validate_snippet`)  
-3. **Done — Dogfood** — SD33DS + MUI clean/dirty fixtures (same Decree codes)  
-4. **Done — Init** — bootstrap contract from a design-system package  
-5. **Later — Docs / measurement** — generated from the same contract  
+3. **Done — Init** — bootstrap contract from a design-system package  
+4. **Done — 3rd-party fixtures** — MUI clean/dirty (same Decree codes)  
+5. **Now — Examples** — isolated test apps for shadcn / MUI / Radix Themes  
+6. **Later — Docs / measurement** — generated from the same contract  
 
-### Fixtures matrix
+### Proof matrix (3rd-party only)
 
 | System | Clean | Dirty |
 |--------|-------|-------|
 | shadcn/ui | `fixtures/shadcn-clean` | `fixtures/shadcn-dirty` |
-| SD33DS | `fixtures/sd33ds-clean` | `fixtures/sd33ds-dirty` |
 | MUI | `fixtures/mui-clean` | `fixtures/mui-dirty` |
+| Radix Themes | `examples/radix-themes-clean` | `examples/radix-themes-dirty` |
 | init sample | `fixtures/init-sample-pkg` | — |
 
 ## Package name

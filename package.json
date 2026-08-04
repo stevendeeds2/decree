@@ -12,8 +12,8 @@
     "test": "node --test tests/**/*.test.js",
     "verify:clean": "node ./bin/decree.js verify fixtures/shadcn-clean",
     "verify:dirty": "node ./bin/decree.js verify fixtures/shadcn-dirty",
-    "verify:sd33ds": "node ./bin/decree.js verify fixtures/sd33ds-clean && node ./bin/decree.js verify fixtures/sd33ds-dirty; test $? -eq 1",
     "verify:mui": "node ./bin/decree.js verify fixtures/mui-clean && node ./bin/decree.js verify fixtures/mui-dirty; test $? -eq 1",
+    "verify:radix": "node ./bin/decree.js verify examples/radix-themes-clean && node ./bin/decree.js verify examples/radix-themes-dirty; test $? -eq 1",
     "verify": "node ./bin/decree.js verify",
     "init:sample": "node ./bin/decree.js init fixtures/init-sample-pkg --out /tmp/decree-init-sample.contract.json --force",
     "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json"

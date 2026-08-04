@@ -9,14 +9,8 @@ import { loadContract } from '../src/contract/index.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 
+/** Third-party proof systems only — no personal production DS. */
 const systems = [
-  {
-    name: 'sd33ds',
-    clean: join(root, 'fixtures/sd33ds-clean'),
-    dirty: join(root, 'fixtures/sd33ds-dirty'),
-    expectPrimitive: 'Button',
-    expectToken: '--light-control-emphasis-idle-background-color',
-  },
   {
     name: 'mui',
     clean: join(root, 'fixtures/mui-clean'),
@@ -24,9 +18,16 @@ const systems = [
     expectPrimitive: 'Button',
     expectToken: '--mui-palette-primary-main',
   },
+  {
+    name: 'radix-themes',
+    clean: join(root, 'examples/radix-themes-clean'),
+    dirty: join(root, 'examples/radix-themes-dirty'),
+    expectPrimitive: 'Button',
+    expectToken: '--accent-9',
+  },
 ];
 
-describe('phase 2 dogfood fixtures', () => {
+describe('third-party proof fixtures', () => {
   for (const sys of systems) {
     it(`${sys.name} clean passes verify`, () => {
       const result = verifyPath(sys.clean);

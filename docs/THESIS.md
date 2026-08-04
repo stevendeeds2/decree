@@ -49,12 +49,14 @@ Figma, Storybook, and Chromatic stay. Decree sits under them as the law.
 
 ## Success criteria (POC)
 
-Prove potency against real systems (starting with shadcn/ui-shaped stacks):
+Prove potency against **third-party established design systems** using **isolated test apps / fixtures in this repo** (starting with shadcn/ui-shaped stacks, MUI, Radix Themes, etc.):
 
 1. Invented component → **CI fail**  
 2. Hardcoded color / arbitrary spacing → **CI fail**  
 3. Agent MCP returns only allowlisted primitives  
 4. Golden fixtures: clean app **passes**; contaminated app **fails** with stable error codes  
+
+**Out of scope for POC:** personal production apps (Corvy, stevendeeds.com, SD33DS consumers). Decree must show value on foreign systems before it touches production.
 
 ## Positioning
 
