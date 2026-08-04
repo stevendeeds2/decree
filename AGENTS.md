@@ -23,8 +23,9 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 - **Done:** MCP allowlist (`src/mcp/`, `bin/decree-mcp.js`)  
 - **Done:** MUI fixtures (3rd-party)  
 - **Done:** `decree init` — bootstrap contract from a package (`src/init/`)  
-- **Now:** isolated **3rd-party** test apps / examples (shadcn, MUI, Radix Themes, …)  
-- **Later:** docs-from-contract, measurement, richer scanners  
+- **Done:** isolated **3rd-party** fixtures + npm-backed examples (MUI, Radix Themes)  
+- **Done:** richer scanners — unknown components, rgb/hsl colors  
+- **Later:** docs-from-contract, measurement, deeper AST scanners  
 
 Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`). Get-started path: **init → verify → mcp**.
 
