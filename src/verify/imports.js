@@ -36,13 +36,12 @@ function exportNameFromDefaultPath(spec) {
  * @param {Map<string, string>} out
  */
 function parseNamedClause(clause, out) {
-  // Strip leading `type` on whole clause already handled by caller skipping type imports.
   const parts = clause.split(',');
   for (let raw of parts) {
     let part = raw.trim();
     if (!part) continue;
-    if (part.startsWith('type ')) part = part.slice(5).trim();
-    if (!part || part === 'type') continue;
+    // Skip type-only bindings: `type Foo`, `type Foo as Bar`
+    if (part.startsWith('type ')) continue;
 
     const asMatch = part.match(/^([A-Za-z_$][\w$]*)\s+as\s+([A-Za-z_$][\w$]*)$/);
     if (asMatch) {

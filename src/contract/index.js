@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+import { assertSafeScanPrefix } from '../verify/excludes.js';
 
 /**
  * @typedef {{ name: string, value?: string }} DecreeToken
@@ -6,6 +7,7 @@ import { readFileSync } from 'node:fs';
  *   profile?: 'strict' | 'app',
  *   localComponentPrefixes?: string[],
  *   excludePrefixes?: string[],
+ *   excludeDefaults?: boolean,
  * }} DecreeScanConfig
  * @typedef {{
  *   version: number,
@@ -58,6 +60,28 @@ export function validateContract(input) {
       !Array.isArray(scan.localComponentPrefixes)
     ) {
       throw new Error('Decree scan.localComponentPrefixes must be an array');
+    }
+    if (
+      scan.excludePrefixes !== undefined &&
+      !Array.isArray(scan.excludePrefixes)
+    ) {
+      throw new Error('Decree scan.excludePrefixes must be an array');
+    }
+    if (Array.isArray(scan.localComponentPrefixes)) {
+      for (const p of scan.localComponentPrefixes) {
+        assertSafeScanPrefix(p, 'scan.localComponentPrefixes');
+      }
+    }
+    if (Array.isArray(scan.excludePrefixes)) {
+      for (const p of scan.excludePrefixes) {
+        assertSafeScanPrefix(p, 'scan.excludePrefixes');
+      }
+    }
+    if (
+      scan.excludeDefaults !== undefined &&
+      typeof scan.excludeDefaults !== 'boolean'
+    ) {
+      throw new Error('Decree scan.excludeDefaults must be a boolean');
     }
   }
 }

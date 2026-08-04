@@ -27,8 +27,9 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 - **Done:** richer scanners — unknown components, rgb/hsl colors  
 - **Done:** external trials (MUI / Radix / shadcn) + import-aware allowlisting (same-file package aliases)  
 - **Done:** contract profiles (`scan.profile` strict | app + local component discovery)  
-- **Next:** default excludes / packaging polish  
-- **Later:** docs-from-contract, measurement, deeper AST scanners  
+- **Done:** default exclude prefixes (`ui/` + theme dumps) + prefix path safety  
+- **Next:** harden `FRAMEWORK_COMPONENTS` silent-allow + init path containment (see `docs/AUDIT-2026-08-04.md`)  
+- **Later:** packaging / docs-from-contract / deeper AST scanners  
 
 Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`). Get-started path: **init → verify → mcp**.
 

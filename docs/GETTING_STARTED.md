@@ -73,6 +73,15 @@ Each playground keeps:
 
 Flagship proof: `examples/trials/mui-nextjs-ts` with `profile: "app"` is one theme-hex finding from green.
 
+### Default excludes
+
+Unless `scan.excludeDefaults` is `false`, verify also skips:
+
+- `src/components/ui`, `components/ui` (vendored shadcn-style DS)
+- `src/styles/themes`, `styles/themes` (theme CSS dumps)
+
+Custom `scan.excludePrefixes` are merged on top. See `docs/AUDIT-2026-08-04.md` for hardening backlog.
+
 ## Agent allowlist (MCP)
 
 ```bash

@@ -145,7 +145,7 @@ for (const trial of trials) {
     }
 
     const contract = buildContractFromPackage(initPath);
-    // shadcn: don't treat the vendored DS + theme CSS dumps as consumer UI
+    // shadcn: defaults already exclude ui/ + themes; keep explicit for report clarity
     if (trial.id === 'shadcn-dashboard-starter') {
       contract.scan = {
         excludePrefixes: ['src/components/ui', 'src/styles/themes'],

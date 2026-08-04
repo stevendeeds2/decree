@@ -46,7 +46,7 @@ Generated: 2026-08-04 (re-run locally via `npm run trials`)
 
 1. ~~**Contract profiles**~~ — shipped: `scan.profile` `strict` | `app` + local component discovery.  
 2. ~~**Import-aware allowlisting**~~ — shipped.  
-3. **Default excludes** — skip vendored DS folders + `*.theme.css` token dumps (shadcn still manual).  
+3. ~~**Default excludes**~~ — shipped: `ui/` + `styles/themes` skipped unless `excludeDefaults: false`.  
 4. **Keep MUI official example as the flagship external demo.**
 
 ## Reproduce
