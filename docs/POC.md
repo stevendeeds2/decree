@@ -69,10 +69,11 @@ fixtures/shadcn-dirty
 CLI / MCP:
 
 ```bash
+npx @stevendeeds/decree init <path-or-package-name> [--out] [--force]
 npx @stevendeeds/decree verify [path]
 npx @stevendeeds/decree mcp [contract.json]   # print client config
 node bin/decree-mcp.js path/to/decree.contract.json
-# later: init · build · docs
+# later: docs · measurement
 ```
 
 MCP tools: `list_primitives`, `list_tokens`, `is_allowed_primitive`, `validate_snippet`

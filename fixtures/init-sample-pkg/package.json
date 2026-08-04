@@ -1,0 +1,13 @@
+{
+  "name": "@fixtures/init-sample-pkg",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./js/components/Button.js": "./js/components/Button.js",
+    "./js/components/Input.js": "./js/components/Input.js",
+    "./js/components/helpers.js": "./js/components/helpers.js",
+    "./styles/tokens.css": "./styles/tokens.css",
+    "./tokens.json": "./tokens.json"
+  }
+}
