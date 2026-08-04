@@ -30,16 +30,23 @@ So the design system stops being a hope — and starts being the law.
 
 ## Status
 
-Greenfield. **POC slice A (verify-first)** in progress. Full product story preserved in thesis/POC — MCP, docs-from-contract, and multi-framework dogfood are sequenced, not cut.
+POC slices **A (verify)** and **B (MCP allowlist)** are on main. Full product story preserved — dogfood, docs-from-contract, and measurement are sequenced, not cut.
 
 Corvy project: **DECREE**.
 
 ## Roadmap (full story)
 
-1. **Now — Verify** — contract + CI against shadcn clean/dirty fixtures  
-2. **Next — MCP** — agent allowlist (anti-forgery)  
-3. **Then — Dogfood** — SD33DS + a second major framework  
+1. **Done — Verify** — contract + CI against shadcn clean/dirty fixtures  
+2. **Done — MCP** — agent allowlist (`list_primitives`, `list_tokens`, `validate_snippet`)  
+3. **Next — Dogfood** — SD33DS + a second major framework  
 4. **Later — Docs / measurement** — generated from the same contract  
+
+### Try MCP
+
+```bash
+node bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json
+# paste into Cursor / Claude MCP config, then call list_primitives
+```
 
 ## Package name
 

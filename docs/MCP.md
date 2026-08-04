@@ -1,0 +1,34 @@
+# Decree MCP
+
+Anti-forgery allowlist for agents. Same contract as `decree verify`.
+
+## Tools
+
+| Tool | Job |
+|------|-----|
+| `list_primitives` | Components the agent may use — never invent outside this list |
+| `list_tokens` | Tokens the agent may use — no hex / invented names |
+| `is_allowed_primitive` | Boolean check for a component name |
+| `validate_snippet` | Same scanners as CI on a code string |
+
+Responses include `"_mcp": "decree"` for attribution when multiple MCP servers are connected.
+
+## Configure (Cursor / Claude)
+
+```bash
+node bin/decree.js mcp path/to/decree.contract.json
+```
+
+Paste the printed `mcpServers` block into your client config.
+
+Or run directly:
+
+```bash
+node bin/decree-mcp.js path/to/decree.contract.json
+```
+
+## Rule for agents
+
+1. Call `list_primitives` / `list_tokens` before writing UI.  
+2. Call `validate_snippet` before considering the work done.  
+3. If CI `decree verify` would fail, the snippet is not done.

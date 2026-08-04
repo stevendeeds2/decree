@@ -19,12 +19,12 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 
 ## Sequencing (do not shrink the story)
 
-- **Now:** contract + `decree verify` + shadcn fixtures  
-- **Next:** MCP allowlist  
-- **Then:** SD33DS + second framework  
+- **Done:** contract + `decree verify` + shadcn fixtures  
+- **Done:** MCP allowlist (`src/mcp/`, `bin/decree-mcp.js`)  
+- **Next:** SD33DS + second framework dogfood  
 - **Later:** docs-from-contract, measurement  
 
-When implementing Slice A, keep hooks/interfaces ready for MCP and future fixtures. Do not delete roadmap items from docs to “simplify.”
+Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`).
 
 ## Rules for agents in this repo
 

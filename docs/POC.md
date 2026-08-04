@@ -8,10 +8,10 @@ We prove potency with contracts + CI gates first. We are **not** shrinking the p
 
 | Slice | Status |
 |-------|--------|
-| A. Contract + `decree verify` + shadcn clean/dirty | **In progress** |
-| B. Decree MCP allowlist (anti-forgery) | Next |
-| C. Demo narrative (dirty PR → fail → fix) | With A |
-| D. Phase 2 frameworks + SD33DS dogfood | After A+B |
+| A. Contract + `decree verify` + shadcn clean/dirty | **Done** |
+| B. Decree MCP allowlist (anti-forgery) | **Done** |
+| C. Demo narrative (dirty PR → fail → fix) | Ready (verify + validate_snippet) |
+| D. Phase 2 frameworks + SD33DS dogfood | Next |
 
 ## Full product story (do not lose)
 
@@ -66,13 +66,16 @@ fixtures/shadcn-clean
 fixtures/shadcn-dirty
 ```
 
-CLI:
+CLI / MCP:
 
 ```bash
 npx @stevendeeds/decree verify [path]
-npx @stevendeeds/decree help
-# later: init · build · mcp
+npx @stevendeeds/decree mcp [contract.json]   # print client config
+node bin/decree-mcp.js path/to/decree.contract.json
+# later: init · build · docs
 ```
+
+MCP tools: `list_primitives`, `list_tokens`, `is_allowed_primitive`, `validate_snippet`
 
 ## Tests (potency gate)
 

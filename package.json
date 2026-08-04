@@ -5,16 +5,22 @@
   "description": "Decree — design system enforcement layer",
   "type": "module",
   "bin": {
-    "decree": "./bin/decree.js"
+    "decree": "./bin/decree.js",
+    "decree-mcp": "./bin/decree-mcp.js"
   },
   "scripts": {
     "test": "node --test tests/**/*.test.js",
     "verify:clean": "node ./bin/decree.js verify fixtures/shadcn-clean",
     "verify:dirty": "node ./bin/decree.js verify fixtures/shadcn-dirty",
-    "verify": "node ./bin/decree.js verify"
+    "verify": "node ./bin/decree.js verify",
+    "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json"
   },
   "engines": {
     "node": ">=20"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "zod": "^4.4.3"
+  }
 }
