@@ -1,4 +1,5 @@
 import { CODES } from './codes.js';
+import { collectImportAliases } from './imports.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
@@ -55,6 +56,9 @@ export function scanSource(source, file, contract) {
   const findings = [];
   const lines = source.split(/\r?\n/);
   const allow = new Set(contract.components || []);
+  const aliases = JSX_EXT.test(file)
+    ? collectImportAliases(source)
+    : new Map();
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -96,6 +100,8 @@ export function scanSource(source, file, contract) {
         const name = match[1];
         if (FRAMEWORK_COMPONENTS.has(name)) continue;
         if (allow.has(name)) continue;
+        const resolved = aliases.get(name);
+        if (resolved && allow.has(resolved)) continue;
         findings.push({
           code: CODES.UNKNOWN_COMPONENT,
           message: `Unknown component <${name}> — not in the Decree contract allowlist`,

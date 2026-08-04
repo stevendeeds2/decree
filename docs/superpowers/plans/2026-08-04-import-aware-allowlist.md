@@ -17,11 +17,11 @@
 - (Later) Create: `src/verify/imports.js`
 - Modify: `src/verify/scan.js`
 
-- [ ] **Step 1: Write failing tests** covering default alias, named alias, still-unknown, relative import ignored
-- [ ] **Step 2: Run tests — expect FAIL**
-- [ ] **Step 3: Implement `collectImportAliases` + wire into `scanSource`**
-- [ ] **Step 4: Run tests — expect PASS**
-- [ ] **Step 5: Commit**
+- [x] **Step 1: Write failing tests** covering default alias, named alias, still-unknown, relative import ignored
+- [x] **Step 2: Run tests — expect FAIL**
+- [x] **Step 3: Implement `collectImportAliases` + wire into `scanSource`**
+- [x] **Step 4: Run tests — expect PASS**
+- [x] **Step 5: Commit**
 
 ### Task 2: Docs + MUI trial smoke
 
@@ -29,6 +29,6 @@
 - Modify: `docs/TRIALS.md` and/or `README.md` (brief mention)
 - Run: `npm run trials` (or at least MUI trial path)
 
-- [ ] **Step 1: Re-verify MUI trial; note delta in unknown count**
-- [ ] **Step 2: Update curated narrative if numbers change**
+- [x] **Step 1: Re-verify MUI trial; note delta in unknown count** (9 → 7)
+- [x] **Step 2: Update curated narrative if numbers change**
 - [ ] **Step 3: Commit, push, open PR**

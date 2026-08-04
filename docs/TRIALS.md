@@ -8,26 +8,26 @@ Generated: 2026-08-04 (re-run locally via `npm run trials`)
 
 | Trial | Source | Contract | First-pass verify |
 |-------|--------|----------|-------------------|
-| **mui-nextjs-ts** | [MUI official Next.js TS example](https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-ts) | 219 components | **9 findings / 8 files** |
+| **mui-nextjs-ts** | [MUI official Next.js TS example](https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-ts) | 219 components | **9 → 7 findings** after import-aware allowlisting |
 | **radix-themes-playground** | [Radix Themes playground](https://github.com/radix-ui/themes/tree/main/apps/playground) | 90 components, 1484 tokens | **638 findings / 103 files** |
 | **shadcn-dashboard-starter** | [Kiranism next-shadcn-dashboard-starter](https://github.com/Kiranism/next-shadcn-dashboard-starter) | 387 components (from local `ui/`) | **1151 → 449 findings** after excluding `ui/` + theme CSS |
 
 ### Takeaways
 
 1. **Decree works on real foreign apps** — `init` + `verify` ran end-to-end without touching personal production.
-2. **Best signal so far: official MUI example** — nearly green; remaining hits are mostly *local app shells* (`ProTip`, `Copyright`, `ModeSwitch`) and import aliases (`MuiLink`), not wild hex soup.
+2. **Best signal so far: official MUI example** — nearly green; remaining hits are *local app shells* (`ProTip`, `Copyright`, `ModeSwitch`, local `LightBulbIcon`) plus one theme hex — not wild hex soup.
 3. **Unknown-component volume dominates** on large apps — need contract modes: “primitives only” vs “allow app-local composites.”
 4. **Don’t scan the design system as if it were the consumer** — shadcn ships `components/ui` inside the app; excluding that path (and theme CSS dumps) cut findings ~1151 → ~449.
-5. **Import aliases are a false-positive class** — `import MuiLink from '@mui/material/Link'` flags `<MuiLink>` as unknown even though it’s MUI `Link`.
+5. **Import-aware allowlisting (done)** — same-file package aliases (`MaterialUILink` ← `@mui/material/Link`) resolve to the contract export; MUI trial 9 → 7.
 6. **Playgrounds / kitchensink apps are noisy by nature** — Radix playground intentionally uses raw HTML + many patterns; treat as stress test, not a buyer demo.
 
 ## Per-trial detail
 
 ### mui-nextjs-ts (strongest demo candidate)
 
-- **Verify:** FAIL — 9 findings  
-- **Codes:** `DECREE_UNKNOWN_COMPONENT` 8 · `DECREE_HARDCODED_HEX` 1  
-- **What it means:** Small official example is almost compliant once local wrappers are allowlisted or ignored. Ideal for a sales/demo narrative: “init from `@mui/material` → nine findings → fix or allowlist shells → green.”
+- **Verify:** FAIL — **7 findings** (was 9 before import-aware allowlisting)  
+- **Codes:** `DECREE_UNKNOWN_COMPONENT` 6 · `DECREE_HARDCODED_HEX` 1  
+- **What it means:** Package aliases no longer false-positive. Remaining hits are local shells + one theme hex. Demo narrative: “init from `@mui/material` → seven findings → allowlist/ignore app shells → green.”
 
 ### radix-themes-playground (stress test)
 
@@ -43,8 +43,8 @@ Generated: 2026-08-04 (re-run locally via `npm run trials`)
 
 ## Product implications (ordered)
 
-1. **Contract profiles** — `strict` (primitives only) vs `app` (allow local PascalCase composites under `src/components` except `ui/`).  
-2. **Import-aware allowlisting** — map `MuiLink` → `@mui/material/Link` → `Link`.  
+1. **Contract profiles** *(next)* — `strict` (primitives only) vs `app` (allow local PascalCase composites under `src/components` except `ui/`).  
+2. ~~**Import-aware allowlisting**~~ — shipped: same-file package default + named aliases → contract export.  
 3. **Default excludes** — skip vendored DS folders + `*.theme.css` token dumps.  
 4. **Keep MUI official example as the flagship external demo.**
 

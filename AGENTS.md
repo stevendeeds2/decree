@@ -25,6 +25,8 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 - **Done:** `decree init` — bootstrap contract from a package (`src/init/`)  
 - **Done:** isolated **3rd-party** fixtures + npm-backed examples (MUI, Radix Themes)  
 - **Done:** richer scanners — unknown components, rgb/hsl colors  
+- **Done:** external trials (MUI / Radix / shadcn) + import-aware allowlisting (same-file package aliases)  
+- **Next:** contract profiles (strict vs app-local shells)  
 - **Later:** docs-from-contract, measurement, deeper AST scanners  
 
 Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`). Get-started path: **init → verify → mcp**.
