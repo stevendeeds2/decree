@@ -60,6 +60,10 @@ export function scanSource(source, file, contract, options = {}) {
     if (line.trimStart().startsWith('*') || line.trimStart().startsWith('/*')) continue;
 
     for (const match of line.matchAll(HEX_RE)) {
+      // Skip URL fragments (…/#fff) and SVG url(#id) — not color tokens
+      const idx = match.index ?? 0;
+      if (idx > 0 && line[idx - 1] === '/') continue;
+      if (/url\(\s*$/i.test(line.slice(0, idx))) continue;
       findings.push({
         code: CODES.HARDCODED_HEX,
         message: `Hardcoded color ${match[0]} — use a contract token instead`,

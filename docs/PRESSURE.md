@@ -1,0 +1,33 @@
+# Decree pressure report
+
+Generated: 2026-08-04T22:55:36.199Z
+
+## Gate: PASS
+
+## Unit tests
+
+- ok: true
+
+## Fixtures
+
+| Fixture | Expect | Actual ok | Findings | Pass |
+|---------|--------|-----------|----------|------|
+| shadcn-clean | true | true | 0 | true |
+| shadcn-dirty | false | false | 6 | true |
+| mui-clean | true | true | 0 | true |
+| mui-dirty | false | false | 8 | true |
+| radix-themes-clean | true | true | 0 | true |
+| radix-themes-dirty | false | false | 8 | true |
+| pressure-adversarial | false | false | 7 | true |
+
+## Trials
+
+| Trial | Findings | Codes |
+|-------|----------|-------|
+| mui-nextjs-ts | 1 | {"DECREE_HARDCODED_HEX":1} |
+| radix-themes-playground | 621 | {"DECREE_UNKNOWN_COMPONENT":546,"DECREE_NATIVE_ELEMENT":64,"DECREE_HARDCODED_COLOR":11} |
+| shadcn-dashboard-starter | 452 | {"DECREE_UNKNOWN_COMPONENT":367,"DECREE_ARBITRARY_VALUE":68,"DECREE_HARDCODED_HEX":7,"DECREE_NATIVE_ELEMENT":10} |
+
+## Outside-tester readiness
+
+Internal pressure gate passed. Still POC — invite only technical design-system folks, not general users.
