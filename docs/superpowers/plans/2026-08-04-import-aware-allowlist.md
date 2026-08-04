@@ -31,4 +31,4 @@
 
 - [x] **Step 1: Re-verify MUI trial; note delta in unknown count** (9 → 7)
 - [x] **Step 2: Update curated narrative if numbers change**
-- [ ] **Step 3: Commit, push, open PR**
+- [x] **Step 3: Commit, push, open PR** (#6)
