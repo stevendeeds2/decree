@@ -31,7 +31,7 @@ export function extractComponents(packageRoot) {
     const base = basename(file);
     const pascalFile = COMPONENT_FILE.test(base);
     const kebabComponent =
-      COMPONENTISH_FILE.test(base) && /(?:^|\/)components\//.test(file.replace(/\\/g, '/'));
+      COMPONENTISH_FILE.test(base) && isComponentDirPath(file);
     if (!pascalFile && !kebabComponent) continue;
     if (isNestedNodeModulesPath(packageRoot, file)) continue;
     modulePaths.add(file);
@@ -43,7 +43,7 @@ export function extractComponents(packageRoot) {
     const base = basename(file);
     const pascalFile = COMPONENT_FILE.test(base);
     const kebabComponent =
-      COMPONENTISH_FILE.test(base) && /(?:^|\/)components\//.test(file.replace(/\\/g, '/'));
+      COMPONENTISH_FILE.test(base) && isComponentDirPath(file);
     if (!pascalFile && !kebabComponent) continue;
     const source = readFileSync(file, 'utf8');
     for (const name of parseExportedComponents(source)) {
@@ -253,4 +253,10 @@ function isNestedNodeModulesPath(packageRoot, file) {
   const rel = relative(packageRoot, file);
   if (!rel || rel.startsWith('..')) return false;
   return rel.split(/[/\\]/).includes('node_modules');
+}
+
+/** Radix `components/`, shadcn `ui/`, etc. */
+function isComponentDirPath(file) {
+  const norm = file.replace(/\\/g, '/');
+  return /(?:^|\/)(?:components|ui)\//.test(norm);
 }

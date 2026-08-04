@@ -20,6 +20,7 @@
     "examples:init": "bash ./scripts/examples-init.sh",
     "examples:verify": "bash ./scripts/examples-verify.sh",
     "demo": "npm run examples:verify",
+    "trials": "node ./scripts/run-external-trials.mjs",
     "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json"
   },
   "engines": {

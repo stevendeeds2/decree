@@ -16,6 +16,7 @@ Isolated mini-apps used to prove Decree against **established foreign design sys
 | `radix-themes-*` | Radix Themes-shaped | Lightweight fixtures |
 | `mui-from-npm/` | Real `@mui/material` | `npm install` + `decree init` + clean/dirty apps |
 | `radix-from-npm/` | Real `@radix-ui/themes` | `npm install` + `decree init` + clean/dirty apps |
+| `trials/` | Public third-party apps | External pressure tests — see [docs/TRIALS.md](../docs/TRIALS.md) |
 
 ## Commands
 

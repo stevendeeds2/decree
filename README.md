@@ -38,6 +38,8 @@ Corvy project: **DECREE** (board only).
 
 Do **not** dogfood on Corvy, stevendeeds.com, or SD33DS production. Prove Decree on established foreign systems first.
 
+External trial results: [docs/TRIALS.md](./docs/TRIALS.md) (`npm run trials`).
+
 ## Get started
 
 Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)
