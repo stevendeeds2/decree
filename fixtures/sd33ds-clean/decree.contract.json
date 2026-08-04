@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "name": "sd33ds-dogfood-clean",
+  "package": "@stevendeeds/sd33ds",
+  "components": [
+    "Button",
+    "SectionHeader",
+    "IssueCard",
+    "PriorityBadge",
+    "ProjectHero",
+    "ProjectKpiTag",
+    "LogoWordmark",
+    "ContentGuard",
+    "Footer"
+  ],
+  "tokens": [
+    { "name": "--light-control-emphasis-idle-background-color" },
+    { "name": "--light-control-emphasis-idle-text-color" },
+    { "name": "--light-typography-color-primary" },
+    { "name": "--light-typography-color-secondary" },
+    { "name": "--light-typography-body-font-size" },
+    { "name": "--light-control-emphasis-font-size" }
+  ],
+  "nativeElementMap": {
+    "button": "Button"
+  }
+}

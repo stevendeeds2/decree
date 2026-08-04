@@ -38,8 +38,16 @@ Corvy project: **DECREE**.
 
 1. **Done — Verify** — contract + CI against shadcn clean/dirty fixtures  
 2. **Done — MCP** — agent allowlist (`list_primitives`, `list_tokens`, `validate_snippet`)  
-3. **Next — Dogfood** — SD33DS + a second major framework  
+3. **Done — Dogfood** — SD33DS + MUI clean/dirty fixtures (same Decree codes)  
 4. **Later — Docs / measurement** — generated from the same contract  
+
+### Fixtures matrix
+
+| System | Clean | Dirty |
+|--------|-------|-------|
+| shadcn/ui | `fixtures/shadcn-clean` | `fixtures/shadcn-dirty` |
+| SD33DS | `fixtures/sd33ds-clean` | `fixtures/sd33ds-dirty` |
+| MUI | `fixtures/mui-clean` | `fixtures/mui-dirty` |
 
 ### Try MCP
 

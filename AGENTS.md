@@ -21,8 +21,8 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 
 - **Done:** contract + `decree verify` + shadcn fixtures  
 - **Done:** MCP allowlist (`src/mcp/`, `bin/decree-mcp.js`)  
-- **Next:** SD33DS + second framework dogfood  
-- **Later:** docs-from-contract, measurement  
+- **Done:** SD33DS + MUI dogfood fixtures  
+- **Later:** docs-from-contract, measurement, richer scanners (variant axes, CSS-in-JS hex in template literals)  
 
 Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`).
 

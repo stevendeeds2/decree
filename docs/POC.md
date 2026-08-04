@@ -11,7 +11,7 @@ We prove potency with contracts + CI gates first. We are **not** shrinking the p
 | A. Contract + `decree verify` + shadcn clean/dirty | **Done** |
 | B. Decree MCP allowlist (anti-forgery) | **Done** |
 | C. Demo narrative (dirty PR → fail → fix) | Ready (verify + validate_snippet) |
-| D. Phase 2 frameworks + SD33DS dogfood | Next |
+| D. Phase 2 frameworks + SD33DS dogfood | **Done** |
 
 ## Full product story (do not lose)
 
