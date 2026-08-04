@@ -1,8 +1,10 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { basename, join, relative } from 'node:path';
 
 const COMPONENT_FILE =
   /^[A-Z][A-Za-z0-9]*\.(jsx?|tsx?|mjs|cjs)$/;
+/** Radix-style: button.tsx / icon-button.tsx that export PascalCase symbols. */
+const COMPONENTISH_FILE = /^[a-z][a-z0-9-]*\.(jsx?|tsx?|mjs|cjs)$/;
 
 const NATIVE_MAP = {
   Button: 'button',
@@ -23,11 +25,15 @@ export function extractComponents(packageRoot) {
   const pkg = readPackageJson(packageRoot);
   const modulePaths = new Set(collectExportTargets(pkg, packageRoot));
 
-  // Prefer PascalCase filenames; also accept components/ tree walk as fallback
+  // Prefer PascalCase filenames; also accept components/ tree walk as fallback.
+  // Package roots often live under node_modules — only skip *nested* deps.
   for (const file of walkFiles(packageRoot)) {
     const base = basename(file);
-    if (!COMPONENT_FILE.test(base)) continue;
-    if (file.includes(`${join('node_modules')}`)) continue;
+    const pascalFile = COMPONENT_FILE.test(base);
+    const kebabComponent =
+      COMPONENTISH_FILE.test(base) && /(?:^|\/)components\//.test(file.replace(/\\/g, '/'));
+    if (!pascalFile && !kebabComponent) continue;
+    if (isNestedNodeModulesPath(packageRoot, file)) continue;
     modulePaths.add(file);
   }
 
@@ -35,13 +41,18 @@ export function extractComponents(packageRoot) {
   for (const file of modulePaths) {
     if (!existsSync(file)) continue;
     const base = basename(file);
-    if (!COMPONENT_FILE.test(base)) continue;
+    const pascalFile = COMPONENT_FILE.test(base);
+    const kebabComponent =
+      COMPONENTISH_FILE.test(base) && /(?:^|\/)components\//.test(file.replace(/\\/g, '/'));
+    if (!pascalFile && !kebabComponent) continue;
     const source = readFileSync(file, 'utf8');
     for (const name of parseExportedComponents(source)) {
       names.add(name);
     }
     // Filename itself is a strong signal when exports are re-export only
-    names.add(base.replace(/\.(jsx?|tsx?|mjs|cjs)$/, ''));
+    if (pascalFile) {
+      names.add(base.replace(/\.(jsx?|tsx?|mjs|cjs)$/, ''));
+    }
   }
 
   // Drop accidental lowercase helpers if somehow added
@@ -58,7 +69,7 @@ export function extractTokens(packageRoot) {
 
   for (const file of walkFiles(packageRoot)) {
     if (!/\.(css|scss)$/.test(file)) continue;
-    if (file.includes(`${join('node_modules')}`)) continue;
+    if (isNestedNodeModulesPath(packageRoot, file)) continue;
     const css = readFileSync(file, 'utf8');
     for (const m of css.matchAll(/--([a-zA-Z0-9-_]+)/g)) {
       names.add(`--${m[1]}`);
@@ -229,4 +240,17 @@ function walkFiles(dir) {
     }
   }
   return out;
+}
+
+/**
+ * True when `file` is inside a nested node_modules under packageRoot
+ * (dependency of the package), not merely because packageRoot itself is
+ * installed in someone's node_modules.
+ * @param {string} packageRoot
+ * @param {string} file
+ */
+function isNestedNodeModulesPath(packageRoot, file) {
+  const rel = relative(packageRoot, file);
+  if (!rel || rel.startsWith('..')) return false;
+  return rel.split(/[/\\]/).includes('node_modules');
 }

@@ -13,11 +13,13 @@ Decree proves potency on **established foreign design systems** via isolated fix
 | System | Clean | Dirty |
 |--------|-------|-------|
 | shadcn/ui-shaped | `fixtures/shadcn-clean` | `fixtures/shadcn-dirty` |
-| MUI (`@mui/material`) | `fixtures/mui-clean` | `fixtures/mui-dirty` |
-| Radix Themes | `examples/radix-themes-clean` | `examples/radix-themes-dirty` |
+| MUI (fixture) | `fixtures/mui-clean` | `fixtures/mui-dirty` |
+| Radix Themes (fixture) | `examples/radix-themes-clean` | `examples/radix-themes-dirty` |
+| MUI (real npm) | `examples/mui-from-npm/clean` | `examples/mui-from-npm/dirty` |
+| Radix Themes (real npm) | `examples/radix-from-npm/clean` | `examples/radix-from-npm/dirty` |
 
 ## Shared potency
 
 Same CLI, same MCP allowlist shape, same stable codes:
 
-`DECREE_NATIVE_ELEMENT` · `DECREE_HARDCODED_HEX` · `DECREE_ARBITRARY_VALUE`
+`DECREE_NATIVE_ELEMENT` · `DECREE_HARDCODED_HEX` · `DECREE_HARDCODED_COLOR` · `DECREE_ARBITRARY_VALUE` · `DECREE_UNKNOWN_COMPONENT`

@@ -16,6 +16,10 @@
     "verify:radix": "node ./bin/decree.js verify examples/radix-themes-clean && node ./bin/decree.js verify examples/radix-themes-dirty; test $? -eq 1",
     "verify": "node ./bin/decree.js verify",
     "init:sample": "node ./bin/decree.js init fixtures/init-sample-pkg --out /tmp/decree-init-sample.contract.json --force",
+    "examples:install": "bash ./scripts/examples-install.sh",
+    "examples:init": "bash ./scripts/examples-init.sh",
+    "examples:verify": "bash ./scripts/examples-verify.sh",
+    "demo": "npm run examples:verify",
     "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json"
   },
   "engines": {

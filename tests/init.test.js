@@ -120,4 +120,52 @@ describe('decree init', () => {
       rmSync(dir, { recursive: true, force: true });
     }
   });
+
+  it('inits a package that itself lives under node_modules (real npm layout)', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'decree-init-nested-nm-'));
+    try {
+      const nm = join(dir, 'node_modules', 'FakeUi');
+      mkdirSync(join(nm, 'Button'), { recursive: true });
+      writeFileSync(
+        join(nm, 'package.json'),
+        JSON.stringify({ name: 'FakeUi', version: '1.0.0', type: 'module' }),
+      );
+      writeFileSync(
+        join(nm, 'Button', 'Button.js'),
+        'export function Button() { return null }\n',
+      );
+      writeFileSync(
+        join(nm, 'Button', 'index.js'),
+        "export { Button } from './Button.js'\n",
+      );
+      const contract = buildContractFromPackage(nm);
+      assert.ok(contract.components.includes('Button'), JSON.stringify(contract));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('discovers PascalCase exports from kebab-case component files (Radix-style)', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'decree-init-radix-style-'));
+    try {
+      mkdirSync(join(dir, 'src', 'components'), { recursive: true });
+      writeFileSync(
+        join(dir, 'package.json'),
+        JSON.stringify({ name: 'radix-style-ui', version: '1.0.0', type: 'module' }),
+      );
+      writeFileSync(
+        join(dir, 'src', 'components', 'button.tsx'),
+        'export const Button = () => null;\n',
+      );
+      writeFileSync(
+        join(dir, 'src', 'components', 'icon-button.tsx'),
+        'export function IconButton() { return null }\n',
+      );
+      const contract = buildContractFromPackage(dir);
+      assert.ok(contract.components.includes('Button'), JSON.stringify(contract));
+      assert.ok(contract.components.includes('IconButton'), JSON.stringify(contract));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
 });

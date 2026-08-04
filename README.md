@@ -40,17 +40,16 @@ Do **not** dogfood on Corvy, stevendeeds.com, or SD33DS production. Prove Decree
 
 ## Get started
 
+Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)
+
 ```bash
-# 1. Point at your design-system package (path or node_modules name)
-node bin/decree.js init ./path/to/design-system
-# → writes decree.contract.json (components + tokens + nativeElementMap)
+npm install
+npm run demo                 # clean pass / dirty fail across 3rd-party fixtures + npm examples
 
-# 2. Gate product UI
-node bin/decree.js verify .
-
-# 3. Leash agents (optional)
-node bin/decree.js mcp decree.contract.json
-# paste into Cursor / Claude MCP config, then call list_primitives
+# Or bootstrap a contract from an installed foreign package:
+npm run examples:install
+node bin/decree.js init examples/mui-from-npm/node_modules/@mui/material --force
+node bin/decree.js verify examples/mui-from-npm/clean
 ```
 
 ## Roadmap (full story)
@@ -77,7 +76,9 @@ npm unscoped `decree` is taken. This project ships as **`@stevendeeds/decree`**.
 
 ## Quick links
 
+- [Getting started](./docs/GETTING_STARTED.md)
 - [Thesis](./docs/THESIS.md)
 - [POC plan](./docs/POC.md)
 - [Init](./docs/INIT.md) — bootstrap contract from a package
+- [Examples](./examples/README.md) — third-party proof apps
 - [AGENTS.md](./AGENTS.md) — context for ongoing agent work
