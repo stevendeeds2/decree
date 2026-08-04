@@ -3,6 +3,7 @@ import { join, relative } from 'node:path';
 import { loadContract } from '../contract/index.js';
 import { scanSource } from './scan.js';
 import { collectLocalComponents } from './local-components.js';
+import { resolveExcludePrefixes, assertSafeScanPrefix } from './excludes.js';
 import { CODES } from './codes.js';
 
 const SOURCE_RE = /\.(tsx|jsx|ts|js|css)$/;
@@ -74,15 +75,49 @@ export function verifyPath(targetPath) {
     ? join(targetPath, 'src')
     : targetPath;
   const scan = contract.scan || {};
-  const excludePrefixes = Array.isArray(scan.excludePrefixes)
-    ? scan.excludePrefixes
-    : [];
+  let excludePrefixes;
+  try {
+    excludePrefixes = resolveExcludePrefixes(scan);
+  } catch (err) {
+    return {
+      ok: false,
+      exitCode: 2,
+      findings: [
+        {
+          code: CODES.INVALID_CONTRACT,
+          message: err instanceof Error ? err.message : String(err),
+          file: contractPath,
+          line: 0,
+        },
+      ],
+      contractPath,
+    };
+  }
   const profile = scan.profile === 'app' ? 'app' : 'strict';
-  const localPrefixes =
-    Array.isArray(scan.localComponentPrefixes) &&
-    scan.localComponentPrefixes.length > 0
-      ? scan.localComponentPrefixes
-      : ['src/components'];
+  let localPrefixes;
+  try {
+    localPrefixes =
+      Array.isArray(scan.localComponentPrefixes) &&
+      scan.localComponentPrefixes.length > 0
+        ? scan.localComponentPrefixes.map((p) =>
+            assertSafeScanPrefix(p, 'scan.localComponentPrefixes'),
+          )
+        : ['src/components'];
+  } catch (err) {
+    return {
+      ok: false,
+      exitCode: 2,
+      findings: [
+        {
+          code: CODES.INVALID_CONTRACT,
+          message: err instanceof Error ? err.message : String(err),
+          file: contractPath,
+          line: 0,
+        },
+      ],
+      contractPath,
+    };
+  }
   const localComponents =
     profile === 'app'
       ? collectLocalComponents(targetPath, localPrefixes, excludePrefixes)
