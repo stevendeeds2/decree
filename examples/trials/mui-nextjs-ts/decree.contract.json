@@ -229,5 +229,11 @@
     "input": "Radio",
     "select": "Select",
     "a": "Link"
+  },
+  "scan": {
+    "profile": "app",
+    "localComponentPrefixes": [
+      "src/components"
+    ]
   }
 }

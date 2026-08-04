@@ -151,6 +151,14 @@ for (const trial of trials) {
         excludePrefixes: ['src/components/ui', 'src/styles/themes'],
       };
     }
+    // MUI official example: allow app-local shells under src/components
+    if (trial.id === 'mui-nextjs-ts') {
+      contract.scan = {
+        ...(contract.scan || {}),
+        profile: 'app',
+        localComponentPrefixes: ['src/components'],
+      };
+    }
     const contractOut = join(trial.appDir, 'decree.contract.json');
     writeContract(contract, contractOut, { force: true });
     contractMeta = {

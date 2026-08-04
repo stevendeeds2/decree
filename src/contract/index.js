@@ -3,11 +3,17 @@ import { readFileSync } from 'node:fs';
 /**
  * @typedef {{ name: string, value?: string }} DecreeToken
  * @typedef {{
+ *   profile?: 'strict' | 'app',
+ *   localComponentPrefixes?: string[],
+ *   excludePrefixes?: string[],
+ * }} DecreeScanConfig
+ * @typedef {{
  *   version: number,
  *   name?: string,
  *   components: string[],
  *   tokens: DecreeToken[],
  *   nativeElementMap: Record<string, string>,
+ *   scan?: DecreeScanConfig,
  * }} DecreeContract
  */
 
@@ -36,6 +42,23 @@ export function validateContract(input) {
     Array.isArray(c.nativeElementMap)
   ) {
     throw new Error('Decree contract requires nativeElementMap (object)');
+  }
+  if (c.scan !== undefined && c.scan !== null) {
+    if (typeof c.scan !== 'object' || Array.isArray(c.scan)) {
+      throw new Error('Decree contract scan must be an object');
+    }
+    const scan = /** @type {Record<string, unknown>} */ (c.scan);
+    if (scan.profile !== undefined && scan.profile !== 'strict' && scan.profile !== 'app') {
+      throw new Error(
+        `Unsupported Decree scan.profile: ${String(scan.profile)} (use "strict" or "app")`,
+      );
+    }
+    if (
+      scan.localComponentPrefixes !== undefined &&
+      !Array.isArray(scan.localComponentPrefixes)
+    ) {
+      throw new Error('Decree scan.localComponentPrefixes must be an array');
+    }
   }
 }
 

@@ -55,6 +55,24 @@ Each playground keeps:
 - `init.full.contract.json` — raw `decree init` dump  
 - `clean|dirty/decree.contract.json` — curated consumer allowlist  
 
+## Contract profiles (`scan.profile`)
+
+| Profile | Use when |
+|---------|----------|
+| `strict` *(default)* | Only DS allowlist (+ package import aliases) may appear in JSX |
+| `app` | Also allow PascalCase components discovered under `scan.localComponentPrefixes` (default `src/components`; skips `ui/`) |
+
+```json
+{
+  "scan": {
+    "profile": "app",
+    "localComponentPrefixes": ["src/components"]
+  }
+}
+```
+
+Flagship proof: `examples/trials/mui-nextjs-ts` with `profile: "app"` is one theme-hex finding from green.
+
 ## Agent allowlist (MCP)
 
 ```bash
