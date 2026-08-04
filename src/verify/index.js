@@ -5,7 +5,15 @@ import { scanSource } from './scan.js';
 import { CODES } from './codes.js';
 
 const SOURCE_RE = /\.(tsx|jsx|ts|js|css)$/;
-const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'coverage']);
+const TEST_FILE_RE = /\.(?:test|spec)\.(?:tsx|jsx|ts|js)$/;
+const SKIP_DIRS = new Set([
+  'node_modules',
+  'dist',
+  'build',
+  '.git',
+  'coverage',
+  '__tests__',
+]);
 
 /**
  * @param {string} dir
@@ -17,11 +25,10 @@ function walk(dir, acc = []) {
     const full = join(dir, name);
     const st = statSync(full);
     if (st.isDirectory()) walk(full, acc);
-    else if (SOURCE_RE.test(name)) acc.push(full);
+    else if (SOURCE_RE.test(name) && !TEST_FILE_RE.test(name)) acc.push(full);
   }
   return acc;
 }
-
 /**
  * @param {string} targetPath fixture root or project root containing decree.contract.json
  */
