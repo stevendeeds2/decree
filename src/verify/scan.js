@@ -42,12 +42,17 @@ const FRAMEWORK_COMPONENTS = new Set([
  */
 
 /**
+ * @typedef {{ localComponents?: Set<string> }} ScanOptions
+ */
+
+/**
  * @param {string} source
  * @param {string} file
  * @param {import('../contract/index.js').DecreeContract} contract
+ * @param {ScanOptions} [options]
  * @returns {Finding[]}
  */
-export function scanSource(source, file, contract) {
+export function scanSource(source, file, contract, options = {}) {
   if (!JSX_EXT.test(file) && !file.endsWith('.css')) {
     return [];
   }
@@ -56,6 +61,7 @@ export function scanSource(source, file, contract) {
   const findings = [];
   const lines = source.split(/\r?\n/);
   const allow = new Set(contract.components || []);
+  const localComponents = options.localComponents || new Set();
   const aliases = JSX_EXT.test(file)
     ? collectImportAliases(source)
     : new Map();
@@ -100,6 +106,7 @@ export function scanSource(source, file, contract) {
         const name = match[1];
         if (FRAMEWORK_COMPONENTS.has(name)) continue;
         if (allow.has(name)) continue;
+        if (localComponents.has(name)) continue;
         const resolved = aliases.get(name);
         if (resolved && allow.has(resolved)) continue;
         findings.push({

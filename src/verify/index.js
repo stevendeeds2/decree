@@ -2,6 +2,7 @@ import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { loadContract } from '../contract/index.js';
 import { scanSource } from './scan.js';
+import { collectLocalComponents } from './local-components.js';
 import { CODES } from './codes.js';
 
 const SOURCE_RE = /\.(tsx|jsx|ts|js|css)$/;
@@ -72,13 +73,20 @@ export function verifyPath(targetPath) {
   const srcRoot = existsSync(join(targetPath, 'src'))
     ? join(targetPath, 'src')
     : targetPath;
-  const excludePrefixes = Array.isArray(
-    /** @type {{ scan?: { excludePrefixes?: string[] } }} */ (contract).scan
-      ?.excludePrefixes,
-  )
-    ? /** @type {{ scan: { excludePrefixes: string[] } }} */ (contract).scan
-        .excludePrefixes
+  const scan = contract.scan || {};
+  const excludePrefixes = Array.isArray(scan.excludePrefixes)
+    ? scan.excludePrefixes
     : [];
+  const profile = scan.profile === 'app' ? 'app' : 'strict';
+  const localPrefixes =
+    Array.isArray(scan.localComponentPrefixes) &&
+    scan.localComponentPrefixes.length > 0
+      ? scan.localComponentPrefixes
+      : ['src/components'];
+  const localComponents =
+    profile === 'app'
+      ? collectLocalComponents(targetPath, localPrefixes, excludePrefixes)
+      : new Set();
   const files = walk(srcRoot).filter((file) => {
     const rel = relative(targetPath, file).replace(/\\/g, '/');
     return !excludePrefixes.some((p) => {
@@ -92,7 +100,9 @@ export function verifyPath(targetPath) {
   for (const file of files) {
     const rel = relative(targetPath, file).replace(/\\/g, '/');
     const source = readFileSync(file, 'utf8');
-    findings.push(...scanSource(source, rel, contract));
+    findings.push(
+      ...scanSource(source, rel, contract, { localComponents }),
+    );
   }
 
   return {
