@@ -15,11 +15,28 @@ export function resolvePackageRoot(spec, fromDir = process.cwd()) {
     throw new Error(`No package.json in ${abs}`);
   }
 
+  // Package name path — never allow .. / absolute segments (path escape)
+  const nameParts = spec.split(/[/\\]/);
+  if (
+    nameParts.includes('..') ||
+    nameParts.includes('') ||
+    spec.startsWith('/') ||
+    /^[A-Za-z]:/.test(spec)
+  ) {
+    throw new Error(`Invalid package name "${spec}"`);
+  }
+
   // Treat as package name (e.g. @scope/name or name)
   let dir = resolve(fromDir);
   for (;;) {
-    const candidate = join(dir, 'node_modules', ...spec.split('/'));
+    const nm = join(dir, 'node_modules');
+    const candidate = join(nm, ...nameParts);
     if (existsSync(join(candidate, 'package.json'))) {
+      // Containment: resolved package must live under this node_modules
+      const rel = candidate.slice(nm.length).replace(/^[/\\]/, '');
+      if (rel.split(/[/\\]/).includes('..')) {
+        throw new Error(`Invalid package name "${spec}"`);
+      }
       return candidate;
     }
     const parent = dirname(dir);

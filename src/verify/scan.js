@@ -1,5 +1,5 @@
 import { CODES } from './codes.js';
-import { collectImportAliases } from './imports.js';
+import { collectImportBindings } from './imports.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
@@ -9,32 +9,17 @@ const RGB_HSL_RE =
 const JSX_COMPONENT_RE = /<([A-Z][A-Za-z0-9]*)(?:\.[A-Za-z0-9]+)?(?:\s|>|\/|$)/g;
 const JSX_EXT = /\.(tsx|jsx|ts|js)$/;
 
-/** React / framework tags we never treat as design-system inventions. */
-const FRAMEWORK_COMPONENTS = new Set([
+/**
+ * React runtime tags only — NOT Next/MUI hosts.
+ * Hosts must be imported from a known host package (see imports.js)
+ * or listed on the contract.
+ */
+const REACT_RUNTIME_COMPONENTS = new Set([
   'Fragment',
   'Suspense',
   'StrictMode',
   'Profiler',
-  'Provider',
-  'Consumer',
   'Activity',
-  // Common app-framework hosts (not design-system primitives)
-  'Image',
-  'Link',
-  'Script',
-  'Head',
-  'Html',
-  'Main',
-  'NextScript',
-  'ThemeProvider',
-  'SessionProvider',
-  'QueryClientProvider',
-  'ReactQueryDevtools',
-  'AppRouterCacheProvider',
-  'CacheProvider',
-  'CssBaseline',
-  'GlobalStyles',
-  'StyledEngineProvider',
 ]);
 
 /**
@@ -62,9 +47,9 @@ export function scanSource(source, file, contract, options = {}) {
   const lines = source.split(/\r?\n/);
   const allow = new Set(contract.components || []);
   const localComponents = options.localComponents || new Set();
-  const aliases = JSX_EXT.test(file)
-    ? collectImportAliases(source)
-    : new Map();
+  const { aliases, hosts } = JSX_EXT.test(file)
+    ? collectImportBindings(source)
+    : { aliases: new Map(), hosts: new Set() };
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
@@ -104,9 +89,10 @@ export function scanSource(source, file, contract, options = {}) {
     if (JSX_EXT.test(file)) {
       for (const match of line.matchAll(JSX_COMPONENT_RE)) {
         const name = match[1];
-        if (FRAMEWORK_COMPONENTS.has(name)) continue;
+        if (REACT_RUNTIME_COMPONENTS.has(name)) continue;
         if (allow.has(name)) continue;
         if (localComponents.has(name)) continue;
+        if (hosts.has(name)) continue;
         const resolved = aliases.get(name);
         if (resolved && allow.has(resolved)) continue;
         findings.push({

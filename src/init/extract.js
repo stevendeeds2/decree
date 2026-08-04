@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
-import { basename, join, relative } from 'node:path';
+import { basename, isAbsolute, join, relative, resolve } from 'node:path';
 
 const COMPONENT_FILE =
   /^[A-Z][A-Za-z0-9]*\.(jsx?|tsx?|mjs|cjs)$/;
@@ -197,7 +197,12 @@ function collectExportValue(value, packageRoot, targets) {
   if (typeof value === 'string') {
     // Skip globs for resolution; walk covers files
     if (value.includes('*')) return;
-    targets.push(join(packageRoot, value));
+    const root = resolve(packageRoot);
+    const abs = resolve(packageRoot, value);
+    const rel = relative(root, abs);
+    // Containment: never follow exports outside the package root
+    if (rel.startsWith('..') || isAbsolute(rel)) return;
+    targets.push(abs);
     return;
   }
   if (value && typeof value === 'object' && !Array.isArray(value)) {
