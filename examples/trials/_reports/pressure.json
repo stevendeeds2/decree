@@ -1,8 +1,8 @@
 {
-  "generated": "2026-08-06T16:26:29.075Z",
+  "generated": "2026-08-06T17:39:15.834Z",
   "unitTests": {
-    "status": 1,
-    "ok": false
+    "status": 0,
+    "ok": true
   },
   "fixtures": [
     {
@@ -83,10 +83,8 @@
     "ok": true
   },
   "gate": {
-    "ok": false,
-    "failures": [
-      "npm test failed"
-    ]
+    "ok": true,
+    "failures": []
   },
   "trialSummary": [
     {
@@ -121,5 +119,10 @@
       },
       "error": null
     }
-  ]
+  ],
+  "shadcnBaseline": {
+    "ok": true,
+    "newCount": 0,
+    "baselinedCount": 361
+  }
 }

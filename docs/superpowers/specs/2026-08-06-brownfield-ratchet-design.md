@@ -1,6 +1,6 @@
 # Brownfield baseline / max-new ratchet for `decree verify`
 
-**Status:** draft (Task 1 — design only)  
+**Status:** implemented  
 **Date:** 2026-08-06  
 **Goal:** Make `decree verify` adoptable on noisy brownfield apps by comparing current findings to a checked-in baseline (and/or capping *new* findings), without changing absolute-mode behavior by default.
 

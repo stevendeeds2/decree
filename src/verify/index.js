@@ -1,9 +1,15 @@
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
-import { join, relative } from 'node:path';
+import { join, relative, resolve } from 'node:path';
 import { loadContract } from '../contract/index.js';
 import { scanSource } from './scan.js';
 import { collectLocalComponents } from './local-components.js';
 import { resolveExcludePrefixes, assertSafeScanPrefix } from './excludes.js';
+import {
+  diffAgainstBaseline,
+  findingsToBaseline,
+  loadBaseline,
+  writeBaseline,
+} from './baseline.js';
 import { CODES } from './codes.js';
 
 const SOURCE_RE = /\.(tsx|jsx|ts|js|css)$/;
@@ -31,10 +37,20 @@ function walk(dir, acc = []) {
   }
   return acc;
 }
+
+/**
+ * @typedef {{
+ *   baselinePath?: string,
+ *   writeBaselinePath?: string,
+ *   maxNew?: number,
+ * }} VerifyOptions
+ */
+
 /**
  * @param {string} targetPath fixture root or project root containing decree.contract.json
+ * @param {VerifyOptions} [options]
  */
-export function verifyPath(targetPath) {
+export function verifyPath(targetPath, options = {}) {
   const contractPath = join(targetPath, 'decree.contract.json');
   if (!existsSync(contractPath)) {
     return {
@@ -49,6 +65,10 @@ export function verifyPath(targetPath) {
         },
       ],
       contractPath: null,
+      newFindings: [],
+      baselinedFindings: [],
+      newCount: 0,
+      baselinedCount: 0,
     };
   }
 
@@ -68,6 +88,10 @@ export function verifyPath(targetPath) {
         },
       ],
       contractPath,
+      newFindings: [],
+      baselinedFindings: [],
+      newCount: 0,
+      baselinedCount: 0,
     };
   }
 
@@ -91,6 +115,10 @@ export function verifyPath(targetPath) {
         },
       ],
       contractPath,
+      newFindings: [],
+      baselinedFindings: [],
+      newCount: 0,
+      baselinedCount: 0,
     };
   }
   const profile = scan.profile === 'app' ? 'app' : 'strict';
@@ -116,6 +144,10 @@ export function verifyPath(targetPath) {
         },
       ],
       contractPath,
+      newFindings: [],
+      baselinedFindings: [],
+      newCount: 0,
+      baselinedCount: 0,
     };
   }
   const localComponents =
@@ -135,17 +167,146 @@ export function verifyPath(targetPath) {
   for (const file of files) {
     const rel = relative(targetPath, file).replace(/\\/g, '/');
     const source = readFileSync(file, 'utf8');
-    findings.push(
-      ...scanSource(source, rel, contract, { localComponents }),
-    );
+    findings.push(...scanSource(source, rel, contract, { localComponents }));
   }
 
+  // --- write baseline (exit 0 after successful write) ---
+  if (options.writeBaselinePath) {
+    try {
+      const out = resolve(options.writeBaselinePath);
+      writeBaseline(out, findingsToBaseline(findings));
+      return {
+        ok: true,
+        exitCode: 0,
+        findings,
+        contractPath,
+        filesScanned: files.length,
+        newFindings: findings,
+        baselinedFindings: [],
+        newCount: findings.length,
+        baselinedCount: 0,
+        wroteBaseline: out,
+      };
+    } catch (err) {
+      return {
+        ok: false,
+        exitCode: 2,
+        findings: [
+          {
+            code: CODES.INVALID_CONTRACT,
+            message: err instanceof Error ? err.message : String(err),
+            file: options.writeBaselinePath,
+            line: 0,
+          },
+        ],
+        contractPath,
+        filesScanned: files.length,
+        newFindings: [],
+        baselinedFindings: [],
+        newCount: 0,
+        baselinedCount: 0,
+      };
+    }
+  }
+
+  const useBaseline = Boolean(options.baselinePath);
+  const useMaxNew = options.maxNew !== undefined && options.maxNew !== null;
+
+  if (!useBaseline && !useMaxNew) {
+    return {
+      ok: findings.length === 0,
+      exitCode: findings.length === 0 ? 0 : 1,
+      findings,
+      contractPath,
+      filesScanned: files.length,
+      newFindings: findings,
+      baselinedFindings: [],
+      newCount: findings.length,
+      baselinedCount: 0,
+    };
+  }
+
+  /** @type {import('./scan.js').Finding[]} */
+  let newFindings = findings;
+  /** @type {import('./scan.js').Finding[]} */
+  let baselinedFindings = [];
+
+  if (useBaseline) {
+    try {
+      const baseline = loadBaseline(resolve(options.baselinePath));
+      const diff = diffAgainstBaseline(findings, baseline);
+      newFindings = /** @type {import('./scan.js').Finding[]} */ (
+        diff.newFindings
+      );
+      baselinedFindings = /** @type {import('./scan.js').Finding[]} */ (
+        diff.baselinedFindings
+      );
+    } catch (err) {
+      return {
+        ok: false,
+        exitCode: 2,
+        findings: [
+          {
+            code: CODES.INVALID_CONTRACT,
+            message: err instanceof Error ? err.message : String(err),
+            file: options.baselinePath,
+            line: 0,
+          },
+        ],
+        contractPath,
+        filesScanned: files.length,
+        newFindings: [],
+        baselinedFindings: [],
+        newCount: 0,
+        baselinedCount: 0,
+      };
+    }
+  }
+
+  let maxNew = 0;
+  if (useMaxNew) {
+    if (
+      typeof options.maxNew !== 'number' ||
+      !Number.isInteger(options.maxNew) ||
+      options.maxNew < 0
+    ) {
+      return {
+        ok: false,
+        exitCode: 2,
+        findings: [
+          {
+            code: CODES.INVALID_CONTRACT,
+            message: `Invalid --max-new value: ${String(options.maxNew)}`,
+            file: contractPath,
+            line: 0,
+          },
+        ],
+        contractPath,
+        filesScanned: files.length,
+        newFindings,
+        baselinedFindings,
+        newCount: newFindings.length,
+        baselinedCount: baselinedFindings.length,
+      };
+    }
+    maxNew = options.maxNew;
+  }
+
+  // With baseline only: fail if any new. With max-new: fail if new > maxNew.
+  const failed = useMaxNew
+    ? newFindings.length > maxNew
+    : newFindings.length > 0;
+
   return {
-    ok: findings.length === 0,
-    exitCode: findings.length === 0 ? 0 : 1,
+    ok: !failed,
+    exitCode: failed ? 1 : 0,
     findings,
     contractPath,
     filesScanned: files.length,
+    newFindings,
+    baselinedFindings,
+    newCount: newFindings.length,
+    baselinedCount: baselinedFindings.length,
   };
 }
 

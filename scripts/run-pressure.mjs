@@ -129,6 +129,30 @@ if (existsSync(summaryPath)) {
   }
 }
 
+// Brownfield ratchet: shadcn trial must be green under checked-in baseline
+const shadcnApp = join(root, 'examples/trials/shadcn-dashboard-starter');
+const shadcnBaseline = join(reportsDir, 'shadcn.baseline.json');
+if (existsSync(shadcnApp) && existsSync(shadcnBaseline)) {
+  const ratchet = verifyPath(shadcnApp, { baselinePath: shadcnBaseline });
+  report.shadcnBaseline = {
+    ok: ratchet.ok,
+    newCount: ratchet.newCount,
+    baselinedCount: ratchet.baselinedCount,
+  };
+  console.log(
+    `== shadcn baseline ratchet == new=${ratchet.newCount} baselined=${ratchet.baselinedCount} ok=${ratchet.ok}`,
+  );
+  if (!ratchet.ok || ratchet.newCount !== 0) {
+    report.gate.ok = false;
+    report.gate.failures.push(
+      `shadcn baseline ratchet expected 0 new, got ${ratchet.newCount}`,
+    );
+  }
+} else {
+  report.gate.ok = false;
+  report.gate.failures.push('shadcn trial or baseline missing');
+}
+
 const outJson = join(reportsDir, 'pressure.json');
 writeFileSync(outJson, `${JSON.stringify(report, null, 2)}\n`);
 
