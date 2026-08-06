@@ -1,14 +1,12 @@
 # Decree pressure report
 
-Generated: 2026-08-06T16:26:29.075Z
+Generated: 2026-08-06T17:39:15.834Z
 
-## Gate: FAIL
-
-- npm test failed
+## Gate: PASS
 
 ## Unit tests
 
-- ok: false
+- ok: true
 
 ## Fixtures
 
@@ -32,4 +30,4 @@ Generated: 2026-08-06T16:26:29.075Z
 
 ## Outside-tester readiness
 
-Internal pressure gate **failed** — do not invite outside testers yet.
+Internal pressure gate passed. Still POC — invite only technical design-system folks, not general users.

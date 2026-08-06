@@ -1,0 +1,2171 @@
+{
+  "version": 1,
+  "findings": [
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/auth/sign-in/[[...sign-in]]/page.tsx",
+      "line": 10,
+      "messageFingerprint": "263807cc94f697e1539fa0b1a767c0296fe0385cc7f4f05a9ce9dda9893ce4c6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/auth/sign-up/[[...sign-up]]/page.tsx",
+      "line": 10,
+      "messageFingerprint": "3b0348ae2ed58406381cbe264aae9638411a44159e358ad38b8f8a0bfcc31a2c"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/app/dashboard/billing/page.tsx",
+      "line": 19,
+      "messageFingerprint": "35190d9dff65ce0f601d486b127909ae4a54b298037bb4ef5dc6c9cda28b0cf9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/billing/page.tsx",
+      "line": 15,
+      "messageFingerprint": "7caf8de6fbf7c5caa78f73444fa98d9a0b1015afc984736f5671c756a7646d78"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/billing/page.tsx",
+      "line": 35,
+      "messageFingerprint": "5da2d28003a5b793be789d60da4614bff625e054be307bc31d36f2e2e2168d7a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/billing/page.tsx",
+      "line": 50,
+      "messageFingerprint": "df666450d6aa35c079f60dca70509b51eaa4b1c6910ed55aab74259f551a3e1a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/chat/page.tsx",
+      "line": 8,
+      "messageFingerprint": "2bd1d3259cff8cd2db64ef48713177d4029607392f59ae965463671ba128f31f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/elements/icons/page.tsx",
+      "line": 8,
+      "messageFingerprint": "5ac3248db37fda26fadd5e8b39b08f176c375b83a7afeea8b35a6ccf0f893c26"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/exclusive/page.tsx",
+      "line": 14,
+      "messageFingerprint": "cece5a39fed5534a1cb19573aabf5426658a4f43b172d0939157cbab17eaf51f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/exclusive/page.tsx",
+      "line": 15,
+      "messageFingerprint": "fb9e4451cd8b6ff7c99ada08fbf707cc7b8347df043eda30f7d2fbe3cfbd0a1e"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/exclusive/page.tsx",
+      "line": 20,
+      "messageFingerprint": "734eca76b1df38df5075fd317ff42a3f88127e73fbc1544c32ff46e47e9355a8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/exclusive/page.tsx",
+      "line": 41,
+      "messageFingerprint": "734eca76b1df38df5075fd317ff42a3f88127e73fbc1544c32ff46e47e9355a8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/advanced/page.tsx",
+      "line": 10,
+      "messageFingerprint": "15ab7fe399ab71294004a9d7b6416d24f069916c9ec1385839352cb1fdadc4e2"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/advanced/page.tsx",
+      "line": 14,
+      "messageFingerprint": "6f85e6ffd78b02afcf1363103c4db502cd552c3017b8fdeb8132fd9c04cbcb5d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/basic/page.tsx",
+      "line": 10,
+      "messageFingerprint": "2adb66c3f05b865a7b240f1fa8c851d7bf23b2f2c0a30ff872fed07fc9aa0d16"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/basic/page.tsx",
+      "line": 14,
+      "messageFingerprint": "158dfc63b36fac4f07ca3e46c2a9d4c7183aff1babeff5729001b6bc8fa8ccc3"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/multi-step/page.tsx",
+      "line": 10,
+      "messageFingerprint": "a88e48742c9e42ed5d46794093ae1919f083afb1600d69ca55da70ff4cfec611"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/multi-step/page.tsx",
+      "line": 11,
+      "messageFingerprint": "d1407861caafb34a822d2affcacf6896577f97066bf6ddd34a018b92ed4f2ede"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/sheet-form/page.tsx",
+      "line": 10,
+      "messageFingerprint": "fe596da876feedb9181a3ae900c8c95adb74a0b9afd99216c50687c3d05c4a60"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/forms/sheet-form/page.tsx",
+      "line": 14,
+      "messageFingerprint": "035c8e3dd9685cd26392e0c4bd55c13e8606eec6af4412d13d9591eaee7bae88"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/kanban/page.tsx",
+      "line": 8,
+      "messageFingerprint": "7e9ba43c4cf09e611705a9687f554f2b97ab7fd0fbc5860b93f55f97d27ace6f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/layout.tsx",
+      "line": 24,
+      "messageFingerprint": "28edc09ce5fc99988c1defc0fdb0b6ef62d31d80c235eb61ad700ec33c8f0e40"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/layout.tsx",
+      "line": 26,
+      "messageFingerprint": "e473e11b3b0f183766b89f4eecda02a47509a3fc49c4e8281451f1cc32b183c4"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/layout.tsx",
+      "line": 28,
+      "messageFingerprint": "7f4d51830d0e569f0c25360139a4b7a1f83f63f681448c88844781e6604ed847"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/layout.tsx",
+      "line": 31,
+      "messageFingerprint": "2296998af2a7180563ba488de2f962c745e835ce51a23cb3318ea0cd83217b5d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/notifications/page.tsx",
+      "line": 8,
+      "messageFingerprint": "f1723312fd8f919f82bc41b65043c1f28daf3f27a8fe068d8e79b0134437b95c"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@area_stats/error.tsx",
+      "line": 27,
+      "messageFingerprint": "7ca2a8a7befbb63acd4f27fc253a0b3165a68a0d24e0f6565b900d06357875d1"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@area_stats/error.tsx",
+      "line": 34,
+      "messageFingerprint": "3436cd13c3430a6b9a70ba05689a933503018ee10b4688dbb061869ecab70da7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@area_stats/loading.tsx",
+      "line": 4,
+      "messageFingerprint": "0556423328c5cf031554568c6e293550a84ffb6d6c8579249b9d7f432b6ad2cf"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@area_stats/page.tsx",
+      "line": 6,
+      "messageFingerprint": "3d7f77049beee275ad0d0d84cec03e65ca114879dcf11f07907909da6b98b9fb"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@bar_stats/error.tsx",
+      "line": 27,
+      "messageFingerprint": "4dc9c28f5e8b2492e4e792e35085c6c460770c258721bbeddbe8fcc093e976d4"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@bar_stats/error.tsx",
+      "line": 34,
+      "messageFingerprint": "d4a9b9f086180e40ed2647fb0a7c9be5af7bf2fe6148be5c6818d8d3819cffd2"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@bar_stats/loading.tsx",
+      "line": 4,
+      "messageFingerprint": "205e419be3090e4c4cf35b9d4d184ece004be29e861d2353c814b222112f6fcc"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@bar_stats/page.tsx",
+      "line": 7,
+      "messageFingerprint": "217f33cd50455f8a9d47010de55ead789bf7345d6f7f7f2dc59d0a8d5cb9f6ed"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@pie_stats/error.tsx",
+      "line": 27,
+      "messageFingerprint": "c11f9860afd4989e02e48d3b8ebdc115f1f6c98f62d0fb2294a297c7b3316d0b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@pie_stats/error.tsx",
+      "line": 34,
+      "messageFingerprint": "168380e1f96679a0577fc5592e7309123d272757f4a519c625baacac600fea83"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@pie_stats/loading.tsx",
+      "line": 4,
+      "messageFingerprint": "04f807d9961a62bdc3007b17b1b060646f11f133e6395f83826cca31b8c6c3ab"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@pie_stats/page.tsx",
+      "line": 6,
+      "messageFingerprint": "c2996321ed1c797abd8444a481cdeb9515e2b7bfcc79d3d982f008ff48d9a165"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@sales/error.tsx",
+      "line": 27,
+      "messageFingerprint": "5c57c72af96dfb43139ca3acdb491f9c60eceec7a0fd6cec2383dd909b3348dd"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@sales/error.tsx",
+      "line": 34,
+      "messageFingerprint": "7b45318686aeea741c4d866b5db27c9020d47b9013bb975e0cf31a7581c52403"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@sales/loading.tsx",
+      "line": 5,
+      "messageFingerprint": "9e0c4434ca8b48708cb7b1baba4075c25122a8612f6af08d8b193a57886feed2"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/@sales/page.tsx",
+      "line": 6,
+      "messageFingerprint": "fe2c08e964a16422b8066d1a684636e8c927ee06dac823e9e848e6c70e7e50f4"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/error.tsx",
+      "line": 27,
+      "messageFingerprint": "7e8fb638f5b6b2ced778e73cb4681699314f53a01be7d11d03c78f9db68209b1"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/error.tsx",
+      "line": 34,
+      "messageFingerprint": "76ba6d8e680d35d0bf4b59406312a0159a5b645e14ad6bd1efa6bd263090d042"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 36,
+      "messageFingerprint": "e15e85ca80e0a1c0992c83ad5044b22f089b7c09cdfd05428f60343d5d669383"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 56,
+      "messageFingerprint": "e15e85ca80e0a1c0992c83ad5044b22f089b7c09cdfd05428f60343d5d669383"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 76,
+      "messageFingerprint": "e15e85ca80e0a1c0992c83ad5044b22f089b7c09cdfd05428f60343d5d669383"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 96,
+      "messageFingerprint": "e15e85ca80e0a1c0992c83ad5044b22f089b7c09cdfd05428f60343d5d669383"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 26,
+      "messageFingerprint": "a3cada0586c3c4d32accb6c4888eb0c38507a205139792bdfdadea31035a57ff"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 41,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 48,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 61,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 68,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 81,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 88,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 101,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/overview/layout.tsx",
+      "line": 108,
+      "messageFingerprint": "86e1552f4c86232623317f70e46062fb8985f3fd49e56bf34cb21e7b1a78454d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/product/[productId]/page.tsx",
+      "line": 22,
+      "messageFingerprint": "352340614c5bf0ca67fda951555722e84bee3fe9e90acae4a7ee055042d00403"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/product/[productId]/page.tsx",
+      "line": 24,
+      "messageFingerprint": "2cff59a047aeee801d088dd860f83f15385372419a55855ea8c0adc55edd7429"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/product/[productId]/page.tsx",
+      "line": 25,
+      "messageFingerprint": "5f2e12cececacc577325f440447354b655b34ad7cd3f953f1dcdf4b5301d3256"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/product/page.tsx",
+      "line": 24,
+      "messageFingerprint": "e4b918fee6d8a88125c1d71e42f4c4ef1e478f8e371b6adb5e870e143e14e3c9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/product/page.tsx",
+      "line": 30,
+      "messageFingerprint": "0b2c8ac1819b8b27f4eedb6eb72721ba88f018de10b70f9f30c4ed124840aab7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/product/page.tsx",
+      "line": 34,
+      "messageFingerprint": "73690d31e30626db11c58bdb1efd3916c3397aaeaafc504221cd613e5116f227"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/profile/[[...profile]]/page.tsx",
+      "line": 8,
+      "messageFingerprint": "41820f98f98fbc4b1ec4b0c3f8717f70a949345cf47b54dd618d2264ad5bd8a4"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/react-query/page.tsx",
+      "line": 21,
+      "messageFingerprint": "71ac3249a78a598e0cd3b1a79ac98a1aea4b1680973809edce40b0335359c11a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/react-query/page.tsx",
+      "line": 26,
+      "messageFingerprint": "7ac1a36f5152c303031a52f15fff0987eecc28c771bd035c809c5ef48dbbe1bf"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/react-query/page.tsx",
+      "line": 27,
+      "messageFingerprint": "96b0dd8d3d853df9c774c2a21162a9aa72d7717cfc16c14e71f7bf8bf5d66e0e"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/react-query/page.tsx",
+      "line": 28,
+      "messageFingerprint": "189bbeb5d2fddc2efd0892b11cb955e16818614514f1899eab8ad4d5c14ae044"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/users/page.tsx",
+      "line": 21,
+      "messageFingerprint": "e43d2eb1574e5e08ec6e6e5a40557f716cccc6181304f481f9aaa7588c56176d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/users/page.tsx",
+      "line": 25,
+      "messageFingerprint": "a6d24145d63d0d620077ca52075fe062638817aaf510de98db79f70e7b73f5be"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/users/page.tsx",
+      "line": 27,
+      "messageFingerprint": "4c17ba91394862f2809fdf7d001d9d281e27e52950a54b31b3431549deff8419"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/workspaces/page.tsx",
+      "line": 9,
+      "messageFingerprint": "7b803f4829d371986e221aa8e96c7ff82f5d893a0c2a64dc7eb56093aae9aaf6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/workspaces/page.tsx",
+      "line": 14,
+      "messageFingerprint": "b7d24a38b6aa35164fb9721bc8c7dd878ad426b065f336f9c655bceb00f41a0f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/workspaces/team/[[...rest]]/page.tsx",
+      "line": 9,
+      "messageFingerprint": "6818744fc19900f81bfdee0e14ef243ccd5b4a65f59aad1bd75707c88953c1c1"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/dashboard/workspaces/team/[[...rest]]/page.tsx",
+      "line": 14,
+      "messageFingerprint": "a59edfe79f55f2d49da8a1317d84f205166a5b29ab86cce5b23f0faaeb4a14dd"
+    },
+    {
+      "code": "DECREE_HARDCODED_HEX",
+      "file": "src/app/global-error.tsx",
+      "line": 33,
+      "messageFingerprint": "878163ed6c6ef913392f8ad091d843b5f741430d0c49d500bff88c2999c32996"
+    },
+    {
+      "code": "DECREE_HARDCODED_HEX",
+      "file": "src/app/global-error.tsx",
+      "line": 41,
+      "messageFingerprint": "5083da525c39db49ebd63de376ae485d81ed50678067beaf71bc16829df629b5"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/app/global-error.tsx",
+      "line": 36,
+      "messageFingerprint": "8a2ec049a59bd9ebb038f8ffc2aecaeb89be3c4368402127b21956c7827159ae"
+    },
+    {
+      "code": "DECREE_HARDCODED_HEX",
+      "file": "src/app/layout.tsx",
+      "line": 14,
+      "messageFingerprint": "477ff97b6138a0147093980e8616df59dd8039630ed75231f9ec3a34d8eb075f"
+    },
+    {
+      "code": "DECREE_HARDCODED_HEX",
+      "file": "src/app/layout.tsx",
+      "line": 15,
+      "messageFingerprint": "0d3857237a25ca01d1ab0c3a4f2c450139b93fe34d21ea04d75f4d5b97765747"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/layout.tsx",
+      "line": 84,
+      "messageFingerprint": "0cf53ea6057b52064fde384e64fee9ff5b996610cfe532561d75f91bbbfcedda"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/layout.tsx",
+      "line": 85,
+      "messageFingerprint": "b7878e82b335ca869caf27294dbb0e0b550a89275ae34739d0f2b054f628f4a2"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/layout.tsx",
+      "line": 86,
+      "messageFingerprint": "0480c3f3c102bb781f373e764b21a1efc3483ab63a0c2c5feb9fad56847cea81"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/app/layout.tsx",
+      "line": 93,
+      "messageFingerprint": "20e98f928762850b1261ba9f1d07d4f71d38d7d02043af92398201826a249725"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/app/not-found.tsx",
+      "line": 12,
+      "messageFingerprint": "889306201572776780148cf147737ec08ca1b5a49be9428e38e237ce560648f9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/breadcrumbs.tsx",
+      "line": 30,
+      "messageFingerprint": "3bfa63d8e6152db762b6f20be319e04204e096d3777fb71eb25195bc74520525"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/file-uploader.tsx",
+      "line": 181,
+      "messageFingerprint": "b11ed8f6a5fc096cf233090cac4486f737b565c8165ab6023afc873f6d36a0b8"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/components/file-uploader.tsx",
+      "line": 201,
+      "messageFingerprint": "21422656857a67c5a187c7c98fb683290ef9d1a215848895a3c98d67fc3e11d5"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/file-uploader.tsx",
+      "line": 205,
+      "messageFingerprint": "3b718204026e495a4b63835a777f9e8150556a0a17d98c137427469b868ddea9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/file-uploader.tsx",
+      "line": 212,
+      "messageFingerprint": "3b718204026e495a4b63835a777f9e8150556a0a17d98c137427469b868ddea9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/file-uploader.tsx",
+      "line": 235,
+      "messageFingerprint": "0b22b570c7bbc57feedd99ec83466a7fccc75adb9ab2457ec6726e53b6127b03"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/file-uploader.tsx",
+      "line": 286,
+      "messageFingerprint": "3b718204026e495a4b63835a777f9e8150556a0a17d98c137427469b868ddea9"
+    },
+    {
+      "code": "DECREE_HARDCODED_HEX",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 133,
+      "messageFingerprint": "216a653b778aa2e8dfe994a5c0a3ae257372ab01538071dd705f0a6740e08d1d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 171,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 267,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 297,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 330,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 351,
+      "messageFingerprint": "cb5a89e574176af374c886c01792c09349109e3e7b6d269e20302a4c8d9f78be"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 354,
+      "messageFingerprint": "cb5a89e574176af374c886c01792c09349109e3e7b6d269e20302a4c8d9f78be"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 357,
+      "messageFingerprint": "cb5a89e574176af374c886c01792c09349109e3e7b6d269e20302a4c8d9f78be"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 371,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 387,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 412,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/demo-form.tsx",
+      "line": 450,
+      "messageFingerprint": "cc575622902838447985c65fd23b108b1ae985b528abb158eeb2a06ec5e51447"
+    },
+    {
+      "code": "DECREE_HARDCODED_HEX",
+      "file": "src/components/forms/fields/color-field.tsx",
+      "line": 27,
+      "messageFingerprint": "72bd4e6375785baf85372d4963df0e76db02191d215c9d02d6121800e549eade"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/components/forms/fields/color-field.tsx",
+      "line": 15,
+      "messageFingerprint": "4e1fc77f50e5838cafcb9464e64bf658808dbe8c8b22a68be984506fa642a7a2"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/fields/combobox-field.tsx",
+      "line": 71,
+      "messageFingerprint": "c39dd672a49a1a04d75061c7f8e740727c07610559071a258f6017795354ff15"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/fields/combobox-field.tsx",
+      "line": 90,
+      "messageFingerprint": "c39dd672a49a1a04d75061c7f8e740727c07610559071a258f6017795354ff15"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/fields/date-picker-field.tsx",
+      "line": 48,
+      "messageFingerprint": "56015b4f09e1d54234005fbf9fcff4c9dcbf6a504cf67ff4eb90f152bfd01778"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/fields/date-picker-field.tsx",
+      "line": 99,
+      "messageFingerprint": "56015b4f09e1d54234005fbf9fcff4c9dcbf6a504cf67ff4eb90f152bfd01778"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/fields/file-upload-field.tsx",
+      "line": 26,
+      "messageFingerprint": "6f9cd50a0dd60a2343657afeab230848ea73a53208e7bfab1645cb8c70f2122b"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/components/forms/fields/tags-field.tsx",
+      "line": 64,
+      "messageFingerprint": "cfa30ef307d3215646379274f015e6b6ce32538372312aebe293b095831866c7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/forms/fields/tags-field.tsx",
+      "line": 70,
+      "messageFingerprint": "038e0d9335270fc2174b8d84bdb4941430d844cfc58fe23d247cfd3f1b040d26"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/components/kbar/index.tsx",
+      "line": 69,
+      "messageFingerprint": "15c51453a46fd31bbc8523d00628c351f4e6d8509f77f200655d6f40346e9077"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/components/kbar/index.tsx",
+      "line": 73,
+      "messageFingerprint": "b3416051f1eb88f6bfce78c36016e6f46d442a2c706db7e8cf5a35ce05d55c5f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/index.tsx",
+      "line": 57,
+      "messageFingerprint": "c4c09ac2d4a37f5a1140eface019beddddb2f892a2a7ea72e0a3e0d953bca8c9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/index.tsx",
+      "line": 58,
+      "messageFingerprint": "4730fe9985e95b8a9186cdb22d36742ee0dcea6dfe3fe51e2d4e8d17037a5aa9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/index.tsx",
+      "line": 67,
+      "messageFingerprint": "be2cd512a45030744fa46eee83090a6f5a77b005c70410062d1e06107cb0a516"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/index.tsx",
+      "line": 68,
+      "messageFingerprint": "ceae91b4ba14f5aba3cafcd9f1b13cc87b47678634e3e435292083fce91d50b6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/index.tsx",
+      "line": 69,
+      "messageFingerprint": "55f4f16e78b597630963cfbdcd3b0f054ae6fc362333a9f54091c45a38542851"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/index.tsx",
+      "line": 71,
+      "messageFingerprint": "a185a70d1ad797edf5b711a42f29b5ee38020b0f7b02cf469c0ab29f8af9816e"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/index.tsx",
+      "line": 74,
+      "messageFingerprint": "01bf088866e21abff4f1747a167141d349ee173aaecd1ffc82cede9628d40b51"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/render-result.tsx",
+      "line": 16,
+      "messageFingerprint": "cded543c74864c8a3693f0f3ae5372cb449357aa8fd468da1ea08dec5788e957"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/render-result.tsx",
+      "line": 24,
+      "messageFingerprint": "0ad728a5ee3be54f717137a0d1b0d700a0e8eb3a4fbdaaeef761929eb2de6731"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/kbar/result-item.tsx",
+      "line": 39,
+      "messageFingerprint": "b35e802e00ad4af744f86cbd26a8fdf774060d4643977fda696758b6680d1ac2"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 54,
+      "messageFingerprint": "514225002f9645ffdefbcc3260d9ba738a8094eb051beff8a935e0b2493affc9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 78,
+      "messageFingerprint": "caa08eb3d41dd02703d678d9313ab6956ff685a4972814650058bbdd4e929824"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 80,
+      "messageFingerprint": "0d326d9f23ce826bd4dcb7c5e9d109ba039884d2c52863a2cbe30770d14abd1d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 104,
+      "messageFingerprint": "caa08eb3d41dd02703d678d9313ab6956ff685a4972814650058bbdd4e929824"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 126,
+      "messageFingerprint": "ff0deba89ab08a3136dec6c34087be25fabdaee2aec4c14c826f60712435dc22"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 127,
+      "messageFingerprint": "0d326d9f23ce826bd4dcb7c5e9d109ba039884d2c52863a2cbe30770d14abd1d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 139,
+      "messageFingerprint": "ff0deba89ab08a3136dec6c34087be25fabdaee2aec4c14c826f60712435dc22"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 148,
+      "messageFingerprint": "0d326d9f23ce826bd4dcb7c5e9d109ba039884d2c52863a2cbe30770d14abd1d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 153,
+      "messageFingerprint": "0d326d9f23ce826bd4dcb7c5e9d109ba039884d2c52863a2cbe30770d14abd1d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 158,
+      "messageFingerprint": "0d326d9f23ce826bd4dcb7c5e9d109ba039884d2c52863a2cbe30770d14abd1d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 165,
+      "messageFingerprint": "0d326d9f23ce826bd4dcb7c5e9d109ba039884d2c52863a2cbe30770d14abd1d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/app-sidebar.tsx",
+      "line": 166,
+      "messageFingerprint": "1dbbaa56bb1e41f1812c5c61a236a0bf139b7715713f62e47a2c10aa4e4c4451"
+    },
+    {
+      "code": "DECREE_HARDCODED_HEX",
+      "file": "src/components/layout/cta-github.tsx",
+      "line": 18,
+      "messageFingerprint": "4d4c4a7a2d18f6ccdea52c52ee4d633bdcac1741510dc77103511721903e0a99"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/cta-github.tsx",
+      "line": 22,
+      "messageFingerprint": "f93e02c2fd684d40056f092ba0099ae22e4666fa815d7efd4f4656cfff7d8c86"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/header.tsx",
+      "line": 17,
+      "messageFingerprint": "c07954bd96c7f5f08fa61cc9ee3a7de843d6a1c7ed43c6d684d6baee20321ffc"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/header.tsx",
+      "line": 21,
+      "messageFingerprint": "93656ba64693a1c627391881a9eb2bb83ea2c5484c4b3bda3f2ce31f32230e3d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/header.tsx",
+      "line": 23,
+      "messageFingerprint": "3aeb4b5000bc9c1f41303727abfa0023bb07c88917436fb38576041d92067a5b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/header.tsx",
+      "line": 25,
+      "messageFingerprint": "021201c346e14e211db75a39d8b88904d61f85e300851a983bc289513fed837f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/header.tsx",
+      "line": 27,
+      "messageFingerprint": "b192930334844dd28d2b8432e0077938d66bea1ef27018509970043fc3120343"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/header.tsx",
+      "line": 29,
+      "messageFingerprint": "b8b5bfbf9c6a835cb106b9e1afa3916495679bce3997297603467d650a65a82f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/info-sidebar.tsx",
+      "line": 78,
+      "messageFingerprint": "951957fa86afef34a97aae1185d4e707386a06c89228b36b17c4262a7b20e9da"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/page-container.tsx",
+      "line": 55,
+      "messageFingerprint": "f1800550f6ed194d9ab4879ea00e5e9dc7c5a51360edaba853d0321d75f0a4c6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/providers.tsx",
+      "line": 16,
+      "messageFingerprint": "b3f64b2f1d59cfd27bb514e137507cff5e594df65547d0080e7ddd9c82ce08da"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/providers.tsx",
+      "line": 17,
+      "messageFingerprint": "6e2563c4ba7b15a9dc43a27645ef7647bf42407aab4c4393d663b005153d2881"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/providers.tsx",
+      "line": 35,
+      "messageFingerprint": "6e4442feabbf135a38cb46f0bc2adbada12ec21b5c481826d56283f5f2604fb6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/query-provider.tsx",
+      "line": 12,
+      "messageFingerprint": "2b6129c0c10705c0910e0d6a541d423eb708ada0e86b6c4c2f468a9ee02891e6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/query-provider.tsx",
+      "line": 14,
+      "messageFingerprint": "ab6c4a070db7d804883031907df07a6fec4d86a5938ea782d175c9f3302379e0"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/user-nav.tsx",
+      "line": 24,
+      "messageFingerprint": "d90e1391a0829c43c028dc20597073e54d5fe78fde437ef6a172841563358771"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/layout/user-nav.tsx",
+      "line": 49,
+      "messageFingerprint": "cab4692ad4da2a4a8d6a594edc1ae7593877dba621f7d6f5c985f5a05957712d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-main.tsx",
+      "line": 50,
+      "messageFingerprint": "b2c6ea25c76ccce93e4b6b36b9a904f5f1d0b9290000bb00cb265b4ad69d6d74"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-projects.tsx",
+      "line": 53,
+      "messageFingerprint": "a0e06b53a43f3e73f81450a31716e5c77e4a6c7f3723a3573bbb1bc68538e2b8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-projects.tsx",
+      "line": 63,
+      "messageFingerprint": "a0e06b53a43f3e73f81450a31716e5c77e4a6c7f3723a3573bbb1bc68538e2b8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-projects.tsx",
+      "line": 67,
+      "messageFingerprint": "a0e06b53a43f3e73f81450a31716e5c77e4a6c7f3723a3573bbb1bc68538e2b8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-projects.tsx",
+      "line": 74,
+      "messageFingerprint": "a0e06b53a43f3e73f81450a31716e5c77e4a6c7f3723a3573bbb1bc68538e2b8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-projects.tsx",
+      "line": 84,
+      "messageFingerprint": "a0e06b53a43f3e73f81450a31716e5c77e4a6c7f3723a3573bbb1bc68538e2b8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-user.tsx",
+      "line": 53,
+      "messageFingerprint": "ed44f6323e722bdb588dbea0a307f50dab9e727d52a8a2d67f9e53da386141c8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-user.tsx",
+      "line": 78,
+      "messageFingerprint": "ed44f6323e722bdb588dbea0a307f50dab9e727d52a8a2d67f9e53da386141c8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-user.tsx",
+      "line": 85,
+      "messageFingerprint": "ed44f6323e722bdb588dbea0a307f50dab9e727d52a8a2d67f9e53da386141c8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-user.tsx",
+      "line": 89,
+      "messageFingerprint": "ed44f6323e722bdb588dbea0a307f50dab9e727d52a8a2d67f9e53da386141c8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-user.tsx",
+      "line": 93,
+      "messageFingerprint": "ed44f6323e722bdb588dbea0a307f50dab9e727d52a8a2d67f9e53da386141c8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/nav-user.tsx",
+      "line": 100,
+      "messageFingerprint": "ed44f6323e722bdb588dbea0a307f50dab9e727d52a8a2d67f9e53da386141c8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 69,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 98,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 110,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 152,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 168,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 206,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 210,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/org-switcher.tsx",
+      "line": 225,
+      "messageFingerprint": "c342144955eb461292771ec63592e44887987264e0ae862650e27f8775f61893"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/components/search-input.tsx",
+      "line": 12,
+      "messageFingerprint": "80415529711a35a1aab4d585aef481b28abed6e47a686397ebe61138edb0eb77"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/components/search-input.tsx",
+      "line": 17,
+      "messageFingerprint": "b28438a3b222bf3c3747574a9caacab47a5bbb3248a83d797a37758bea00a2e1"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/components/search-input.tsx",
+      "line": 17,
+      "messageFingerprint": "b28438a3b222bf3c3747574a9caacab47a5bbb3248a83d797a37758bea00a2e1"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/components/search-input.tsx",
+      "line": 17,
+      "messageFingerprint": "07d556a312efc43c02532de428f3dd7e235d2b88ff2882406e86c69ea30280f9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/search-input.tsx",
+      "line": 15,
+      "messageFingerprint": "40690cc62764f817118005ee120e07c9265c5a8863dc736c271a697fec65f2d7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/themes/active-theme.tsx",
+      "line": 59,
+      "messageFingerprint": "362c7f389e69a0d03f281e8ae8014d2f24ba0d703f543b1b56b2c05afb4e6736"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/themes/theme-mode-toggle.tsx",
+      "line": 57,
+      "messageFingerprint": "82979aab1f3f914436d96332ebfa1794c56bb9dff4dbfbfe83c3065878398db7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/themes/theme-provider.tsx",
+      "line": 6,
+      "messageFingerprint": "7b881ab62d712c5c43e0823eb2705f2369d77d9746cf386f04961f71a1725b29"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/components/themes/theme-selector.tsx",
+      "line": 39,
+      "messageFingerprint": "2ca1c7b36bac13c1d023d34c26357b05d0887133e09b60b6a5577361561f86c7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/auth/components/github-auth-button.tsx",
+      "line": 9,
+      "messageFingerprint": "3c475ed5c8e6903a9c4b1659f2af507714a15ceb236dcc38f3421d2d9677cda2"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/auth/components/sign-in-view.tsx",
+      "line": 45,
+      "messageFingerprint": "5389ad1c592f367a83e50abca0f01820fc82a195f0938e4fc40ac73eb594cde5"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/auth/components/sign-in-view.tsx",
+      "line": 42,
+      "messageFingerprint": "8b76ff5c6818428d92bae84a7506b4ae41a2ec4a2b7b80b60aa4e54dce85c85a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/auth/components/sign-in-view.tsx",
+      "line": 60,
+      "messageFingerprint": "cb57337f4b68937b0215465e0c657663bd2af997a56f2f67c42bfe1fec58e638"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/auth/components/sign-up-view.tsx",
+      "line": 45,
+      "messageFingerprint": "d9b431763b4e528fcfbc6ace3ce60224b434c418157957379d57387f35675560"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/auth/components/sign-up-view.tsx",
+      "line": 42,
+      "messageFingerprint": "32fd55579d69a437b8ae522717ea979d38c815eedcdc942cad6013f99c97704e"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/auth/components/sign-up-view.tsx",
+      "line": 60,
+      "messageFingerprint": "7e848c6558640a6525ecb654a02577dde179daff958be1c38ff3841348b7394a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/auth/components/user-auth-form.tsx",
+      "line": 65,
+      "messageFingerprint": "6c4c0955549c64b240796a18f3321fd619e2cb0a03e328a82e820e1d0b37803f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-area.tsx",
+      "line": 59,
+      "messageFingerprint": "df065aa728f7a6b0684a8f06b93e2754bc0034c281a9cfe5b42866913cc7882b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-area.tsx",
+      "line": 68,
+      "messageFingerprint": "d8ef706f2ff044498a83a6d410a0dc6d53d711ca106fb6c34f626440ad52855c"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-area.tsx",
+      "line": 76,
+      "messageFingerprint": "df065aa728f7a6b0684a8f06b93e2754bc0034c281a9cfe5b42866913cc7882b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-area.tsx",
+      "line": 78,
+      "messageFingerprint": "1696167e460cbd926ba296508cf52c6bb4716c9de426acdd8a3142f259872907"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-area.tsx",
+      "line": 83,
+      "messageFingerprint": "5f954e3af1c64a6d4485fadcf6ec1891eaaa4d6284d144fc1bfd2baf6c6cd828"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-header.tsx",
+      "line": 50,
+      "messageFingerprint": "a2daa6fbd2a5e1a66b0de7c94cdf4bf347e6cf2176a714d4fa233b1486167a20"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-header.tsx",
+      "line": 59,
+      "messageFingerprint": "a2daa6fbd2a5e1a66b0de7c94cdf4bf347e6cf2176a714d4fa233b1486167a20"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-header.tsx",
+      "line": 68,
+      "messageFingerprint": "a2daa6fbd2a5e1a66b0de7c94cdf4bf347e6cf2176a714d4fa233b1486167a20"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/chat-view-page.tsx",
+      "line": 8,
+      "messageFingerprint": "da3aade170d07db0c842bf24b52a4679c2cde0e041c4a56c7716a075e14305b2"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 46,
+      "messageFingerprint": "5463a92dcc0011e68e5f7e801598c0500327dea5386f51dab66ee37babba9c15"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 46,
+      "messageFingerprint": "6372a0dde14bb2c912bc623f51b7cd1020cf0702217354d144bb4ee719492b71"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 116,
+      "messageFingerprint": "340e18836f0408a9d38a20855fc4fb130ec5f3cd7a7d1b01c3c388e24f0f530b"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 130,
+      "messageFingerprint": "0d75a430fc62d4ef92a1c1642e88ba3f3d1c7e006eefab149f9ac1a9f962a6b5"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 130,
+      "messageFingerprint": "0d75a430fc62d4ef92a1c1642e88ba3f3d1c7e006eefab149f9ac1a9f962a6b5"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 130,
+      "messageFingerprint": "5463a92dcc0011e68e5f7e801598c0500327dea5386f51dab66ee37babba9c15"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 52,
+      "messageFingerprint": "ac2b19018b08f9a8616ff1cb3f19ad9efbe43cff039ab8d5240ff7632049e065"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/conversation-list.tsx",
+      "line": 56,
+      "messageFingerprint": "dc78f7849c80314973ca577dc83337791b7f72714b08974a47fc3680d4bd5d64"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 22,
+      "messageFingerprint": "564a3a47680dabfb05b4f62941e39062b480967a0a9c166495f1db39ecfb2995"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 29,
+      "messageFingerprint": "564a3a47680dabfb05b4f62941e39062b480967a0a9c166495f1db39ecfb2995"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 29,
+      "messageFingerprint": "35411a1f4e3079b1f18edf8ea8b35c0c8ed8c8f7cfe3c338c2bd92b1c9eddda9"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 29,
+      "messageFingerprint": "3531caeb53378808ea0417edec67f9997e8ded02c6a81f77d8781e6a29b646bc"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 29,
+      "messageFingerprint": "7c55a3a9e232a01fd77a610914177f5693d5f9bfd0d737933593d5fef70d8fd5"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 37,
+      "messageFingerprint": "564a3a47680dabfb05b4f62941e39062b480967a0a9c166495f1db39ecfb2995"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 35,
+      "messageFingerprint": "3012db512eba63cfc2d38a63207775ea4f53404fd3fb4f217f978861e4be034c"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/features/chat/components/conversation-select.tsx",
+      "line": 41,
+      "messageFingerprint": "00f9763a074312feb266d769d8815f7fc71b11570936adf2da16d4db4b1b827b"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 29,
+      "messageFingerprint": "a5f98739c2dab7266195266290cfed705c6af0516bd96c3df5d23381de8b8ca3"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 29,
+      "messageFingerprint": "d02b193cb55f8d9f0f09a571baf995396eee20f7c519342af8ca242edb8349c1"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 46,
+      "messageFingerprint": "53a4bc9e168606f60f680c0a59764e40b8b81d69d58ccb3edba2dea110b9985c"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 46,
+      "messageFingerprint": "25fe2b85c3a027b81ef37af7637c4822baad17cef716c710c501d00741ddc758"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 64,
+      "messageFingerprint": "d79b579094d3db6da38d0d0533c792f256401ac6e268e4be096d63a08db71582"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 64,
+      "messageFingerprint": "1ad9f471ed0e9d347c558943af000b7b26dd5816ce278c6c08964f50c88f1496"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 54,
+      "messageFingerprint": "b1ef8aa12e12a12d553a09366b3e01ea5c509dec05bd435a945e0e970a259def"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/message-bubble.tsx",
+      "line": 69,
+      "messageFingerprint": "bb72cf801c61f0139f77d2d81e2a802c17b03c4b9519a1112b8473f920ebb7b0"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 67,
+      "messageFingerprint": "2f06ef237dda28f11d0bbb6e9a731a2f4d7b395d74547432007a43a10fd6ec80"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 67,
+      "messageFingerprint": "3723de2805068468f5a62aa23492390b174565ce0397afa262d24b0c2029ddfd"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 76,
+      "messageFingerprint": "c615be918764dc348f3fe9f8f928fcf5ae490a516836efe648247524acd06197"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 35,
+      "messageFingerprint": "2e89c5bcfd8bf9d52230473b6121f33e68b39c7ddfa0c5e19e55be2bad064249"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 41,
+      "messageFingerprint": "aba15575a95cc4331f92c8dc8fd0ca6d4545f4afc4e573392ab2bd550c81575a"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 72,
+      "messageFingerprint": "1d41ce5e2e04b5ca0ce5249b0bf61cc99f1b08219c095ab4fc32b21e00b837c3"
+    },
+    {
+      "code": "DECREE_NATIVE_ELEMENT",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 84,
+      "messageFingerprint": "100146a86f7e59ec3bc4a3bc8c82ea4424c1d9a96f7a7160fb733536b9baa057"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 106,
+      "messageFingerprint": "1386e94d4b5f344c7588af403487887d21c43b64a749496649744c353c7ec369"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/message-composer.tsx",
+      "line": 115,
+      "messageFingerprint": "1386e94d4b5f344c7588af403487887d21c43b64a749496649744c353c7ec369"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/messenger.tsx",
+      "line": 108,
+      "messageFingerprint": "d2fac75a938480cca222bba0a658662820631a07f571643cf2de8cf1fbfb9019"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/messenger.tsx",
+      "line": 113,
+      "messageFingerprint": "ba3095c370b40476b297da050d5aaf74a8663e2096337194893be7a207ca0599"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/chat/components/messenger.tsx",
+      "line": 118,
+      "messageFingerprint": "e29ff2a4c4686cdd5d2f02ed4c5bd69087e5db910c7a5810a7c287b0e90d97d7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/elements/components/icons-view-page.tsx",
+      "line": 20,
+      "messageFingerprint": "2f401c014fd9dd692b6c09f4b6965aa550feb11154877455e62c7e4bdbf668c9"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/elements/components/icons-view-page.tsx",
+      "line": 29,
+      "messageFingerprint": "a6e066d878bdc3ceee6cc7c8b0d46abe713bb8538e3edeef1321dc5a2e279184"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/elements/components/icons-view-page.tsx",
+      "line": 47,
+      "messageFingerprint": "395e73de6e3d57bad1835c82a41c661b7bb9f2a8f7c472928e885f7e473ed75a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/advanced-form-patterns.tsx",
+      "line": 317,
+      "messageFingerprint": "30f459cd167e47b8a9318baf36b3dd1e9bd912bdc9c1da2be2df3295a3dc7692"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/advanced-form-patterns.tsx",
+      "line": 327,
+      "messageFingerprint": "30f459cd167e47b8a9318baf36b3dd1e9bd912bdc9c1da2be2df3295a3dc7692"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/forms-showcase-page.tsx",
+      "line": 8,
+      "messageFingerprint": "346ce9c790b2eee68a03bea155d6522d5bb5e2b9c7a36339abe76efa84b66fde"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/multi-step-product-form.tsx",
+      "line": 144,
+      "messageFingerprint": "712e5509cf2b28534c8a4ae706f9ab648a3e0fc756b67bb5c402214f3c0b134d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/multi-step-product-form.tsx",
+      "line": 221,
+      "messageFingerprint": "ecec21a5c42bf3ab4c32e0542fed8c4ce28898e735df77a1f2e0b82592fcdd0c"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/multi-step-product-form.tsx",
+      "line": 235,
+      "messageFingerprint": "49cb42c3de660978c0975aa949baa602ef16f039c4c144f695f5e84adb04c610"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/multi-step-product-form.tsx",
+      "line": 253,
+      "messageFingerprint": "49cb42c3de660978c0975aa949baa602ef16f039c4c144f695f5e84adb04c610"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 92,
+      "messageFingerprint": "d0defca9e01aa40b30582d7d58c630025273e67c1a95d2979d6a4ae73cd76a9b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 214,
+      "messageFingerprint": "d0defca9e01aa40b30582d7d58c630025273e67c1a95d2979d6a4ae73cd76a9b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 293,
+      "messageFingerprint": "d0defca9e01aa40b30582d7d58c630025273e67c1a95d2979d6a4ae73cd76a9b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 297,
+      "messageFingerprint": "d0defca9e01aa40b30582d7d58c630025273e67c1a95d2979d6a4ae73cd76a9b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 301,
+      "messageFingerprint": "d0defca9e01aa40b30582d7d58c630025273e67c1a95d2979d6a4ae73cd76a9b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 305,
+      "messageFingerprint": "d0defca9e01aa40b30582d7d58c630025273e67c1a95d2979d6a4ae73cd76a9b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 318,
+      "messageFingerprint": "d0defca9e01aa40b30582d7d58c630025273e67c1a95d2979d6a4ae73cd76a9b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 333,
+      "messageFingerprint": "06dcb4355810e0b9ccedf145653b00189f874d4726d221e54b128087e52f822b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 334,
+      "messageFingerprint": "0026bc487ca3ef44a4f7836a04ff671fe5888fa2bd9cc77a2b340e6b80ef65f0"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-form-demo.tsx",
+      "line": 335,
+      "messageFingerprint": "f6d62ff3779fa0d8d7208bb7ecd70b244a09ea133e23739f83164935356d1069"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/forms/components/sheet-product-form.tsx",
+      "line": 56,
+      "messageFingerprint": "4af3a5e66b8e3168daa71d6298676c68e154b92bdee7ac4354fbfb0197de6863"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/kanban/components/board-column.tsx",
+      "line": 23,
+      "messageFingerprint": "376605b838a5a24eda41ca9b92b0be0a4758f955dfbd960011d3ce3258cfe9ee"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/board-column.tsx",
+      "line": 32,
+      "messageFingerprint": "b41990ebef4abdc2d43ead01f3ca914a79268aa9bd1b4d2906390ba12dd776d2"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/board-column.tsx",
+      "line": 37,
+      "messageFingerprint": "a436ad64b8ccfc69df2cf92ac56e836e5099270d3a47142c2180e188e831666a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/kanban-board.tsx",
+      "line": 30,
+      "messageFingerprint": "ad71822b994463d59990dc303b0a66769c6142cff556fc272970b8efe0af62fb"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/kanban-board.tsx",
+      "line": 32,
+      "messageFingerprint": "5bb2db5f5c08fedf62c163d7edb5e61b6a6bec873719ab81225a3c61cd08e61a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/kanban-board.tsx",
+      "line": 40,
+      "messageFingerprint": "5bb2db5f5c08fedf62c163d7edb5e61b6a6bec873719ab81225a3c61cd08e61a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/kanban-board.tsx",
+      "line": 48,
+      "messageFingerprint": "54c552d9e008a1bb7ddb0ebc0f4a90985defacd869534b9030192ffa105f148a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/kanban-view-page.tsx",
+      "line": 7,
+      "messageFingerprint": "6a3c244f699c085f995befa7dca243794ce03289e58342f5904a72b726f0cb1c"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/kanban/components/kanban-view-page.tsx",
+      "line": 10,
+      "messageFingerprint": "75b9bd9609e1d836189554f050decedb77761e9b020a121074efbb07515fe566"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/kanban/components/new-task-dialog.tsx",
+      "line": 53,
+      "messageFingerprint": "ccef9ae282e79f9bd7a8b0572fe0a3e74d1257ca52fa2c93d638d7d2a8a3f92c"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/kanban/components/task-card.tsx",
+      "line": 30,
+      "messageFingerprint": "2340585476d30af1db85ac842a9504ec7148a4241618df3be6d63a5ed7adf517"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/kanban/components/task-card.tsx",
+      "line": 42,
+      "messageFingerprint": "67dd0d61414b89db94920f5e6c8a1398d97bdb26f9adef8b310e5a4482007b55"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/notifications/components/notification-center.tsx",
+      "line": 34,
+      "messageFingerprint": "865cd311c742fa1d50d74feaadb756e0276feb5f1de53cca31e0fe86c137570e"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/notifications/components/notification-center.tsx",
+      "line": 40,
+      "messageFingerprint": "19b128561b9a3749de3c86ae0e0bd564adf8ada31a96dac34050a715d297d753"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/notifications/components/notification-center.tsx",
+      "line": 65,
+      "messageFingerprint": "7d64e3d9edebd63aeb14ba5b39cd111f203567c0dd5ce79c81c24eee9561c8bb"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/notifications/components/notification-center.tsx",
+      "line": 32,
+      "messageFingerprint": "2246b7e0199aead1c790a499f0d9fa1b715efaf21792170dacebd34c2237beb1"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/notifications/components/notification-center.tsx",
+      "line": 44,
+      "messageFingerprint": "2246b7e0199aead1c790a499f0d9fa1b715efaf21792170dacebd34c2237beb1"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/notifications/components/notification-center.tsx",
+      "line": 68,
+      "messageFingerprint": "2246b7e0199aead1c790a499f0d9fa1b715efaf21792170dacebd34c2237beb1"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/notifications/components/notification-center.tsx",
+      "line": 74,
+      "messageFingerprint": "dece1dcaffe6d6709af8f091bbccebb235ea6aee50fd58b11656c3cc08aef7b0"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/notifications/components/notifications-page.tsx",
+      "line": 31,
+      "messageFingerprint": "76641dec4f1d69b7524ae846ac10779b07034bbe514b5394fc89974e3e124ead"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/notifications/components/notifications-page.tsx",
+      "line": 40,
+      "messageFingerprint": "c5c3d45cc56ea969529ef716b1f71809002f8d59179655913b5e767f17485b41"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/notifications/components/notifications-page.tsx",
+      "line": 63,
+      "messageFingerprint": "846a339263e4745e5931c0f4818361bfb92a8e0426dde61dd8d118f094cbf005"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/area-graph-skeleton.tsx",
+      "line": 9,
+      "messageFingerprint": "621662434325d49fd1a98e9bb639f46ac3f1458f029e99d4ab9df42244859816"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/area-graph-skeleton.tsx",
+      "line": 10,
+      "messageFingerprint": "60e24a2d4a8b5b448232403cdd4f3a57b387a0774a6b698eaa1c70d35bf920fd"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/area-graph-skeleton.tsx",
+      "line": 12,
+      "messageFingerprint": "3e9515d1eefaff836342febfdadfdb585bb661c1fd9948e620f0d5f440120755"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/area-graph-skeleton.tsx",
+      "line": 15,
+      "messageFingerprint": "eb0d36c1889d617c6b00714556aac81dfda07dbc4fd993fad0e2de1c79cb9f80"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/area-graph-skeleton.tsx",
+      "line": 17,
+      "messageFingerprint": "48c9c4f6649f438cba805320c69ef551a0456ff513b7b19ee9dc4f11ce7166ab"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/area-graph-skeleton.tsx",
+      "line": 18,
+      "messageFingerprint": "48c9c4f6649f438cba805320c69ef551a0456ff513b7b19ee9dc4f11ce7166ab"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/area-graph.tsx",
+      "line": 49,
+      "messageFingerprint": "943e22946cf8fb1acfa75b38b617b1ad86ae751057438ced71c126fed45bd349"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/area-graph.tsx",
+      "line": 57,
+      "messageFingerprint": "f6e566c1bc953c0d15bb8d29f7c39b0b23bbd519559a2c3dc699eccd7eb9189d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/area-graph.tsx",
+      "line": 58,
+      "messageFingerprint": "548d7785a5f7754fdee5380bff80e8f2c0a611934fb9bd73bee774824b41b21d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/area-graph.tsx",
+      "line": 59,
+      "messageFingerprint": "516877f75429068b9051527603c1903e15708753d146bd7d75238594a4f17dec"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/area-graph.tsx",
+      "line": 68,
+      "messageFingerprint": "11aae74ad269f216ce3d8a44c3beefaf7d805912b80d516119873435c0189c4f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/area-graph.tsx",
+      "line": 70,
+      "messageFingerprint": "6278110b06d1729d53a581b385e0625dd1a5307cda10e1ef37d5b4de0e450714"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/area-graph.tsx",
+      "line": 79,
+      "messageFingerprint": "6278110b06d1729d53a581b385e0625dd1a5307cda10e1ef37d5b4de0e450714"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/bar-graph-skeleton.tsx",
+      "line": 9,
+      "messageFingerprint": "99e5a470b6b6cceba7d719ad638923664c672a7c53654f5fa791d0b4f221287f"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/bar-graph-skeleton.tsx",
+      "line": 10,
+      "messageFingerprint": "0be018758e8162ba6501a0cbe32c3cd13b9352fb74640484805021dfe66747c2"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/bar-graph-skeleton.tsx",
+      "line": 12,
+      "messageFingerprint": "b97e089298d73e3a42803a6b87a39d2e91ed5df09a6d97ae65fe644f9fc1ef41"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/bar-graph-skeleton.tsx",
+      "line": 15,
+      "messageFingerprint": "33e3ba7d00dc404d56fd82dc33cc1acfc63aedda590bfe93bacaf6996be731d0"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 42,
+      "messageFingerprint": "e048c66ab695520fbec441282e276de3e82babc0328b10a8cd4ed61359456264"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 50,
+      "messageFingerprint": "c10d6adef2f1bb0383ad12ac9974bfc03f6abe155599fccd3831a5f157c17646"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 59,
+      "messageFingerprint": "1326ead9ded6537970a02fa8f91fd4c0aa0f46a854785308c0f6a14849529bd6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 61,
+      "messageFingerprint": "90c4c1896626a51efb33d42dc54fb880a129ad3736346830f67e4559c134c0ef"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 72,
+      "messageFingerprint": "e227388c47c602051fbc2af75ae935fb5fec78ce398bb19f724e322c408fe338"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 76,
+      "messageFingerprint": "178b031e10ea787a6a97a237682411b719434f21d27b7c7c7b8dc84a6b89ad6c"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 79,
+      "messageFingerprint": "e227388c47c602051fbc2af75ae935fb5fec78ce398bb19f724e322c408fe338"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/bar-graph.tsx",
+      "line": 82,
+      "messageFingerprint": "178b031e10ea787a6a97a237682411b719434f21d27b7c7c7b8dc84a6b89ad6c"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 41,
+      "messageFingerprint": "3eac2496e4dc47b46ce87139914ca271a2ea18a30df42ed3944ca96ae328da03"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 61,
+      "messageFingerprint": "3eac2496e4dc47b46ce87139914ca271a2ea18a30df42ed3944ca96ae328da03"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 81,
+      "messageFingerprint": "3eac2496e4dc47b46ce87139914ca271a2ea18a30df42ed3944ca96ae328da03"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 101,
+      "messageFingerprint": "3eac2496e4dc47b46ce87139914ca271a2ea18a30df42ed3944ca96ae328da03"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 21,
+      "messageFingerprint": "e5bd65b584dfd0846392cefaa638fd09cebdff4b032b69c931ef6d7c57e66f5f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 46,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 53,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 66,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 73,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 86,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 93,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 106,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 113,
+      "messageFingerprint": "a3b1bddca64c578dbcfff9f003ebf131ce98d4fcb72bdf78e70116415ebb00ca"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 121,
+      "messageFingerprint": "c386b4eac427bbf3b282f917f11c556ff2fdfe0a75571b4a22032b11dd7f64ee"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 124,
+      "messageFingerprint": "0a017c9a5903c256e693033ed26e8887ad289da82df8b19f6d094097a408984c"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 127,
+      "messageFingerprint": "6bd0f1a47c98bd285dc9047b0624324fac7d0a35e55ef05063a2697fc2df444a"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/overview.tsx",
+      "line": 130,
+      "messageFingerprint": "d15f67dfbd098b1181fa958a2f9533a523cdbc128d0d20210dc96136342a4ba3"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/pie-graph-skeleton.tsx",
+      "line": 9,
+      "messageFingerprint": "35035e1b28f6904b2731e8304111183b5e555a56df7dfb00c6de13273fd7da27"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/pie-graph-skeleton.tsx",
+      "line": 10,
+      "messageFingerprint": "b975e7dde95fb4a8dce0321300122c57ec6be5ade4f53942a21664968138085e"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/pie-graph-skeleton.tsx",
+      "line": 12,
+      "messageFingerprint": "5d28a3ee6d5c1d47a8fda66cc7520d5e48644d3bab037d51377e9400a80e4646"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/pie-graph-skeleton.tsx",
+      "line": 15,
+      "messageFingerprint": "6a246bdba0450e22c31ba30800e397c378bd32d7e2088b9fcb129f6757670ad7"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/pie-graph-skeleton.tsx",
+      "line": 15,
+      "messageFingerprint": "6a246bdba0450e22c31ba30800e397c378bd32d7e2088b9fcb129f6757670ad7"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/pie-graph.tsx",
+      "line": 65,
+      "messageFingerprint": "ca2cbe1f381a4894032b60b832afa10fd4c8a433bca525ba1b07772fc3742581"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/pie-graph.tsx",
+      "line": 65,
+      "messageFingerprint": "067a3c20ee2315be32fa689c0257fa3ee413200824835cfc9429d3f1fa3cdc5d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/pie-graph.tsx",
+      "line": 56,
+      "messageFingerprint": "bb9270b37dd00b1e11b4725bc5c8ac9496741d60a84c5d677a49cd39e67cc3f8"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/pie-graph.tsx",
+      "line": 67,
+      "messageFingerprint": "ba0c546793a0bedae05c4f4af2f52aec10f4db7754c3d41ff953333cf9ac6e21"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/pie-graph.tsx",
+      "line": 69,
+      "messageFingerprint": "8e53930c889a7e7b72bcd3be7003db4d2cc8f76fdaf6fa639d6d31cfeac80874"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/pie-graph.tsx",
+      "line": 77,
+      "messageFingerprint": "6c9e2d9f9a0a9e7a13175c734e14494cd05fead606a06e18ce7f1d8359f76389"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/recent-sales-skeleton.tsx",
+      "line": 8,
+      "messageFingerprint": "6b46ba1865f2671e13f0063b6c5c2bbc8169afc2aa1a7c7d0344990ed0a30d37"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/recent-sales-skeleton.tsx",
+      "line": 9,
+      "messageFingerprint": "89bcbcd186c4551479c0e6072a8a8a96b0830027bbfb582ff6a74c442d6d69c0"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/recent-sales-skeleton.tsx",
+      "line": 17,
+      "messageFingerprint": "6a6c4ec9ca04134e1003529bee5ee6f16c61afd86e23b423c425a277a404ac2e"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/recent-sales-skeleton.tsx",
+      "line": 18,
+      "messageFingerprint": "986cd8a4efcd4aa1df2e98ef337dfebe83ee59aac2764c923146e6f9f83d5278"
+    },
+    {
+      "code": "DECREE_ARBITRARY_VALUE",
+      "file": "src/features/overview/components/recent-sales-skeleton.tsx",
+      "line": 20,
+      "messageFingerprint": "f643523755a11466e6ad3e388379beb8b8205583fd7d6783e6cd88b081ab895b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/overview/components/stats-error.tsx",
+      "line": 17,
+      "messageFingerprint": "de3432222fb7b75d80070ac676b080d78976288fda9992a0d9903fa4ae0469a0"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-listing.tsx",
+      "line": 27,
+      "messageFingerprint": "5ef76166ab8bfb2f8abdc1a36b6ca8e9e4e9f14702a1a93db9b8ad930aa3dd30"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-listing.tsx",
+      "line": 28,
+      "messageFingerprint": "ecb876805e7e50f79a72f5a8b82e69b2ad53708625345b8600d455b0ba4d4a33"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-tables/cell-action.tsx",
+      "line": 41,
+      "messageFingerprint": "2a652d7f97208b6ab4772dab11b91c74402f336139ca66b1f6cf847fb9bc74f7"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-tables/cell-action.tsx",
+      "line": 50,
+      "messageFingerprint": "1c36dcba73890bc9a3b973936335e1f39eb783ebdc48eee0f6a85bdec17085ef"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-tables/cell-action.tsx",
+      "line": 58,
+      "messageFingerprint": "1c36dcba73890bc9a3b973936335e1f39eb783ebdc48eee0f6a85bdec17085ef"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-tables/cell-action.tsx",
+      "line": 61,
+      "messageFingerprint": "1c36dcba73890bc9a3b973936335e1f39eb783ebdc48eee0f6a85bdec17085ef"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-tables/columns.tsx",
+      "line": 57,
+      "messageFingerprint": "eba8145d3dd91b82754c7c5eab80295c050099a8602ffd8e1126e8fb2f6ca93b"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-tables/columns.tsx",
+      "line": 80,
+      "messageFingerprint": "56549f16ec01835fa2612b4dd19cf8162e84b51239c519b563b3f1eb0836c6ef"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-view-page.tsx",
+      "line": 15,
+      "messageFingerprint": "e81ed17f97cf1e7c47f123f60fd6ff2b0c5fd74450046937f1b5ddacdfd42c6e"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-view-page.tsx",
+      "line": 18,
+      "messageFingerprint": "61e061f1b0d7df002bd7bcc8b89fd1d04d9d164a57800c3956a77ac632b7d511"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/products/components/product-view-page.tsx",
+      "line": 28,
+      "messageFingerprint": "e81ed17f97cf1e7c47f123f60fd6ff2b0c5fd74450046937f1b5ddacdfd42c6e"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/profile/components/profile-view-page.tsx",
+      "line": 6,
+      "messageFingerprint": "8e57bb1801db0235cf0bb78db39bcd7b7e8577a125e137dbed82ea9320ed4327"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/user-form-sheet.tsx",
+      "line": 172,
+      "messageFingerprint": "4f0e7f263f04f121b16ba3db72d47556395fdeab842f948b9232dede4d56349f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/user-form-sheet.tsx",
+      "line": 188,
+      "messageFingerprint": "4f0e7f263f04f121b16ba3db72d47556395fdeab842f948b9232dede4d56349f"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/user-form-sheet.tsx",
+      "line": 190,
+      "messageFingerprint": "c7506b263017386d72273d60c103114715fac6ace9f75fc810559d5656d05ae0"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/user-listing.tsx",
+      "line": 27,
+      "messageFingerprint": "0df8facd7368dcdb867a23ead7b928df62200bddb9cdc3c2fe262749ae0a515d"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/user-listing.tsx",
+      "line": 28,
+      "messageFingerprint": "4178291e4c49a1f99ffa4377860f67c488acaf17d2fb667750bc019d492b49a6"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/users-table/cell-action.tsx",
+      "line": 41,
+      "messageFingerprint": "92718509da0c5beff6e4c5c0f2c8602967dbdde877082e02f48a891474717cef"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/users-table/cell-action.tsx",
+      "line": 47,
+      "messageFingerprint": "c7c84342c739299020dfb7e1897fd075b733e383722036e4477feb9355f2a946"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/users-table/cell-action.tsx",
+      "line": 51,
+      "messageFingerprint": "c300dca3be43fa7f8797e25806c249c77f18041000ae933a09fb35295561ec56"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/users-table/cell-action.tsx",
+      "line": 59,
+      "messageFingerprint": "c300dca3be43fa7f8797e25806c249c77f18041000ae933a09fb35295561ec56"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/users-table/cell-action.tsx",
+      "line": 62,
+      "messageFingerprint": "c300dca3be43fa7f8797e25806c249c77f18041000ae933a09fb35295561ec56"
+    },
+    {
+      "code": "DECREE_UNKNOWN_COMPONENT",
+      "file": "src/features/users/components/users-table/columns.tsx",
+      "line": 70,
+      "messageFingerprint": "d74f556bd88dfdad095a4941a2521e368643bc249965d2fa77fcd4ed3113faf9"
+    }
+  ]
+}

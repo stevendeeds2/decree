@@ -23,13 +23,73 @@ Commands:
 Init:
   decree init <path-or-package-name> [--out decree.contract.json] [--force]
 
+Verify (brownfield ratchet):
+  decree verify [path] [--baseline file] [--write-baseline file] [--max-new N]
+  --baseline         fail only on findings not in the baseline
+  --write-baseline   write current findings as baseline (exit 0)
+  --max-new N        fail if new findings > N (with or without --baseline)
+
 MCP server binary: decree-mcp [path/to/decree.contract.json]
 
 Full story (sequenced):
   init  →  verify  →  mcp allowlist  →  docs-from-contract / measurement
 
-Docs: docs/THESIS.md · docs/POC.md
+Docs: docs/THESIS.md · docs/POC.md · docs/ADOPTION.md
 `);
+}
+
+/**
+ * @param {string[]} args
+ * @returns {{
+ *   positional: string[],
+ *   baselinePath?: string,
+ *   writeBaselinePath?: string,
+ *   maxNew?: number,
+ * }}
+ */
+function parseVerifyArgs(args) {
+  /** @type {string[]} */
+  const positional = [];
+  /** @type {string | undefined} */
+  let baselinePath;
+  /** @type {string | undefined} */
+  let writeBaselinePath;
+  /** @type {number | undefined} */
+  let maxNew;
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === '--baseline') {
+      baselinePath = args[++i];
+      continue;
+    }
+    if (a.startsWith('--baseline=')) {
+      baselinePath = a.slice('--baseline='.length);
+      continue;
+    }
+    if (a === '--write-baseline') {
+      writeBaselinePath = args[++i];
+      continue;
+    }
+    if (a.startsWith('--write-baseline=')) {
+      writeBaselinePath = a.slice('--write-baseline='.length);
+      continue;
+    }
+    if (a === '--max-new') {
+      const raw = args[++i];
+      maxNew = Number(raw);
+      continue;
+    }
+    if (a.startsWith('--max-new=')) {
+      maxNew = Number(a.slice('--max-new='.length));
+      continue;
+    }
+    if (a.startsWith('-')) {
+      console.error(`decree verify: unknown flag ${a}`);
+      process.exit(2);
+    }
+    positional.push(a);
+  }
+  return { positional, baselinePath, writeBaselinePath, maxNew };
 }
 
 /**
@@ -88,19 +148,68 @@ if (cmd === 'init') {
 }
 
 if (cmd === 'verify') {
-  const target = rest[0] ?? '.';
-  const result = verifyPath(resolve(target));
-  for (const f of result.findings) {
+  const parsed = parseVerifyArgs(rest);
+  if (parsed.baselinePath === undefined && rest.includes('--baseline')) {
+    console.error('decree verify: --baseline requires a path');
+    process.exit(2);
+  }
+  if (
+    parsed.writeBaselinePath === undefined &&
+    rest.some((a) => a === '--write-baseline' || a.startsWith('--write-baseline='))
+  ) {
+    // allow --write-baseline=path form only through parser; bare flag without value
+    if (rest.includes('--write-baseline') && !parsed.writeBaselinePath) {
+      console.error('decree verify: --write-baseline requires a path');
+      process.exit(2);
+    }
+  }
+  if (
+    parsed.maxNew !== undefined &&
+    (Number.isNaN(parsed.maxNew) || !Number.isInteger(parsed.maxNew))
+  ) {
+    console.error('decree verify: --max-new requires a non-negative integer');
+    process.exit(2);
+  }
+  const target = parsed.positional[0] ?? '.';
+  const result = verifyPath(resolve(target), {
+    baselinePath: parsed.baselinePath
+      ? resolve(parsed.baselinePath)
+      : undefined,
+    writeBaselinePath: parsed.writeBaselinePath
+      ? resolve(parsed.writeBaselinePath)
+      : undefined,
+    maxNew: parsed.maxNew,
+  });
+
+  const toPrint =
+    parsed.baselinePath || parsed.maxNew !== undefined
+      ? result.newFindings ?? result.findings
+      : result.findings;
+  for (const f of toPrint) {
     const loc = f.line ? `${f.file}:${f.line}` : f.file;
     console.error(`${f.code}  ${loc}  ${f.message}`);
   }
-  if (result.ok) {
+
+  const newCount = result.newCount ?? result.findings.length;
+  const baselinedCount = result.baselinedCount ?? 0;
+  const total = result.findings.length;
+  console.error(
+    `decree verify: ${newCount} new, ${baselinedCount} baselined, ${total} total`,
+  );
+
+  if (result.wroteBaseline) {
+    console.log(`decree verify: wrote baseline ${result.wroteBaseline}`);
+  } else if (result.ok) {
     console.log(
       `decree verify: ok (${result.filesScanned ?? 0} files, contract ${result.contractPath})`,
     );
+  } else if (result.exitCode === 2) {
+    console.error(
+      `decree verify: error — ${result.findings[0]?.message ?? 'invalid config'}`,
+    );
   } else {
     console.error(
-      `decree verify: failed with ${result.findings.length} finding(s)`,
+      `decree verify: failed with ${newCount} new finding(s)`,
     );
   }
   process.exit(result.exitCode);

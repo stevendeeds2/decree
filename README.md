@@ -39,7 +39,8 @@ Corvy project: **DECREE** (board only).
 Do **not** dogfood on Corvy, stevendeeds.com, or SD33DS production. Prove Decree on established foreign systems first.
 
 External trial results: [docs/TRIALS.md](./docs/TRIALS.md) (`npm run trials`).  
-Pressure gate before outside invites: [docs/PRESSURE.md](./docs/PRESSURE.md) (`npm run pressure`).
+Pressure gate before outside invites: [docs/PRESSURE.md](./docs/PRESSURE.md) (`npm run pressure`).  
+Brownfield adoption (baseline ratchet): [docs/ADOPTION.md](./docs/ADOPTION.md).
 
 ## Get started
 
