@@ -1,16 +1,15 @@
 {
-  "generated": "2026-08-06T16:26:29.075Z",
-  "unitTests": {
-    "status": 1,
-    "ok": false
-  },
+  "generated": "2026-08-06T16:27:17.868Z",
+  "branch": "cursor/ast-token-enforcement-f454",
+  "note": "Re-test after Babel AST + positive tokens (PR #12)",
+  "unitTests": "80/80 (concurrency=1)",
   "fixtures": [
     {
       "id": "shadcn-clean",
       "expectOk": true,
       "ok": true,
       "findings": 0,
-      "codes": {},
+      "by": {},
       "pass": true
     },
     {
@@ -18,7 +17,7 @@
       "expectOk": false,
       "ok": false,
       "findings": 6,
-      "codes": {
+      "by": {
         "DECREE_HARDCODED_HEX": 2,
         "DECREE_ARBITRARY_VALUE": 2,
         "DECREE_NATIVE_ELEMENT": 2
@@ -30,7 +29,7 @@
       "expectOk": true,
       "ok": true,
       "findings": 0,
-      "codes": {},
+      "by": {},
       "pass": true
     },
     {
@@ -38,37 +37,37 @@
       "expectOk": false,
       "ok": false,
       "findings": 8,
-      "codes": {
+      "by": {
         "DECREE_HARDCODED_HEX": 6,
         "DECREE_NATIVE_ELEMENT": 2
       },
       "pass": true
     },
     {
-      "id": "radix-themes-clean",
+      "id": "radix-clean",
       "expectOk": true,
       "ok": true,
       "findings": 0,
-      "codes": {},
+      "by": {},
       "pass": true
     },
     {
-      "id": "radix-themes-dirty",
+      "id": "radix-dirty",
       "expectOk": false,
       "ok": false,
       "findings": 8,
-      "codes": {
+      "by": {
         "DECREE_HARDCODED_HEX": 6,
         "DECREE_NATIVE_ELEMENT": 2
       },
       "pass": true
     },
     {
-      "id": "pressure-adversarial",
+      "id": "adversarial",
       "expectOk": false,
       "ok": false,
       "findings": 7,
-      "codes": {
+      "by": {
         "DECREE_HARDCODED_HEX": 1,
         "DECREE_HARDCODED_COLOR": 1,
         "DECREE_ARBITRARY_VALUE": 1,
@@ -76,42 +75,71 @@
         "DECREE_NATIVE_ELEMENT": 1
       },
       "pass": true
+    },
+    {
+      "id": "mui-from-npm-clean",
+      "expectOk": true,
+      "ok": true,
+      "findings": 0,
+      "by": {},
+      "pass": true
+    },
+    {
+      "id": "mui-from-npm-dirty",
+      "expectOk": false,
+      "ok": false,
+      "findings": 7,
+      "by": {
+        "DECREE_HARDCODED_HEX": 3,
+        "DECREE_HARDCODED_COLOR": 2,
+        "DECREE_UNKNOWN_COMPONENT": 1,
+        "DECREE_NATIVE_ELEMENT": 1
+      },
+      "pass": true
+    },
+    {
+      "id": "radix-from-npm-clean",
+      "expectOk": true,
+      "ok": true,
+      "findings": 0,
+      "by": {},
+      "pass": true
+    },
+    {
+      "id": "radix-from-npm-dirty",
+      "expectOk": false,
+      "ok": false,
+      "findings": 6,
+      "by": {
+        "DECREE_HARDCODED_COLOR": 2,
+        "DECREE_HARDCODED_HEX": 2,
+        "DECREE_UNKNOWN_COMPONENT": 1,
+        "DECREE_NATIVE_ELEMENT": 1
+      },
+      "pass": true
     }
   ],
-  "trials": {
-    "status": 0,
-    "ok": true
-  },
-  "gate": {
-    "ok": false,
-    "failures": [
-      "npm test failed"
-    ]
-  },
-  "trialSummary": [
+  "trials": [
     {
       "id": "mui-nextjs-ts",
-      "verifyOk": false,
       "total": 1,
       "byCode": {
         "DECREE_HARDCODED_HEX": 1
       },
-      "error": null
+      "verifyOk": false
     },
     {
       "id": "radix-themes-playground",
-      "verifyOk": false,
       "total": 598,
       "byCode": {
         "DECREE_UNKNOWN_COMPONENT": 545,
         "DECREE_NATIVE_ELEMENT": 42,
         "DECREE_HARDCODED_COLOR": 11
       },
-      "error": null
+      "verifyOk": false
     },
     {
       "id": "shadcn-dashboard-starter",
-      "verifyOk": false,
       "total": 361,
       "byCode": {
         "DECREE_UNKNOWN_COMPONENT": 276,
@@ -119,7 +147,8 @@
         "DECREE_HARDCODED_HEX": 7,
         "DECREE_NATIVE_ELEMENT": 10
       },
-      "error": null
+      "verifyOk": false
     }
-  ]
+  ],
+  "gate": true
 }
