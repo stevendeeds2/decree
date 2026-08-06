@@ -31,7 +31,7 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 - **Done:** harden React-runtime-only tags + host-package imports; init path containment  
 - **Done:** MCP ↔ verify parity for `profile: "app"` + pressure gate (`npm run pressure`)  
 - **Done:** Babel AST JSX/native scan + positive `var(--token)` when contract has tokens  
-- **Next:** brownfield ratchet (`--max-new`) then publish `@stevendeeds/decree`  
+- **Next phase:** brownfield ratchet → publish `0.1.0` → limited invite — see `docs/superpowers/plans/2026-08-06-phase-next-ratchet-publish.md`  
 - **Later:** docs-from-contract / CSS/className AST  
 - Audit: `docs/AUDIT-2026-08-04.md` · Pressure: `docs/PRESSURE.md`
 
