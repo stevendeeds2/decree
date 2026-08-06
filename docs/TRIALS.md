@@ -8,9 +8,9 @@ Generated: 2026-08-04 (re-run locally via `npm run trials`)
 
 | Trial | Source | Contract | First-pass verify |
 |-------|--------|----------|-------------------|
-| **mui-nextjs-ts** | [MUI official Next.js TS example](https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-ts) | 219 components | **9 → 7 → 1** (import aliases + `scan.profile: "app"`; residual theme hex) |
-| **radix-themes-playground** | [Radix Themes playground](https://github.com/radix-ui/themes/tree/main/apps/playground) | 90 components, 1484 tokens | **~621 findings** (stress / kitchensink; drifts with hardening) |
-| **shadcn-dashboard-starter** | [Kiranism next-shadcn-dashboard-starter](https://github.com/Kiranism/next-shadcn-dashboard-starter) | 387 components (from local `ui/`) | **~452 findings** with default/explicit `ui/` + theme excludes |
+| **mui-nextjs-ts** | [MUI official Next.js TS example](https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-ts) | 219 components | **1** (theme hex) — still holds after Babel AST |
+| **radix-themes-playground** | [Radix Themes playground](https://github.com/radix-ui/themes/tree/main/apps/playground) | 90 components, 1484 tokens | **598** after AST (was ~621; fewer native false positives) |
+| **shadcn-dashboard-starter** | [Kiranism next-shadcn-dashboard-starter](https://github.com/Kiranism/next-shadcn-dashboard-starter) | 387 components (from local `ui/`) | **361** after AST (was ~452; fewer string/comment unknown-component hits) |
 
 ### Takeaways
 

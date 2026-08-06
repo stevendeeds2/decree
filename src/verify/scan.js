@@ -1,11 +1,18 @@
+import parser from '@babel/parser';
 import { CODES } from './codes.js';
 import { collectImportBindings } from './imports.js';
+import { extractJsxTags } from './ast-scan.js';
+import {
+  extractCssVars,
+  extractCssVarsFromJs,
+  tokenNameSet,
+} from './tokens.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
 const RGB_HSL_RE =
   /\b(?:rgb|rgba|hsl|hsla|hwb)\(\s*[^)]+\)/gi;
-/** PascalCase JSX open tags: <Foo, <Foo.Bar, <Foo /> */
+/** Legacy fallback when AST parse fails entirely */
 const JSX_COMPONENT_RE = /<([A-Z][A-Za-z0-9]*)(?:\.[A-Za-z0-9]+)?(?:\s|>|\/|$)/g;
 const JSX_EXT = /\.(tsx|jsx|ts|js)$/;
 
@@ -32,6 +39,23 @@ const REACT_RUNTIME_COMPONENTS = new Set([
 
 /**
  * @param {string} source
+ * @returns {any | null}
+ */
+function tryParse(source) {
+  try {
+    return parser.parse(source, {
+      sourceType: 'module',
+      plugins: ['jsx', 'typescript'],
+      errorRecovery: true,
+      allowReturnOutsideFunction: true,
+    });
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * @param {string} source
  * @param {string} file
  * @param {import('../contract/index.js').DecreeContract} contract
  * @param {ScanOptions} [options]
@@ -51,16 +75,17 @@ export function scanSource(source, file, contract, options = {}) {
     ? collectImportBindings(source)
     : { aliases: new Map(), hosts: new Set() };
 
+  // --- Colors / arbitrary (string-aware-ish regex; URL fragment skips) ---
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     const lineNo = i + 1;
 
-    // Skip import lines for hex false positives in comments only — still scan code.
     if (line.trimStart().startsWith('//')) continue;
-    if (line.trimStart().startsWith('*') || line.trimStart().startsWith('/*')) continue;
+    if (line.trimStart().startsWith('*') || line.trimStart().startsWith('/*')) {
+      continue;
+    }
 
     for (const match of line.matchAll(HEX_RE)) {
-      // Skip URL fragments (…/#fff) and SVG url(#id) — not color tokens
       const idx = match.index ?? 0;
       if (idx > 0 && line[idx - 1] === '/') continue;
       if (/url\(\s*$/i.test(line.slice(0, idx))) continue;
@@ -89,10 +114,26 @@ export function scanSource(source, file, contract, options = {}) {
         line: lineNo,
       });
     }
+  }
 
-    if (JSX_EXT.test(file)) {
-      for (const match of line.matchAll(JSX_COMPONENT_RE)) {
-        const name = match[1];
+  // --- JSX components + native elements (AST, regex fallback) ---
+  if (JSX_EXT.test(file)) {
+    const { tags, ok } = extractJsxTags(source, file);
+    if (ok) {
+      for (const tag of tags) {
+        if (tag.native) {
+          const component = contract.nativeElementMap?.[tag.name];
+          if (component && allow.has(component)) {
+            findings.push({
+              code: CODES.NATIVE_ELEMENT,
+              message: `Native <${tag.name}> used — use allowlisted <${component}> instead`,
+              file,
+              line: tag.line,
+            });
+          }
+          continue;
+        }
+        const name = tag.name;
         if (REACT_RUNTIME_COMPONENTS.has(name)) continue;
         if (allow.has(name)) continue;
         if (localComponents.has(name)) continue;
@@ -103,23 +144,74 @@ export function scanSource(source, file, contract, options = {}) {
           code: CODES.UNKNOWN_COMPONENT,
           message: `Unknown component <${name}> — not in the Decree contract allowlist`,
           file,
-          line: lineNo,
+          line: tag.line,
         });
       }
+    } else {
+      // Legacy regex fallback
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        const lineNo = i + 1;
+        if (line.trimStart().startsWith('//')) continue;
+        for (const match of line.matchAll(JSX_COMPONENT_RE)) {
+          const name = match[1];
+          if (REACT_RUNTIME_COMPONENTS.has(name)) continue;
+          if (allow.has(name)) continue;
+          if (localComponents.has(name)) continue;
+          if (hosts.has(name)) continue;
+          const resolved = aliases.get(name);
+          if (resolved && allow.has(resolved)) continue;
+          findings.push({
+            code: CODES.UNKNOWN_COMPONENT,
+            message: `Unknown component <${name}> — not in the Decree contract allowlist`,
+            file,
+            line: lineNo,
+          });
+        }
+        for (const [native, component] of Object.entries(
+          contract.nativeElementMap || {},
+        )) {
+          if (!allow.has(component)) continue;
+          const re = new RegExp(`<${escapeRegExp(native)}(?:\\s|>|/|$)`);
+          if (re.test(line)) {
+            findings.push({
+              code: CODES.NATIVE_ELEMENT,
+              message: `Native <${native}> used — use allowlisted <${component}> instead`,
+              file,
+              line: lineNo,
+            });
+          }
+        }
+      }
     }
+  }
 
-    for (const [native, component] of Object.entries(
-      contract.nativeElementMap || {},
-    )) {
-      if (!allow.has(component)) continue;
-      const re = new RegExp(`<${escapeRegExp(native)}(?:\\s|>|/|$)`);
-      if (re.test(line)) {
-        findings.push({
-          code: CODES.NATIVE_ELEMENT,
-          message: `Native <${native}> used — use allowlisted <${component}> instead`,
-          file,
-          line: lineNo,
-        });
+  // --- Positive token enforcement (only when contract lists tokens) ---
+  const knownTokens = tokenNameSet(contract);
+  if (knownTokens.size > 0) {
+    if (file.endsWith('.css')) {
+      for (let i = 0; i < lines.length; i++) {
+        for (const name of extractCssVars(lines[i])) {
+          if (!knownTokens.has(name)) {
+            findings.push({
+              code: CODES.UNKNOWN_TOKEN,
+              message: `Unknown token ${name} — not in the Decree contract token list`,
+              file,
+              line: i + 1,
+            });
+          }
+        }
+      }
+    } else if (JSX_EXT.test(file)) {
+      for (const { name, line } of extractCssVarsFromJs(source, tryParse)) {
+        if (!knownTokens.has(name)) {
+          findings.push({
+            code: CODES.UNKNOWN_TOKEN,
+            message: `Unknown token ${name} — not in the Decree contract token list`,
+            file,
+            line,
+          });
+        }
       }
     }
   }

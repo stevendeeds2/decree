@@ -95,6 +95,9 @@ node bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json
 |-------|--------|
 | Allowlisted components + tokens | `decree verify: ok` |
 | Native `<button>`, hex, `rgb()`, invented `<SuperButton>` | Non-zero exit + `DECREE_*` codes |
+| `var(--missing)` when contract `tokens` is non-empty | `DECREE_UNKNOWN_TOKEN` |
+
+JSX component/native checks use a Babel AST (not regex). Hex/rgb/arbitrary remain line scanners with URL-fragment skips. Empty `tokens: []` skips positive token checks (common after `init` from MUI).
 
 ## Out of scope
 

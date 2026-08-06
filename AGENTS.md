@@ -30,8 +30,9 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 - **Done:** default exclude prefixes (`ui/` + theme dumps) + prefix path safety  
 - **Done:** harden React-runtime-only tags + host-package imports; init path containment  
 - **Done:** MCP ↔ verify parity for `profile: "app"` + pressure gate (`npm run pressure`)  
-- **Next:** packaging / limited outside invite after pressure gate green  
-- **Later:** docs-from-contract / deeper AST scanners  
+- **Done:** Babel AST JSX/native scan + positive `var(--token)` when contract has tokens  
+- **Next:** brownfield ratchet (`--max-new`) then publish `@stevendeeds/decree`  
+- **Later:** docs-from-contract / CSS/className AST  
 - Audit: `docs/AUDIT-2026-08-04.md` · Pressure: `docs/PRESSURE.md`
 
 Do not delete roadmap items from docs to “simplify.” Same scanners power CI (`verify`) and MCP (`validate_snippet`). Get-started path: **init → verify → mcp**.
