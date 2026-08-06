@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-04T22:55:36.199Z",
+  "generated": "2026-08-06T14:21:28.430Z",
   "unitTests": {
     "status": 0,
     "ok": true
@@ -69,11 +69,11 @@
       "ok": false,
       "findings": 7,
       "codes": {
-        "DECREE_UNKNOWN_COMPONENT": 3,
-        "DECREE_NATIVE_ELEMENT": 1,
         "DECREE_HARDCODED_HEX": 1,
         "DECREE_HARDCODED_COLOR": 1,
-        "DECREE_ARBITRARY_VALUE": 1
+        "DECREE_ARBITRARY_VALUE": 1,
+        "DECREE_UNKNOWN_COMPONENT": 3,
+        "DECREE_NATIVE_ELEMENT": 1
       },
       "pass": true
     }
@@ -99,10 +99,10 @@
     {
       "id": "radix-themes-playground",
       "verifyOk": false,
-      "total": 621,
+      "total": 598,
       "byCode": {
-        "DECREE_UNKNOWN_COMPONENT": 546,
-        "DECREE_NATIVE_ELEMENT": 64,
+        "DECREE_UNKNOWN_COMPONENT": 545,
+        "DECREE_NATIVE_ELEMENT": 42,
         "DECREE_HARDCODED_COLOR": 11
       },
       "error": null
@@ -110,9 +110,9 @@
     {
       "id": "shadcn-dashboard-starter",
       "verifyOk": false,
-      "total": 452,
+      "total": 361,
       "byCode": {
-        "DECREE_UNKNOWN_COMPONENT": 367,
+        "DECREE_UNKNOWN_COMPONENT": 276,
         "DECREE_ARBITRARY_VALUE": 68,
         "DECREE_HARDCODED_HEX": 7,
         "DECREE_NATIVE_ELEMENT": 10

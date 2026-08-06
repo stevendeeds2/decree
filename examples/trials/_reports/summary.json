@@ -97,8 +97,8 @@
     "verifyOk": false,
     "verify": {
       "byCode": {
-        "DECREE_UNKNOWN_COMPONENT": 546,
-        "DECREE_NATIVE_ELEMENT": 64,
+        "DECREE_UNKNOWN_COMPONENT": 545,
+        "DECREE_NATIVE_ELEMENT": 42,
         "DECREE_HARDCODED_COLOR": 11
       },
       "topFiles": [
@@ -111,12 +111,12 @@
           61
         ],
         [
-          "app/(themeable)/test/reset/page.tsx",
-          39
-        ],
-        [
           "app/(themeable)/test/grid-align-content/page.tsx",
           18
+        ],
+        [
+          "app/(themeable)/test/reset/page.tsx",
+          17
         ],
         [
           "app/(themeable)/test/appearance/page.tsx",
@@ -163,7 +163,7 @@
           10
         ]
       ],
-      "total": 621,
+      "total": 598,
       "filesScanned": 103,
       "exitCode": 1
     }
@@ -212,16 +212,12 @@
     "verifyOk": false,
     "verify": {
       "byCode": {
-        "DECREE_UNKNOWN_COMPONENT": 367,
+        "DECREE_UNKNOWN_COMPONENT": 276,
         "DECREE_ARBITRARY_VALUE": 68,
         "DECREE_HARDCODED_HEX": 7,
         "DECREE_NATIVE_ELEMENT": 10
       },
       "topFiles": [
-        [
-          "src/hooks/use-data-table.ts",
-          18
-        ],
         [
           "src/features/overview/components/overview.tsx",
           17
@@ -239,15 +235,7 @@
           12
         ],
         [
-          "src/features/chat/components/message-composer.tsx",
-          11
-        ],
-        [
           "src/features/forms/components/sheet-form-demo.tsx",
-          10
-        ],
-        [
-          "src/lib/compose-refs.ts",
           10
         ],
         [
@@ -255,19 +243,11 @@
           9
         ],
         [
-          "src/features/overview/components/bar-graph.tsx",
-          9
-        ],
-        [
-          "src/hooks/use-controllable-state.tsx",
+          "src/features/chat/components/message-composer.tsx",
           9
         ],
         [
           "src/components/org-switcher.tsx",
-          8
-        ],
-        [
-          "src/features/chat/components/chat-area.tsx",
           8
         ],
         [
@@ -277,9 +257,29 @@
         [
           "src/features/chat/components/conversation-select.tsx",
           8
+        ],
+        [
+          "src/features/chat/components/message-bubble.tsx",
+          8
+        ],
+        [
+          "src/features/overview/components/bar-graph.tsx",
+          8
+        ],
+        [
+          "src/features/notifications/components/notification-center.tsx",
+          7
+        ],
+        [
+          "src/features/overview/components/area-graph.tsx",
+          7
+        ],
+        [
+          "src/app/layout.tsx",
+          6
         ]
       ],
-      "total": 452,
+      "total": 361,
       "filesScanned": 205,
       "exitCode": 1
     }

@@ -1,6 +1,6 @@
 # Decree pressure report
 
-Generated: 2026-08-04T22:55:36.199Z
+Generated: 2026-08-06T14:21:28.430Z
 
 ## Gate: PASS
 
@@ -25,8 +25,8 @@ Generated: 2026-08-04T22:55:36.199Z
 | Trial | Findings | Codes |
 |-------|----------|-------|
 | mui-nextjs-ts | 1 | {"DECREE_HARDCODED_HEX":1} |
-| radix-themes-playground | 621 | {"DECREE_UNKNOWN_COMPONENT":546,"DECREE_NATIVE_ELEMENT":64,"DECREE_HARDCODED_COLOR":11} |
-| shadcn-dashboard-starter | 452 | {"DECREE_UNKNOWN_COMPONENT":367,"DECREE_ARBITRARY_VALUE":68,"DECREE_HARDCODED_HEX":7,"DECREE_NATIVE_ELEMENT":10} |
+| radix-themes-playground | 598 | {"DECREE_UNKNOWN_COMPONENT":545,"DECREE_NATIVE_ELEMENT":42,"DECREE_HARDCODED_COLOR":11} |
+| shadcn-dashboard-starter | 361 | {"DECREE_UNKNOWN_COMPONENT":276,"DECREE_ARBITRARY_VALUE":68,"DECREE_HARDCODED_HEX":7,"DECREE_NATIVE_ELEMENT":10} |
 
 ## Outside-tester readiness
 

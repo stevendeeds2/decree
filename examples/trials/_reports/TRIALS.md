@@ -1,6 +1,6 @@
 # External trials report
 
-Generated: 2026-08-04T22:55:37.464Z
+Generated: 2026-08-06T14:21:29.854Z
 
 Public third-party apps only. No personal production apps.
 
@@ -23,16 +23,16 @@ Public third-party apps only. No personal production apps.
 - **Title:** Radix Themes official playground (apps/playground)
 - **Install:** ok
 - **Contract:** 90 components, 1484 tokens
-- **Verify:** FAIL — 621 finding(s) across 103 files
+- **Verify:** FAIL — 598 finding(s) across 103 files
 - **Codes:**
-  - `DECREE_UNKNOWN_COMPONENT`: 546
-  - `DECREE_NATIVE_ELEMENT`: 64
+  - `DECREE_UNKNOWN_COMPONENT`: 545
+  - `DECREE_NATIVE_ELEMENT`: 42
   - `DECREE_HARDCODED_COLOR`: 11
 - **Top files:**
   - `app/(themeable)/test/textfield/page.tsx`: 83
   - `app/(themeable)/sink/page.tsx`: 61
-  - `app/(themeable)/test/reset/page.tsx`: 39
   - `app/(themeable)/test/grid-align-content/page.tsx`: 18
+  - `app/(themeable)/test/reset/page.tsx`: 17
   - `app/(themeable)/test/appearance/page.tsx`: 16
   - `app/(themeable)/ghost-balance/page.tsx`: 14
   - `app/(themeable)/sink/select/page.tsx`: 14
@@ -52,28 +52,28 @@ Public third-party apps only. No personal production apps.
 - **Title:** next-shadcn-dashboard-starter (Kiranism)
 - **Install:** skipped
 - **Contract:** 387 components, 0 tokens
-- **Verify:** FAIL — 452 finding(s) across 205 files
+- **Verify:** FAIL — 361 finding(s) across 205 files
 - **Codes:**
-  - `DECREE_UNKNOWN_COMPONENT`: 367
+  - `DECREE_UNKNOWN_COMPONENT`: 276
   - `DECREE_ARBITRARY_VALUE`: 68
   - `DECREE_NATIVE_ELEMENT`: 10
   - `DECREE_HARDCODED_HEX`: 7
 - **Top files:**
-  - `src/hooks/use-data-table.ts`: 18
   - `src/features/overview/components/overview.tsx`: 17
   - `src/app/dashboard/overview/layout.tsx`: 13
   - `src/components/forms/demo-form.tsx`: 12
   - `src/components/layout/app-sidebar.tsx`: 12
-  - `src/features/chat/components/message-composer.tsx`: 11
   - `src/features/forms/components/sheet-form-demo.tsx`: 10
-  - `src/lib/compose-refs.ts`: 10
   - `src/components/kbar/index.tsx`: 9
-  - `src/features/overview/components/bar-graph.tsx`: 9
-  - `src/hooks/use-controllable-state.tsx`: 9
+  - `src/features/chat/components/message-composer.tsx`: 9
   - `src/components/org-switcher.tsx`: 8
-  - `src/features/chat/components/chat-area.tsx`: 8
   - `src/features/chat/components/conversation-list.tsx`: 8
   - `src/features/chat/components/conversation-select.tsx`: 8
+  - `src/features/chat/components/message-bubble.tsx`: 8
+  - `src/features/overview/components/bar-graph.tsx`: 8
+  - `src/features/notifications/components/notification-center.tsx`: 7
+  - `src/features/overview/components/area-graph.tsx`: 7
+  - `src/app/layout.tsx`: 6
 - Sample components from init: Accordion, AccordionContent, AccordionItem, AccordionTrigger, Alert, AlertAction, AlertDescription, AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogOverlay, AlertDialogPortal, AlertDialogTitle, AlertDialogTrigger, AlertTitle
 
 ## Interpretation notes
