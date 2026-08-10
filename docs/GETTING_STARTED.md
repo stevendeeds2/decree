@@ -3,7 +3,10 @@
 Prove Decree on **third-party design systems** using this repo’s fixtures and examples.  
 Do **not** wire Decree into personal production apps (Corvy, stevendeeds.com, SD33DS consumers).
 
-## Install (local)
+## Install
+
+- **From registry (after publish):** [INSTALL.md](./INSTALL.md) — `@stevendeeds/decree@0.1.0`  
+- **From this repo (local):**
 
 ```bash
 git clone https://github.com/stevendeeds2/decree.git

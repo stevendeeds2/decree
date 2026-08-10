@@ -76,11 +76,14 @@ node bin/decree.js verify examples/mui-from-npm/clean
 
 ## Package name
 
-npm unscoped `decree` is taken. This project ships as **`@stevendeeds/decree`**.
+npm unscoped `decree` is taken. This project ships as **`@stevendeeds/decree`** (`0.1.0` packaging — see [Install](./docs/INSTALL.md) / [Publish](./docs/PUBLISH.md)).
 
 ## Quick links
 
 - [Getting started](./docs/GETTING_STARTED.md)
+- [Install](./docs/INSTALL.md) — GitHub Packages / private install
+- [Adoption](./docs/ADOPTION.md) — brownfield baseline ratchet
+- [Invite brief](./docs/INVITE.md) — limited peer trials (after publish)
 - [Thesis](./docs/THESIS.md)
 - [POC plan](./docs/POC.md)
 - [Init](./docs/INIT.md) — bootstrap contract from a package

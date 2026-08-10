@@ -1,0 +1,22 @@
+# Dev / proof assets stay in git; never ship in the installable tarball.
+tests/
+fixtures/
+examples/
+scripts/
+docs/superpowers/
+docs/AUDIT-*.md
+docs/DOGFOOD.md
+docs/POC.md
+docs/PRESSURE.md
+docs/PILOT-RETEST.md
+docs/THESIS.md
+docs/TRIALS.md
+docs/INVITE.md
+.github/
+coverage/
+*.tgz
+.node-test-results/
+.DS_Store
+*.log
+.env
+.env.*

@@ -1,13 +1,23 @@
 {
   "name": "@stevendeeds/decree",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Decree — design system enforcement layer",
   "type": "module",
   "bin": {
     "decree": "./bin/decree.js",
     "decree-mcp": "./bin/decree-mcp.js"
   },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE",
+    "docs/INSTALL.md",
+    "docs/ADOPTION.md",
+    "docs/GETTING_STARTED.md",
+    "docs/INIT.md",
+    "docs/MCP.md"
+  ],
   "scripts": {
     "test": "node --test tests/**/*.test.js",
     "verify:clean": "node ./bin/decree.js verify fixtures/shadcn-clean",
@@ -22,10 +32,24 @@
     "demo": "npm run examples:verify",
     "trials": "node ./scripts/run-external-trials.mjs",
     "pressure": "node ./scripts/run-pressure.mjs",
-    "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json"
+    "pack:check": "node ./scripts/pack-check.mjs",
+    "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json",
+    "prepublishOnly": "npm test && npm run pack:check"
   },
   "engines": {
     "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevendeeds2/decree.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stevendeeds2/decree/issues"
+  },
+  "homepage": "https://github.com/stevendeeds2/decree#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   },
   "license": "MIT",
   "dependencies": {

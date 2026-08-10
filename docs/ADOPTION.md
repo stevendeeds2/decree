@@ -25,6 +25,8 @@ Commit `decree.contract.json` + `decree.baseline.json`.
 npx decree verify . --baseline decree.baseline.json
 ```
 
+Example workflow: [`.github/workflows/decree-verify.example.yml`](../.github/workflows/decree-verify.example.yml). Install notes: [INSTALL.md](./INSTALL.md).
+
 - **Pass** if there are **0 new** findings (debt already in the baseline is ignored).
 - **Fail** if someone introduces a new forgery / hex / unknown component.
 
