@@ -51,13 +51,14 @@ Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md) · init: 
 
 ## Demos
 
-Same product app, different design systems — under [`demos/`](./demos/).
+Same product shape under established design systems — start at
+[`demos/index.html`](./demos/index.html).
 
 | Demo | System | Entry |
 |------|--------|--------|
-| **Pulse Reports** | shadcn-shaped (`@pulse/ui`) | Open [`demos/pulse-reports/index.html`](./demos/pulse-reports/index.html) (no server) |
-
-More system variants (e.g. Material UI) will land beside Pulse under `demos/`.
+| **shadcn** | shadcn/ui (`@demo/shadcn-ui`) | [`demos/shadcn/`](./demos/shadcn/) · 5180 / 5181 |
+| **mui** | Material UI (`@demo/mui-ui`) | [`demos/mui/`](./demos/mui/) · 5190 / 5191 |
+| **antd** | Ant Design (`@demo/antd-ui`) | [`demos/antd/`](./demos/antd/) · 5200 / 5201 |
 
 ## Layout
 

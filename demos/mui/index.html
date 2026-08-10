@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Decree demo — Material UI</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="eyebrow">Decree · demo</p>
+      <h1>Material UI</h1>
+      <p class="lede">
+        Design-system package, a product app built with it, and an AI rebuild
+        from a screenshot. Same Decree contract. Different outcomes.
+      </p>
+    </header>
+    <main>
+      <section class="panel">
+        <h2>Start the apps</h2>
+        <p class="callout">From <code>demos/mui/</code>.</p>
+        <pre class="code"><code>cd demos/mui
+npm install
+npm run dev      # http://127.0.0.1:5190
+npm run dev:ai   # http://127.0.0.1:5191</code></pre>
+      </section>
+      <section class="panel">
+        <h2>Pieces</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>@demo/mui-ui</h3>
+            <p>Material UI–shaped package + Decree contract.</p>
+            <p class="meta">packages/ui</p>
+          </article>
+          <article class="card">
+            <h3>App</h3>
+            <p>Built with the package.</p>
+            <p class="meta">apps/app · 5190</p>
+            <a class="btn" href="http://127.0.0.1:5190/" target="_blank" rel="noreferrer">Open</a>
+          </article>
+          <article class="card">
+            <h3>App AI</h3>
+            <p>Screenshot rebuild — no package.</p>
+            <p class="meta">apps/app-ai · 5191</p>
+            <a class="btn" href="http://127.0.0.1:5191/" target="_blank" rel="noreferrer">Open</a>
+          </article>
+        </div>
+      </section>
+      <section class="panel">
+        <h2>Trial run (Decree)</h2>
+        <pre class="code"><code>node bin/decree.js prepare demos/mui/packages/ui
+node bin/decree.js use demos/mui/packages/ui --force \
+  --out demos/mui/apps/app/decree.contract.json
+# add scan.profile app + excludes
+node bin/decree.js verify demos/mui/apps/app
+cp demos/mui/apps/app/decree.contract.json demos/mui/apps/app-ai/decree.contract.json
+node bin/decree.js verify demos/mui/apps/app-ai</code></pre>
+      </section>
+    </main>
+    <footer class="site-footer"><p>Decree · <code>demos/mui</code></p></footer>
+  </body>
+</html>

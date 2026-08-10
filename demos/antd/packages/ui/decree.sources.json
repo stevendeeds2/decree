@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "components": {
+    "include": ["src/components"],
+    "exclude": ["**/*.stories.*", "**/*.test.*"]
+  },
+  "tokens": {
+    "mode": "css-allowlist",
+    "cssAllowlist": ["src/theme.css"]
+  },
+  "ignoreComponentNames": ["App", "ThemeProvider"],
+  "nativeElementMap": {
+    "button": "Button",
+    "input": "Input",
+    "select": "Select"
+  }
+}

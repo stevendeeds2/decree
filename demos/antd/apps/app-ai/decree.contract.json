@@ -1,0 +1,71 @@
+{
+  "version": 1,
+  "name": "@demo/antd-ui",
+  "package": "@demo/antd-ui",
+  "components": [
+    "Alert",
+    "Avatar",
+    "Badge",
+    "Breadcrumb",
+    "Button",
+    "Card",
+    "Flex",
+    "Input",
+    "Layout",
+    "Select",
+    "Separator",
+    "Space",
+    "Table",
+    "Tabs",
+    "Tag",
+    "Typography"
+  ],
+  "tokens": [
+    {
+      "name": "--background"
+    },
+    {
+      "name": "--border"
+    },
+    {
+      "name": "--card"
+    },
+    {
+      "name": "--chart-1"
+    },
+    {
+      "name": "--chart-2"
+    },
+    {
+      "name": "--destructive"
+    },
+    {
+      "name": "--foreground"
+    },
+    {
+      "name": "--muted"
+    },
+    {
+      "name": "--primary"
+    },
+    {
+      "name": "--primary-foreground"
+    }
+  ],
+  "nativeElementMap": {
+    "button": "Button",
+    "input": "Input",
+    "select": "Select"
+  },
+  "scan": {
+    "profile": "app",
+    "localComponentPrefixes": [
+      "src"
+    ],
+    "excludePrefixes": [
+      "src/index.css",
+      "src/assets",
+      "src/main.tsx"
+    ]
+  }
+}

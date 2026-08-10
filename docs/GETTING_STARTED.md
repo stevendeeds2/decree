@@ -33,18 +33,17 @@ Brownfield: [ADOPTION.md](./ADOPTION.md) (`--baseline` / `--max-new`).
 
 ## 4. Try a demo
 
-Open the static landing page (no server):
-
 ```bash
-open demos/pulse-reports/index.html
+open demos/index.html
 ```
 
-That page explains how to start the Pulse Reports apps (shadcn-shaped `@pulse/ui`) and run Decree against them.
+Pick shadcn, Material UI, or Ant Design. Each landing page explains how to start
+its apps and run Decree (pass on the system app, fail on the AI twin).
 
 ## 5. MCP (optional)
 
 ```bash
-node bin/decree.js mcp demos/pulse-reports/packages/pulse-ui/decree.contract.json
+node bin/decree.js mcp demos/shadcn/packages/ui/decree.contract.json
 ```
 
 Details: [MCP.md](./MCP.md).

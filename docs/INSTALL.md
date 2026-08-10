@@ -49,6 +49,6 @@ Template workflow (not enabled by default):
 git clone https://github.com/stevendeeds2/decree.git
 cd decree
 npm install
-open demos/pulse-reports/index.html
+open demos/index.html
 node bin/decree.js --help
 ```

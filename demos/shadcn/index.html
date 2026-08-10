@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Decree demo — shadcn/ui</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <p class="eyebrow">Decree · demo</p>
+      <h1>shadcn/ui</h1>
+      <p class="lede">
+        Design-system package, a product app built with it, and an AI rebuild
+        from a screenshot. Same Decree contract. Different outcomes.
+      </p>
+      <p class="note">
+        This page is static — open <code>index.html</code> in a browser (no
+        server). The two apps below need Vite.
+      </p>
+    </header>
+
+    <main>
+      <section class="panel" aria-labelledby="start-heading">
+        <h2 id="start-heading">Start the apps</h2>
+        <p class="callout">
+          From <code>demos/shadcn/</code>. First time: <code>npm install</code>
+          here (wires the package + both apps).
+        </p>
+        <pre class="code"><code>cd demos/shadcn
+npm install
+
+# Terminal 1 — app (uses @demo/shadcn-ui)
+npm run dev
+# opens http://127.0.0.1:5180
+
+# Terminal 2 — AI twin (screenshot rebuild)
+npm run dev:ai
+# opens http://127.0.0.1:5181</code></pre>
+      </section>
+
+      <section class="panel" aria-labelledby="ecosystem-heading">
+        <h2 id="ecosystem-heading">Pieces</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>@demo/shadcn-ui</h3>
+            <p>Design-system package (shadcn-shaped) + Decree contract.</p>
+            <p class="meta">packages/ui · no server</p>
+          </article>
+          <article class="card">
+            <h3>App</h3>
+            <p>Product UI built <em>with</em> the package.</p>
+            <p class="meta">apps/app · port 5180</p>
+            <a class="btn" href="http://127.0.0.1:5180/" target="_blank" rel="noreferrer"
+              >Open app</a
+            >
+          </article>
+          <article class="card">
+            <h3>App AI</h3>
+            <p>Same UI intent from a screenshot only — no design-system package.</p>
+            <p class="meta">apps/app-ai · port 5181</p>
+            <a class="btn" href="http://127.0.0.1:5181/" target="_blank" rel="noreferrer"
+              >Open app</a
+            >
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="story-heading">
+        <h2 id="story-heading">The story</h2>
+        <ol class="story">
+          <li>
+            <strong>Default shadcn</strong> —
+            <a href="https://ui.shadcn.com/themes" target="_blank" rel="noreferrer"
+              >ui.shadcn.com/themes</a
+            >.
+          </li>
+          <li>
+            <strong>@demo/shadcn-ui</strong> — demo design-system package +
+            <code>decree.contract.json</code>.
+          </li>
+          <li><strong>App</strong> — consumes the package. Decree verify: <em>pass</em>.</li>
+          <li><strong>Screenshot</strong> — evidence in <code>evidence/</code>.</li>
+          <li>
+            <strong>App AI</strong> — rebuild from screenshot. Same contract:
+            <em>fail</em>.
+          </li>
+        </ol>
+      </section>
+
+      <section class="panel" aria-labelledby="evidence-heading">
+        <h2 id="evidence-heading">Evidence</h2>
+        <div class="shots">
+          <figure>
+            <img
+              src="./evidence/pulse-system-full.png"
+              alt="Compliant shadcn app screenshot"
+              width="1440"
+              height="900"
+            />
+            <figcaption>App — uses @demo/shadcn-ui</figcaption>
+          </figure>
+          <figure>
+            <img
+              src="./evidence/pulse-lookalike-full.png"
+              alt="AI twin screenshot"
+              width="1440"
+              height="900"
+            />
+            <figcaption>App AI — screenshot rebuild</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="trial-heading">
+        <h2 id="trial-heading">Trial run (Decree)</h2>
+        <p class="note" style="margin-top: 0">
+          From the <strong>Decree repo root</strong>.
+        </p>
+        <pre class="code"><code>node bin/decree.js prepare demos/shadcn/packages/ui
+
+node bin/decree.js use demos/shadcn/packages/ui --force \
+  --out demos/shadcn/apps/app/decree.contract.json
+# ensure scan.profile app + css excludes on the app contract
+
+node bin/decree.js verify demos/shadcn/apps/app
+# expect: ok
+
+cp demos/shadcn/apps/app/decree.contract.json \
+   demos/shadcn/apps/app-ai/decree.contract.json
+node bin/decree.js verify demos/shadcn/apps/app-ai
+# expect: fail</code></pre>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Decree · <code>demos/shadcn</code></p>
+    </footer>
+  </body>
+</html>

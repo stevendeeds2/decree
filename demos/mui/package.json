@@ -1,0 +1,13 @@
+{
+  "name": "mui-demo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Decree demo — Material UI design system + compliant app + AI twin",
+  "scripts": {
+    "postinstall": "npm install --prefix packages/ui --omit=peer && npm install --prefix apps/app && npm install --prefix apps/app-ai",
+    "dev": "npm run dev --prefix apps/app",
+    "dev:ai": "npm run dev --prefix apps/app-ai",
+    "build": "npm run build --prefix apps/app",
+    "build:ai": "npm run build --prefix apps/app-ai"
+  }
+}

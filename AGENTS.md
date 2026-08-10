@@ -14,7 +14,7 @@ Pitch: *If it’s not in the system, it doesn’t ship.*
 |------|------|
 | `bin/`, `src/` | Product |
 | `docs/` | User docs that ship with the package |
-| `demos/` | Case studies (same product × design systems) — start with `demos/pulse-reports/` |
+| `demos/` | Case studies by design system — start at `demos/index.html` (shadcn / mui / antd) |
 | `tests/` | Unit tests; small packages under `tests/support/` |
 
 ## Rules

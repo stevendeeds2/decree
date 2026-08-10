@@ -1,0 +1,19 @@
+{
+  "name": "@demo/antd-ui",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ant Design–shaped package for the Decree demo",
+  "decree": "./decree.contract.json",
+  "exports": {
+    "./theme.css": "./src/theme.css",
+    "./*": "./src/components/*.tsx"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "antd": "^5.23.0"
+  }
+}

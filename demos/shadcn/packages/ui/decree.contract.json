@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "name": "@demo/shadcn-ui",
+  "package": "@demo/shadcn-ui",
+  "components": [
+    "Alert",
+    "AlertDescription",
+    "AlertTitle",
+    "Avatar",
+    "AvatarFallback",
+    "AvatarImage",
+    "Badge",
+    "Breadcrumb",
+    "BreadcrumbItem",
+    "BreadcrumbLink",
+    "BreadcrumbList",
+    "BreadcrumbPage",
+    "BreadcrumbSeparator",
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "ChartContainer",
+    "ChartLegend",
+    "ChartLegendContent",
+    "ChartStyle",
+    "ChartTooltip",
+    "ChartTooltipContent",
+    "Input",
+    "Select",
+    "Separator",
+    "Table",
+    "TableBody",
+    "TableCaption",
+    "TableCell",
+    "TableFooter",
+    "TableHead",
+    "TableHeader",
+    "TableRow",
+    "Tabs",
+    "TabsContent",
+    "TabsList",
+    "TabsTrigger"
+  ],
+  "tokens": [
+    {
+      "name": "--accent"
+    },
+    {
+      "name": "--accent-foreground"
+    },
+    {
+      "name": "--background"
+    },
+    {
+      "name": "--border"
+    },
+    {
+      "name": "--card"
+    },
+    {
+      "name": "--card-foreground"
+    },
+    {
+      "name": "--chart-1"
+    },
+    {
+      "name": "--chart-2"
+    },
+    {
+      "name": "--chart-3"
+    },
+    {
+      "name": "--chart-4"
+    },
+    {
+      "name": "--chart-5"
+    },
+    {
+      "name": "--color-conversions"
+    },
+    {
+      "name": "--color-sessions"
+    },
+    {
+      "name": "--destructive"
+    },
+    {
+      "name": "--foreground"
+    },
+    {
+      "name": "--input"
+    },
+    {
+      "name": "--muted"
+    },
+    {
+      "name": "--muted-foreground"
+    },
+    {
+      "name": "--primary"
+    },
+    {
+      "name": "--primary-foreground"
+    },
+    {
+      "name": "--radius"
+    },
+    {
+      "name": "--ring"
+    },
+    {
+      "name": "--secondary"
+    },
+    {
+      "name": "--secondary-foreground"
+    }
+  ],
+  "nativeElementMap": {
+    "button": "Button",
+    "input": "Input",
+    "select": "Select"
+  }
+}

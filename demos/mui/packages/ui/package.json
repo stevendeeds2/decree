@@ -1,0 +1,21 @@
+{
+  "name": "@demo/mui-ui",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Material UI–shaped design-system package for the Decree demo",
+  "decree": "./decree.contract.json",
+  "exports": {
+    "./theme.css": "./src/theme.css",
+    "./*": "./src/components/*.tsx"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^6.4.0"
+  }
+}

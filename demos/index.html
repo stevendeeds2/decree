@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Decree demos</title>
+    <style>
+      :root {
+        --bg: #f7f7f5;
+        --text: #1a1a1a;
+        --muted: #5c5c5c;
+        --border: #e4e4e0;
+        --surface: #fff;
+        --font: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      main {
+        width: min(100% - 2.5rem, 40rem);
+        margin: 3rem auto;
+      }
+      h1 { margin: 0 0 0.5rem; font-size: 1.75rem; }
+      .lede { color: var(--muted); margin: 0 0 2rem; }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1rem 1.15rem;
+        margin-bottom: 0.75rem;
+      }
+      .card h2 { margin: 0 0 0.35rem; font-size: 1.05rem; }
+      .card p { margin: 0 0 0.5rem; color: var(--muted); font-size: 0.95rem; }
+      .meta { font-family: var(--mono); font-size: 0.8rem; color: var(--muted); }
+      a.btn {
+        display: inline-block;
+        margin-top: 0.35rem;
+        padding: 0.4rem 0.75rem;
+        background: #1a1a1a;
+        color: #f7f7f5;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Decree demos</h1>
+      <p class="lede">
+        Same product shape under three established design systems. Open a landing
+        page (no server), then start that demo’s apps.
+      </p>
+
+      <article class="card">
+        <h2>shadcn/ui</h2>
+        <p>@demo/shadcn-ui · ports 5180 / 5181</p>
+        <p class="meta">demos/shadcn/</p>
+        <a class="btn" href="./shadcn/index.html">Open landing</a>
+      </article>
+
+      <article class="card">
+        <h2>Material UI</h2>
+        <p>@demo/mui-ui · ports 5190 / 5191</p>
+        <p class="meta">demos/mui/</p>
+        <a class="btn" href="./mui/index.html">Open landing</a>
+      </article>
+
+      <article class="card">
+        <h2>Ant Design</h2>
+        <p>@demo/antd-ui · ports 5200 / 5201</p>
+        <p class="meta">demos/antd/</p>
+        <a class="btn" href="./antd/index.html">Open landing</a>
+      </article>
+    </main>
+  </body>
+</html>

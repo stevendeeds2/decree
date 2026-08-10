@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "name": "@demo/mui-ui",
+  "package": "@demo/mui-ui",
+  "components": [
+    "Alert",
+    "AlertTitle",
+    "Avatar",
+    "Badge",
+    "Box",
+    "BreadcrumbLink",
+    "Breadcrumbs",
+    "Button",
+    "Card",
+    "CardActions",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "FormControl",
+    "Input",
+    "InputLabel",
+    "Layout",
+    "MenuItem",
+    "Paper",
+    "Select",
+    "Separator",
+    "Stack",
+    "Tab",
+    "TabPanel",
+    "Table",
+    "TableBody",
+    "TableCell",
+    "TableContainer",
+    "TableHead",
+    "TableRow",
+    "Tabs",
+    "Typography"
+  ],
+  "tokens": [
+    {
+      "name": "--background"
+    },
+    {
+      "name": "--border"
+    },
+    {
+      "name": "--card"
+    },
+    {
+      "name": "--chart-1"
+    },
+    {
+      "name": "--chart-2"
+    },
+    {
+      "name": "--destructive"
+    },
+    {
+      "name": "--foreground"
+    },
+    {
+      "name": "--muted"
+    },
+    {
+      "name": "--primary"
+    },
+    {
+      "name": "--primary-foreground"
+    }
+  ],
+  "nativeElementMap": {
+    "button": "Button",
+    "input": "Input",
+    "select": "Select"
+  },
+  "scan": {
+    "profile": "app",
+    "localComponentPrefixes": [
+      "src"
+    ],
+    "excludePrefixes": [
+      "src/index.css",
+      "src/assets",
+      "src/main.tsx"
+    ]
+  }
+}

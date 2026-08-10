@@ -1,0 +1,29 @@
+{
+  "name": "mui-app",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Reports app built with @demo/mui-ui (Material UI)",
+  "decree": "./decree.contract.json",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@demo/mui-ui": "file:../../packages/ui",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "lucide-react": "^0.474.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recharts": "^2.15.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.0"
+  }
+}

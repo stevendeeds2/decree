@@ -1,9 +1,12 @@
 # Demos
 
-Same product idea under different design systems.
+Same product shape under established design systems. Start at
+[`index.html`](./index.html) (static hub).
 
-| Demo | System | Start |
-|------|--------|--------|
-| [pulse-reports](./pulse-reports/) | shadcn-shaped (`@pulse/ui`) | Open `pulse-reports/index.html` |
+| Demo | System | Ports | Start |
+|------|--------|-------|--------|
+| [shadcn](./shadcn/) | shadcn/ui (`@demo/shadcn-ui`) | 5180 / 5181 | `cd demos/shadcn && npm install && npm run dev` |
+| [mui](./mui/) | Material UI (`@demo/mui-ui`) | 5190 / 5191 | `cd demos/mui && npm install && npm run dev` |
+| [antd](./antd/) | Ant Design (`@demo/antd-ui`) | 5200 / 5201 | `cd demos/antd && npm install && npm run dev` |
 
-Material UI (and others) will sit beside Pulse here.
+Each demo: design-system package + compliant app + AI-from-screenshot twin + static landing.
