@@ -2,87 +2,68 @@
 
 **Your design system, enforced.**
 
-Decree is the enforcement layer for design systems. Soft tools explain the rules. Decree makes the rules binding — for humans, CI, and AI agents.
+Soft tools explain the rules. Decree makes them binding — for humans, CI, and AI agents.
 
 If it’s not in the system, it doesn’t ship.
 
-## Pitch (plain language)
-
-Your team has a design system: the official buttons, colors, and spacing everyone is supposed to use.
-
-People still make their own. AI makes its own even faster. Docs and Figma don’t stop that. They only *explain* the rules.
-
-Decree **enforces** the rules.
-
-You write down what’s allowed once. Then:
-
-- AI can only build from those parts
-- Code checks fail if someone sneaks in a fake color or a home-made button
-- Docs stay in sync because they come from the same rulebook
-
-So the design system stops being a hope — and starts being the law.
-
-## User story
-
-**As** a design-system lead on a product team that uses Cursor and Claude to ship UI,  
-**I want** every AI-generated and human-written UI change checked against our real components and tokens before it can merge,  
-**so that** we stop shipping lookalike buttons and off-brand colors that quietly break the system.
-
-## Status
-
-POC slices **A (verify)** and **B (MCP allowlist)** plus **`decree init`** are on the product path. Proof target: **third-party design systems** via isolated fixtures / `examples/` — not personal production apps.
-
-Corvy project: **DECREE** (board only).
-
-### Hard rule
-
-Do **not** dogfood on Corvy, stevendeeds.com, or SD33DS production. Prove Decree on established foreign systems first.
-
-External trial results: [docs/TRIALS.md](./docs/TRIALS.md) (`npm run trials`).  
-Pressure gate before outside invites: [docs/PRESSURE.md](./docs/PRESSURE.md) (`npm run pressure`).  
-Brownfield adoption (baseline ratchet): [docs/ADOPTION.md](./docs/ADOPTION.md).
-
-## Get started
-
-Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md)
+## Install
 
 ```bash
-npm install
-npm run demo                 # clean pass / dirty fail across 3rd-party fixtures + npm examples
-
-# Or bootstrap a contract from an installed foreign package:
-npm run examples:install
-node bin/decree.js init examples/mui-from-npm/node_modules/@mui/material --force
-node bin/decree.js verify examples/mui-from-npm/clean
+npm install -g @stevendeeds/decree
+# or use via npx / local bin — see docs/INSTALL.md for GitHub Packages auth
 ```
 
-## Roadmap (full story)
+From this repo:
 
-1. **Done — Verify** — contract + CI against shadcn clean/dirty fixtures  
-2. **Done — MCP** — agent allowlist (`list_primitives`, `list_tokens`, `validate_snippet`)  
-3. **Done — Init** — bootstrap contract from a design-system package  
-4. **Done — 3rd-party fixtures** — MUI clean/dirty (same Decree codes)  
-5. **Now — Examples** — isolated test apps for shadcn / MUI / Radix Themes  
-6. **Later — Docs / measurement** — generated from the same contract  
+```bash
+cd apps/decree   # or clone stevendeeds2/decree
+npm install
+node bin/decree.js --help
+```
 
-### Proof matrix (3rd-party only)
+## Configure (your design system)
 
-| System | Clean | Dirty |
-|--------|-------|-------|
-| shadcn/ui | `fixtures/shadcn-clean` | `fixtures/shadcn-dirty` |
-| MUI | `fixtures/mui-clean` | `fixtures/mui-dirty` |
-| Radix Themes | `examples/radix-themes-clean` | `examples/radix-themes-dirty` |
-| init sample | `fixtures/init-sample-pkg` | — |
+1. **Prepare a contract** from your design-system package (source-bound):
 
-## Package name
+```bash
+node bin/decree.js prepare path/to/your-design-system
+# writes decree.contract.json next to the package (see docs/SOURCES.md)
+```
 
-npm unscoped `decree` is taken. This project ships as **`@stevendeeds/decree`**.
+2. **Use it in an app** (copy or link the rulebook):
 
-## Quick links
+```bash
+node bin/decree.js use path/to/your-design-system --out ./decree.contract.json
+```
 
-- [Getting started](./docs/GETTING_STARTED.md)
-- [Thesis](./docs/THESIS.md)
-- [POC plan](./docs/POC.md)
-- [Init](./docs/INIT.md) — bootstrap contract from a package
-- [Examples](./examples/README.md) — third-party proof apps
-- [AGENTS.md](./AGENTS.md) — context for ongoing agent work
+3. **Verify** the app:
+
+```bash
+node bin/decree.js verify .
+```
+
+Brownfield teams can ratchet with a baseline — [docs/ADOPTION.md](./docs/ADOPTION.md).  
+Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md) · init details: [docs/INIT.md](./docs/INIT.md) · MCP: [docs/MCP.md](./docs/MCP.md).
+
+## Demos
+
+Same product app, different design systems — under [`demos/`](./demos/).
+
+| Demo | System | Entry |
+|------|--------|--------|
+| **Pulse Reports** | shadcn-shaped (`@pulse/ui`) | Open [`demos/pulse-reports/index.html`](./demos/pulse-reports/index.html) (no server) |
+
+More system variants (e.g. Material UI) will land beside Pulse under `demos/`.
+
+## What ships
+
+| Path | Role |
+|------|------|
+| `bin/`, `src/` | Product CLI + MCP |
+| `docs/` | Install, adopt, init, sources, MCP |
+| `demos/` | Runnable case studies (not in the npm tarball) |
+| `tests/` | Unit tests (self-contained) |
+
+## Package
+
+npm unscoped `decree` is taken. This project is **`@stevendeeds/decree`**.

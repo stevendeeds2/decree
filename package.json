@@ -1,31 +1,45 @@
 {
   "name": "@stevendeeds/decree",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.1.0",
   "description": "Decree — design system enforcement layer",
   "type": "module",
   "bin": {
     "decree": "./bin/decree.js",
     "decree-mcp": "./bin/decree-mcp.js"
   },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE",
+    "docs/INSTALL.md",
+    "docs/ADOPTION.md",
+    "docs/GETTING_STARTED.md",
+    "docs/INIT.md",
+    "docs/SOURCES.md",
+    "docs/MCP.md"
+  ],
   "scripts": {
     "test": "node --test tests/**/*.test.js",
-    "verify:clean": "node ./bin/decree.js verify fixtures/shadcn-clean",
-    "verify:dirty": "node ./bin/decree.js verify fixtures/shadcn-dirty",
-    "verify:mui": "node ./bin/decree.js verify fixtures/mui-clean && node ./bin/decree.js verify fixtures/mui-dirty; test $? -eq 1",
-    "verify:radix": "node ./bin/decree.js verify examples/radix-themes-clean && node ./bin/decree.js verify examples/radix-themes-dirty; test $? -eq 1",
     "verify": "node ./bin/decree.js verify",
-    "init:sample": "node ./bin/decree.js init fixtures/init-sample-pkg --out /tmp/decree-init-sample.contract.json --force",
-    "examples:install": "bash ./scripts/examples-install.sh",
-    "examples:init": "bash ./scripts/examples-init.sh",
-    "examples:verify": "bash ./scripts/examples-verify.sh",
-    "demo": "npm run examples:verify",
-    "trials": "node ./scripts/run-external-trials.mjs",
-    "pressure": "node ./scripts/run-pressure.mjs",
-    "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json"
+    "pack:check": "node ./scripts/pack-check.mjs",
+    "mcp:config": "node ./bin/decree.js mcp demos/pulse-reports/packages/pulse-ui/decree.contract.json",
+    "prepublishOnly": "npm test && npm run pack:check"
   },
   "engines": {
     "node": ">=20"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevendeeds2/decree.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stevendeeds2/decree/issues"
+  },
+  "homepage": "https://github.com/stevendeeds2/decree#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "access": "restricted"
   },
   "license": "MIT",
   "dependencies": {

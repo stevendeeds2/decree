@@ -20,12 +20,13 @@ import {
 } from '../src/init/index.js';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const samplePkg = join(root, 'fixtures/init-sample-pkg');
+const samplePkg = join(root, 'tests/support/init-sample-pkg');
 const decreeBin = join(root, 'bin/decree.js');
 
 describe('decree init', () => {
   it('builds a valid contract from the sample package', () => {
-    const contract = buildContractFromPackage(samplePkg);
+    const { contract, legacy } = buildContractFromPackage(samplePkg);
+    assert.equal(legacy, true);
     validateContract(contract);
     assert.equal(contract.version, 1);
     assert.equal(contract.package, '@fixtures/init-sample-pkg');
@@ -49,7 +50,7 @@ describe('decree init', () => {
     const dir = mkdtempSync(join(tmpdir(), 'decree-init-'));
     try {
       const out = join(dir, 'decree.contract.json');
-      const first = writeContract(buildContractFromPackage(samplePkg), out, {
+      const first = writeContract(buildContractFromPackage(samplePkg).contract, out, {
         force: false,
       });
       assert.equal(first.written, true);
@@ -58,13 +59,13 @@ describe('decree init', () => {
 
       assert.throws(
         () =>
-          writeContract(buildContractFromPackage(samplePkg), out, {
+          writeContract(buildContractFromPackage(samplePkg).contract, out, {
             force: false,
           }),
         /exists/i,
       );
 
-      const second = writeContract(buildContractFromPackage(samplePkg), out, {
+      const second = writeContract(buildContractFromPackage(samplePkg).contract, out, {
         force: true,
       });
       assert.equal(second.written, true);
@@ -114,7 +115,7 @@ describe('decree init', () => {
 
       const resolved = resolvePackageRoot('@fixtures/init-sample-pkg', dir);
       assert.equal(resolved, nm);
-      const contract = buildContractFromPackage(resolved);
+      const { contract } = buildContractFromPackage(resolved);
       assert.ok(contract.components.includes('Button'));
     } finally {
       rmSync(dir, { recursive: true, force: true });
@@ -138,7 +139,7 @@ describe('decree init', () => {
         join(nm, 'Button', 'index.js'),
         "export { Button } from './Button.js'\n",
       );
-      const contract = buildContractFromPackage(nm);
+      const { contract } = buildContractFromPackage(nm);
       assert.ok(contract.components.includes('Button'), JSON.stringify(contract));
     } finally {
       rmSync(dir, { recursive: true, force: true });
@@ -161,7 +162,7 @@ describe('decree init', () => {
         join(dir, 'src', 'components', 'icon-button.tsx'),
         'export function IconButton() { return null }\n',
       );
-      const contract = buildContractFromPackage(dir);
+      const { contract } = buildContractFromPackage(dir);
       assert.ok(contract.components.includes('Button'), JSON.stringify(contract));
       assert.ok(contract.components.includes('IconButton'), JSON.stringify(contract));
     } finally {
@@ -181,7 +182,7 @@ describe('decree init', () => {
         join(dir, 'ui', 'button.tsx'),
         'export function Button() { return null }\n',
       );
-      const contract = buildContractFromPackage(dir);
+      const { contract } = buildContractFromPackage(dir);
       assert.ok(contract.components.includes('Button'), JSON.stringify(contract));
     } finally {
       rmSync(dir, { recursive: true, force: true });

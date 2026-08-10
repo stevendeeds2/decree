@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "name": "@fixtures/sources-bound-pkg",
+  "package": "@fixtures/sources-bound-pkg",
+  "components": [
+    "Button",
+    "Input"
+  ],
+  "tokens": [
+    {
+      "name": "--background"
+    },
+    {
+      "name": "--primary"
+    },
+    {
+      "name": "--theme-control-emphasis-background"
+    }
+  ],
+  "nativeElementMap": {
+    "button": "Button",
+    "input": "Input"
+  }
+}

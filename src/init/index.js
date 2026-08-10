@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
 import { validateContract } from '../contract/index.js';
 import {
   extractComponents,
@@ -7,29 +7,78 @@ import {
   inferNativeElementMap,
 } from './extract.js';
 import { resolvePackageRoot } from './resolve.js';
+import {
+  isComponentFileAllowed,
+  loadSources,
+} from './sources.js';
 
 export { resolvePackageRoot } from './resolve.js';
+export { loadSources, validateSources } from './sources.js';
 
 /**
  * @typedef {import('../contract/index.js').DecreeContract} DecreeContract
+ * @typedef {import('./sources.js').DecreeSources} DecreeSources
  */
 
 /**
  * @param {string} packageRoot
- * @returns {DecreeContract & { package?: string, name?: string }}
+ * @param {{
+ *   sources?: DecreeSources | null,
+ *   sourcesPath?: string,
+ * }} [options]
+ * @returns {{
+ *   contract: DecreeContract & { package?: string, name?: string },
+ *   legacy: boolean,
+ *   sourcesPath: string | null,
+ * }}
  */
-export function buildContractFromPackage(packageRoot) {
+export function buildContractFromPackage(packageRoot, options = {}) {
   const pkg = JSON.parse(
     readFileSync(join(packageRoot, 'package.json'), 'utf8'),
   );
-  const components = extractComponents(packageRoot);
+
+  let sources = options.sources ?? null;
+  let sourcesPath = null;
+  let legacy = true;
+
+  if (sources) {
+    legacy = false;
+  } else {
+    const loaded = loadSources(packageRoot, options.sourcesPath);
+    sources = loaded.sources;
+    sourcesPath = loaded.path;
+    legacy = loaded.legacy;
+  }
+
+  /** @type {((fileAbs: string) => boolean) | undefined} */
+  let fileFilter;
+  if (sources && !legacy) {
+    fileFilter = (fileAbs) =>
+      isComponentFileAllowed(packageRoot, fileAbs, sources);
+  }
+
+  const components = extractComponents(packageRoot, {
+    fileFilter,
+    ignoreComponentNames: sources?.ignoreComponentNames,
+  });
   if (components.length === 0) {
     throw new Error(
       `No components found in ${packageRoot}. Expected PascalCase exports (e.g. Button.js).`,
     );
   }
-  const tokens = extractTokens(packageRoot);
-  const nativeElementMap = inferNativeElementMap(components);
+
+  const tokens = extractTokens(packageRoot, {
+    mode: sources?.tokens?.mode ?? 'legacy-scan',
+    tokenFiles: sources?.tokens?.files,
+    cssAllowlist: sources?.tokens?.cssAllowlist,
+  });
+
+  const nativeElementMap =
+    sources?.nativeElementMap &&
+    Object.keys(sources.nativeElementMap).length > 0
+      ? sources.nativeElementMap
+      : inferNativeElementMap(components);
+
   const name =
     typeof pkg.name === 'string' && pkg.name.length > 0
       ? pkg.name
@@ -45,7 +94,7 @@ export function buildContractFromPackage(packageRoot) {
     nativeElementMap,
   };
   validateContract(contract);
-  return contract;
+  return { contract, legacy, sourcesPath };
 }
 
 /**
@@ -64,4 +113,120 @@ export function writeContract(contract, outPath, opts = {}) {
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(contract, null, 2)}\n`, 'utf8');
   return { written: true, path: outPath };
+}
+
+/**
+ * Stable shape for contract drift checks.
+ * @param {DecreeContract} contract
+ */
+export function canonicalizeContract(contract) {
+  return {
+    version: contract.version,
+    name: contract.name,
+    package: /** @type {{ package?: string }} */ (contract).package,
+    components: [...contract.components].sort(),
+    tokens: [...contract.tokens]
+      .map((t) => ({
+        name: t.name,
+        ...(t.value !== undefined ? { value: t.value } : {}),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
+    nativeElementMap: Object.fromEntries(
+      Object.entries(contract.nativeElementMap || {}).sort(([a], [b]) =>
+        a.localeCompare(b),
+      ),
+    ),
+  };
+}
+
+/**
+ * @param {DecreeContract} a
+ * @param {DecreeContract} b
+ */
+export function contractsEqual(a, b) {
+  return (
+    JSON.stringify(canonicalizeContract(a)) ===
+    JSON.stringify(canonicalizeContract(b))
+  );
+}
+
+/**
+ * Regenerate contract at package root from decree.sources.json.
+ * @param {string} packageRoot
+ * @param {{
+ *   outPath?: string,
+ *   force?: boolean,
+ *   check?: boolean,
+ *   sourcesPath?: string,
+ * }} [opts]
+ */
+export function preparePackage(packageRoot, opts = {}) {
+  const outPath = opts.outPath ?? join(packageRoot, 'decree.contract.json');
+  const { contract, legacy, sourcesPath } = buildContractFromPackage(
+    packageRoot,
+    { sourcesPath: opts.sourcesPath },
+  );
+
+  if (opts.check) {
+    if (!existsSync(outPath)) {
+      return {
+        ok: false,
+        legacy,
+        sourcesPath,
+        message: `No contract at ${outPath} — run decree prepare first`,
+        contract,
+      };
+    }
+    const existing = JSON.parse(readFileSync(outPath, 'utf8'));
+    validateContract(existing);
+    const equal = contractsEqual(contract, existing);
+    return {
+      ok: equal,
+      legacy,
+      sourcesPath,
+      message: equal
+        ? `decree prepare --check: ok (${outPath})`
+        : `decree prepare --check: contract drift at ${outPath} — re-run decree prepare`,
+      contract,
+      existing,
+    };
+  }
+
+  const result = writeContract(contract, outPath, {
+    force: opts.force !== false,
+  });
+  return {
+    ok: true,
+    legacy,
+    sourcesPath,
+    message: `decree prepare: wrote ${result.path}`,
+    contract,
+    path: result.path,
+  };
+}
+
+/**
+ * Copy published contract from a DS package into the consumer cwd.
+ * @param {string} packageSpec path or package name
+ * @param {string} fromCwd
+ * @param {{ outPath?: string, force?: boolean }} [opts]
+ */
+export function usePackageContract(packageSpec, fromCwd, opts = {}) {
+  const packageRoot = resolvePackageRoot(packageSpec, fromCwd);
+  const pkg = JSON.parse(
+    readFileSync(join(packageRoot, 'package.json'), 'utf8'),
+  );
+  const decreeField =
+    typeof pkg.decree === 'string' ? pkg.decree : './decree.contract.json';
+  const sourceContract = resolve(packageRoot, decreeField);
+  if (!existsSync(sourceContract)) {
+    throw new Error(
+      `No decree contract in ${packageRoot} (looked for ${decreeField}). DS packages should ship decree.contract.json.`,
+    );
+  }
+  const contract = JSON.parse(readFileSync(sourceContract, 'utf8'));
+  validateContract(contract);
+  const outPath = opts.outPath ?? join(fromCwd, 'decree.contract.json');
+  const result = writeContract(contract, outPath, { force: opts.force });
+  return { ...result, from: sourceContract, packageRoot };
 }

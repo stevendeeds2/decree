@@ -5,8 +5,11 @@ Absolute `decree verify` is correct for greenfield and for the MUI flagship demo
 ## Day 1
 
 ```bash
-# 1) Bootstrap a contract from your design-system package
-npx decree init ./node_modules/@your/ds --force
+# 1) Prefer: copy curated contract from the DS package
+npx decree use @your/ds --force
+
+# Or bootstrap (DS authors): decree prepare with decree.sources.json — see SOURCES.md
+# Legacy: npx decree init ./node_modules/@your/ds --force   # noisy without sources
 
 # 2) Tune scan (typical consumer app)
 # In decree.contract.json:
@@ -24,6 +27,8 @@ Commit `decree.contract.json` + `decree.baseline.json`.
 ```bash
 npx decree verify . --baseline decree.baseline.json
 ```
+
+Example workflow: [`.github/workflows/decree-verify.example.yml`](../.github/workflows/decree-verify.example.yml). Install notes: [INSTALL.md](./INSTALL.md).
 
 - **Pass** if there are **0 new** findings (debt already in the baseline is ignored).
 - **Fail** if someone introduces a new forgery / hex / unknown component.
@@ -51,6 +56,6 @@ Baseline is a **temporary on-ramp**, not permanent permission to invent UI.
 | `--baseline file` | Fail only on findings not in the baseline |
 | `--max-new N` | Fail if new count > N |
 
-## Flagship absolute demo
+## Demo
 
-Official MUI Next.js example (vendored under `examples/trials/mui-nextjs-ts`) should stay near-green in absolute mode (~1 theme hex). Use that for sales demos; use baseline for brownfield CI.
+Case studies live under [`demos/`](../demos/) (Pulse Reports today). Use baseline for brownfield CI on your own apps.

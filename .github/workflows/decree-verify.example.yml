@@ -1,0 +1,37 @@
+# Example: copy to .github/workflows/decree-verify.yml and adjust.
+# Requires @stevendeeds/decree published to GitHub Packages (see docs/INSTALL.md).
+name: decree-verify
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: https://npm.pkg.github.com
+          scope: '@stevendeeds'
+
+      - name: Install app deps
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Decree
+        run: npm install -D @stevendeeds/decree@0.1.0
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Decree verify (ratchet)
+        run: npx decree verify . --baseline decree.baseline.json

@@ -1,11 +1,16 @@
 # Decree `init`
 
-Bootstrap a v1 `decree.contract.json` from a design-system package so teams can gate without hand-writing the inventory.
+Bootstrap a v1 `decree.contract.json` from a design-system package.
+
+> Prefer **`decree prepare`** with [`decree.sources.json`](./SOURCES.md) for publishable contracts.  
+> Bare `init` without sources is a **legacy full scan** (noisy).
 
 ## Usage
 
 ```bash
-node bin/decree.js init <path-or-package-name> [--out decree.contract.json] [--force]
+node bin/decree.js init <path-or-package-name> [--out decree.contract.json] [--force] [--sources file]
+node bin/decree.js prepare [package-root] [--check] [--out decree.contract.json]
+node bin/decree.js use <path-or-package-name> [--out decree.contract.json] [--force]
 ```
 
 | Input | Behavior |
@@ -14,18 +19,24 @@ node bin/decree.js init <path-or-package-name> [--out decree.contract.json] [--f
 | npm name (e.g. `@stevendeeds/sd33ds`) | Resolved from `node_modules` walking up from cwd |
 | `--out` | Output path (default `./decree.contract.json`) |
 | `--force` | Overwrite existing contract |
+| `--sources` | Path to `decree.sources.json` (default: `<pkg>/decree.sources.json`) |
+| `prepare --check` | Exit 1 if sources regenerate a different contract than on disk |
 
 ## What it extracts
 
-- **Components** — PascalCase modules from `exports` + package walk; exported `function` / `const` names  
-- **Tokens** — CSS `--*` from `.css`/`.scss`, plus flattened `tokens.json` DTCG paths (`a.b` → `--a-b`)  
-- **nativeElementMap** — heuristics (`Button`→`button`, `Input`→`input`, …)
+With **sources** (recommended): only declared component dirs + token mode.
 
-## After init
+Without sources (legacy):
+
+- **Components** — PascalCase modules from `exports` + package walk  
+- **Tokens** — all CSS `--*` plus `tokens.json`  
+- **nativeElementMap** — heuristics (`Button`→`button`, …)
+
+## After prepare / use
 
 ```bash
 node bin/decree.js verify .
 node bin/decree.js mcp decree.contract.json
 ```
 
-Review the contract: init is a starting allowlist, not a legal opinion. Trim tokens/components before locking CI.
+See [SOURCES.md](./SOURCES.md) and [ADOPTION.md](./ADOPTION.md).

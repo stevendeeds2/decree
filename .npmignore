@@ -1,0 +1,12 @@
+# Dev assets stay in git; never ship in the installable tarball.
+tests/
+demos/
+scripts/
+.github/
+coverage/
+*.tgz
+.node-test-results/
+.DS_Store
+*.log
+.env
+.env.*

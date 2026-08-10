@@ -1,9 +1,0 @@
-{
-  "version": 1,
-  "name": "verify-skip-tests",
-  "components": ["Button"],
-  "tokens": [{ "name": "--background" }],
-  "nativeElementMap": {
-    "button": "Button"
-  }
-}

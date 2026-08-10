@@ -13,6 +13,10 @@ const HOST_PACKAGE_PREFIXES = [
   'react-dom',
   '@mui/material-nextjs/',
   '@mui/material-nextjs',
+  'lucide-react/',
+  'lucide-react',
+  'recharts/',
+  'recharts',
 ];
 
 /**
