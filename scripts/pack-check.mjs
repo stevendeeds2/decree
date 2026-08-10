@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Fail if npm pack would include trial apps, fixtures, or other heavy proof assets.
+ * Fail if npm pack would include demos, tests, or other non-product assets.
  */
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -25,14 +25,7 @@ if (pack.status !== 0) {
 /** @type {{ filename: string, files: { path: string }[] }[]} */
 const meta = JSON.parse(pack.stdout);
 const files = (meta[0]?.files ?? []).map((f) => f.path);
-const banned = [
-  /^examples\//,
-  /^fixtures\//,
-  /^tests\//,
-  /^scripts\//,
-  /^docs\/superpowers\//,
-  /node_modules/,
-];
+const banned = [/^demos\//, /^tests\//, /^scripts\//, /node_modules/];
 
 const offenders = files.filter((p) => banned.some((re) => re.test(p)));
 const required = ['bin/decree.js', 'bin/decree-mcp.js', 'src/verify/index.js'];
@@ -53,10 +46,6 @@ if (offenders.length || missing.length) {
   rmSync(dir, { recursive: true, force: true });
   process.exit(1);
 }
-
-const reportsDir = join(root, 'examples/trials/_reports');
-mkdirSync(reportsDir, { recursive: true });
-writeFileSync(join(reportsDir, 'pack-files.txt'), files.sort().join('\n') + '\n');
 
 rmSync(dir, { recursive: true, force: true });
 console.log('pack:check PASS');

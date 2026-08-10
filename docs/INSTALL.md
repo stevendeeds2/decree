@@ -7,7 +7,7 @@ Private package. Channel for `0.1.0`: **GitHub Packages** (`https://npm.pkg.gith
 The npm scope is `@stevendeeds`. The GitHub repo lives under **`stevendeeds2`**.  
 GitHub Packages requires the package scope to match the **owning user or org**.
 
-Until a `stevendeeds` GitHub org owns the package (or the package is renamed to `@stevendeeds2/decree`), `npm publish` to GitHub Packages will fail with a scope mismatch. See [PUBLISH.md](./PUBLISH.md).
+Until a `stevendeeds` GitHub org owns the package (or the package is renamed to `@stevendeeds2/decree`), `npm publish` to GitHub Packages will fail with a scope mismatch.
 
 Install instructions below assume the package is published under `@stevendeeds/decree` on GitHub Packages (after the owner/scope is aligned).
 
@@ -36,7 +36,7 @@ npx decree verify . --write-baseline decree.baseline.json
 npx decree verify . --baseline decree.baseline.json
 ```
 
-See [ADOPTION.md](./ADOPTION.md) for brownfield ratchet and [GETTING_STARTED.md](./GETTING_STARTED.md) for in-repo fixtures.
+See [ADOPTION.md](./ADOPTION.md) for brownfield ratchet and [GETTING_STARTED.md](./GETTING_STARTED.md) for the full walkthrough.
 
 ## CI (copy the example)
 
@@ -49,5 +49,6 @@ Template workflow (not enabled by default):
 git clone https://github.com/stevendeeds2/decree.git
 cd decree
 npm install
-node bin/decree.js verify fixtures/shadcn-clean
+open demos/pulse-reports/index.html
+node bin/decree.js --help
 ```

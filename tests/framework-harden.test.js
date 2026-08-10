@@ -55,6 +55,21 @@ export function App() { return <Link href="/" />; }
     );
   });
 
+  it('allows lucide-react / recharts hosts when imported', () => {
+    const findings = scanSource(
+      `import { Search } from 'lucide-react';
+import { AreaChart } from 'recharts';
+export function App() { return <><Search /><AreaChart /></>; }\n`,
+      'src/App.tsx',
+      bare,
+    );
+    assert.equal(
+      findings.filter((f) => f.code === CODES.UNKNOWN_COMPONENT).length,
+      0,
+      JSON.stringify(findings),
+    );
+  });
+
   it('allows named hosts from @mui/material-nextjs', () => {
     const source = `
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';

@@ -1,17 +1,7 @@
-# Dev / proof assets stay in git; never ship in the installable tarball.
+# Dev assets stay in git; never ship in the installable tarball.
 tests/
-fixtures/
-examples/
+demos/
 scripts/
-docs/superpowers/
-docs/AUDIT-*.md
-docs/DOGFOOD.md
-docs/POC.md
-docs/PRESSURE.md
-docs/PILOT-RETEST.md
-docs/THESIS.md
-docs/TRIALS.md
-docs/INVITE.md
 .github/
 coverage/
 *.tgz

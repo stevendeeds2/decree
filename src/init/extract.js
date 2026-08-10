@@ -18,12 +18,30 @@ const NATIVE_MAP = {
 };
 
 /**
+ * @typedef {{
+ *   fileFilter?: (fileAbs: string) => boolean,
+ *   ignoreComponentNames?: string[],
+ * }} ExtractComponentOptions
+ */
+
+/**
+ * @typedef {{
+ *   mode?: 'dtcg-only' | 'css-allowlist' | 'legacy-scan',
+ *   tokenFiles?: string[],
+ *   cssAllowlist?: string[],
+ * }} ExtractTokenOptions
+ */
+
+/**
  * @param {string} packageRoot
+ * @param {ExtractComponentOptions} [options]
  * @returns {string[]}
  */
-export function extractComponents(packageRoot) {
+export function extractComponents(packageRoot, options = {}) {
   const pkg = readPackageJson(packageRoot);
   const modulePaths = new Set(collectExportTargets(pkg, packageRoot));
+  const fileFilter = options.fileFilter;
+  const ignore = new Set(options.ignoreComponentNames ?? []);
 
   // Prefer PascalCase filenames; also accept components/ tree walk as fallback.
   // Package roots often live under node_modules — only skip *nested* deps.
@@ -34,12 +52,14 @@ export function extractComponents(packageRoot) {
       COMPONENTISH_FILE.test(base) && isComponentDirPath(file);
     if (!pascalFile && !kebabComponent) continue;
     if (isNestedNodeModulesPath(packageRoot, file)) continue;
+    if (fileFilter && !fileFilter(file)) continue;
     modulePaths.add(file);
   }
 
   const names = new Set();
   for (const file of modulePaths) {
     if (!existsSync(file)) continue;
+    if (fileFilter && !fileFilter(file)) continue;
     const base = basename(file);
     const pascalFile = COMPONENT_FILE.test(base);
     const kebabComponent =
@@ -47,11 +67,12 @@ export function extractComponents(packageRoot) {
     if (!pascalFile && !kebabComponent) continue;
     const source = readFileSync(file, 'utf8');
     for (const name of parseExportedComponents(source)) {
-      names.add(name);
+      if (!ignore.has(name)) names.add(name);
     }
     // Filename itself is a strong signal when exports are re-export only
     if (pascalFile) {
-      names.add(base.replace(/\.(jsx?|tsx?|mjs|cjs)$/, ''));
+      const fromFile = base.replace(/\.(jsx?|tsx?|mjs|cjs)$/, '');
+      if (!ignore.has(fromFile)) names.add(fromFile);
     }
   }
 
@@ -61,31 +82,57 @@ export function extractComponents(packageRoot) {
 
 /**
  * @param {string} packageRoot
+ * @param {ExtractTokenOptions} [options]
  * @returns {{ name: string }[]}
  */
-export function extractTokens(packageRoot) {
+export function extractTokens(packageRoot, options = {}) {
   /** @type {Set<string>} */
   const names = new Set();
+  const mode = options.mode ?? 'legacy-scan';
 
-  for (const file of walkFiles(packageRoot)) {
-    if (!/\.(css|scss)$/.test(file)) continue;
-    if (isNestedNodeModulesPath(packageRoot, file)) continue;
+  const addCssFile = (file) => {
+    if (!existsSync(file)) return;
     const css = readFileSync(file, 'utf8');
     for (const m of css.matchAll(/--([a-zA-Z0-9-_]+)/g)) {
       names.add(`--${m[1]}`);
     }
-  }
+  };
 
-  const tokensJson = join(packageRoot, 'tokens.json');
-  if (existsSync(tokensJson)) {
+  const addDtcgFile = (file) => {
+    if (!existsSync(file)) return;
     try {
-      const tree = JSON.parse(readFileSync(tokensJson, 'utf8'));
+      const tree = JSON.parse(readFileSync(file, 'utf8'));
       for (const path of flattenDtcgPaths(tree)) {
         names.add(`--${path.replaceAll('.', '-')}`);
       }
     } catch {
       // ignore invalid tokens.json
     }
+  };
+
+  if (mode === 'dtcg-only') {
+    const files =
+      options.tokenFiles && options.tokenFiles.length > 0
+        ? options.tokenFiles.map((f) => join(packageRoot, f))
+        : [join(packageRoot, 'tokens.json')];
+    for (const file of files) addDtcgFile(file);
+  } else if (mode === 'css-allowlist') {
+    for (const rel of options.cssAllowlist ?? []) {
+      addCssFile(join(packageRoot, rel));
+    }
+    for (const rel of options.tokenFiles ?? []) {
+      if (/\.json$/i.test(rel)) addDtcgFile(join(packageRoot, rel));
+      else addCssFile(join(packageRoot, rel));
+    }
+  } else {
+    // legacy-scan
+    for (const file of walkFiles(packageRoot)) {
+      if (!/\.(css|scss)$/.test(file)) continue;
+      if (isNestedNodeModulesPath(packageRoot, file)) continue;
+      addCssFile(file);
+    }
+    const tokensJson = join(packageRoot, 'tokens.json');
+    addDtcgFile(tokensJson);
   }
 
   return [...names].sort().map((name) => ({ name }));

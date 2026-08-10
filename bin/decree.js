@@ -3,7 +3,9 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildContractFromPackage,
+  preparePackage,
   resolvePackageRoot,
+  usePackageContract,
   writeContract,
 } from '../src/init/index.js';
 import { verifyPath } from '../src/verify/index.js';
@@ -16,25 +18,27 @@ function printHelp() {
 
 Commands:
   init <pkg>      Build decree.contract.json from a design-system package
+  prepare [path]  Regenerate contract from decree.sources.json (DS publish)
+  use <pkg>       Copy a published package contract into the current app
   verify [path]   Fail if source invents UI outside the contract (default: .)
   mcp [contract]  Print MCP client config for the allowlist server
   help            Show this help
 
-Init:
-  decree init <path-or-package-name> [--out decree.contract.json] [--force]
+Init / prepare:
+  decree init <path-or-package-name> [--out decree.contract.json] [--force] [--sources file]
+  decree prepare [package-root] [--out decree.contract.json] [--check] [--sources file]
+  decree use <path-or-package-name> [--out decree.contract.json] [--force]
 
 Verify (brownfield ratchet):
   decree verify [path] [--baseline file] [--write-baseline file] [--max-new N]
-  --baseline         fail only on findings not in the baseline
-  --write-baseline   write current findings as baseline (exit 0)
-  --max-new N        fail if new findings > N (with or without --baseline)
 
 MCP server binary: decree-mcp [path/to/decree.contract.json]
 
-Full story (sequenced):
-  init  →  verify  →  mcp allowlist  →  docs-from-contract / measurement
+Recommended DS flow:
+  decree.sources.json  →  decree prepare  →  publish with decree.contract.json
+  app: decree use @acme/ds  →  decree verify .
 
-Docs: docs/THESIS.md · docs/POC.md · docs/ADOPTION.md
+Docs: docs/SOURCES.md · docs/INIT.md · docs/ADOPTION.md · docs/GETTING_STARTED.md
 `);
 }
 
@@ -94,9 +98,87 @@ function parseVerifyArgs(args) {
 
 /**
  * @param {string[]} args
- * @returns {{ positional: string[], out: string, force: boolean }}
+ * @returns {{ positional: string[], out: string, force: boolean, sources?: string }}
  */
 function parseInitArgs(args) {
+  let out = 'decree.contract.json';
+  let force = false;
+  /** @type {string | undefined} */
+  let sources;
+  /** @type {string[]} */
+  const positional = [];
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === '--force') {
+      force = true;
+      continue;
+    }
+    if (a === '--out') {
+      out = args[++i] ?? out;
+      continue;
+    }
+    if (a.startsWith('--out=')) {
+      out = a.slice('--out='.length);
+      continue;
+    }
+    if (a === '--sources') {
+      sources = args[++i];
+      continue;
+    }
+    if (a.startsWith('--sources=')) {
+      sources = a.slice('--sources='.length);
+      continue;
+    }
+    positional.push(a);
+  }
+  return { positional, out, force, sources };
+}
+
+/**
+ * @param {string[]} args
+ */
+function parsePrepareArgs(args) {
+  let out;
+  let check = false;
+  /** @type {string | undefined} */
+  let sources;
+  /** @type {string[]} */
+  const positional = [];
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === '--check') {
+      check = true;
+      continue;
+    }
+    if (a === '--out') {
+      out = args[++i];
+      continue;
+    }
+    if (a.startsWith('--out=')) {
+      out = a.slice('--out='.length);
+      continue;
+    }
+    if (a === '--sources') {
+      sources = args[++i];
+      continue;
+    }
+    if (a.startsWith('--sources=')) {
+      sources = a.slice('--sources='.length);
+      continue;
+    }
+    if (a.startsWith('-')) {
+      console.error(`decree prepare: unknown flag ${a}`);
+      process.exit(2);
+    }
+    positional.push(a);
+  }
+  return { positional, out, check, sources };
+}
+
+/**
+ * @param {string[]} args
+ */
+function parseUseArgs(args) {
   let out = 'decree.contract.json';
   let force = false;
   /** @type {string[]} */
@@ -115,6 +197,10 @@ function parseInitArgs(args) {
       out = a.slice('--out='.length);
       continue;
     }
+    if (a.startsWith('-')) {
+      console.error(`decree use: unknown flag ${a}`);
+      process.exit(2);
+    }
     positional.push(a);
   }
   return { positional, out, force };
@@ -126,7 +212,7 @@ if (cmd === 'help' || cmd === '--help' || cmd === '-h') {
 }
 
 if (cmd === 'init') {
-  const { positional, out, force } = parseInitArgs(rest);
+  const { positional, out, force, sources } = parseInitArgs(rest);
   const spec = positional[0];
   if (!spec) {
     console.error('decree init: missing <path-or-package-name>');
@@ -135,7 +221,17 @@ if (cmd === 'init') {
   }
   try {
     const packageRoot = resolvePackageRoot(spec, process.cwd());
-    const contract = buildContractFromPackage(packageRoot);
+    const { contract, legacy, sourcesPath } = buildContractFromPackage(
+      packageRoot,
+      { sourcesPath: sources },
+    );
+    if (legacy) {
+      console.error(
+        'decree: no decree.sources.json — using legacy full scan; expect noise. See docs/SOURCES.md',
+      );
+    } else if (sourcesPath) {
+      console.error(`decree: using sources ${sourcesPath}`);
+    }
     const result = writeContract(contract, resolve(out), { force });
     console.log(
       `decree init: wrote ${result.path} (${contract.components.length} components, ${contract.tokens.length} tokens) from ${packageRoot}`,
@@ -143,6 +239,63 @@ if (cmd === 'init') {
     process.exit(0);
   } catch (err) {
     console.error(`decree init: ${err instanceof Error ? err.message : err}`);
+    process.exit(1);
+  }
+}
+
+if (cmd === 'prepare') {
+  const { positional, out, check, sources } = parsePrepareArgs(rest);
+  const rootSpec = positional[0] ?? '.';
+  try {
+    const packageRoot = resolve(rootSpec);
+    const result = preparePackage(packageRoot, {
+      outPath: out ? resolve(out) : undefined,
+      check,
+      force: true,
+      sourcesPath: sources,
+    });
+    if (result.legacy) {
+      console.error(
+        'decree: no decree.sources.json — using legacy full scan; expect noise. See docs/SOURCES.md',
+      );
+    } else if (result.sourcesPath) {
+      console.error(`decree: using sources ${result.sourcesPath}`);
+    }
+    if (check) {
+      console.log(result.message);
+      process.exit(result.ok ? 0 : 1);
+    }
+    console.log(
+      `${result.message} (${result.contract.components.length} components, ${result.contract.tokens.length} tokens)`,
+    );
+    process.exit(0);
+  } catch (err) {
+    console.error(
+      `decree prepare: ${err instanceof Error ? err.message : err}`,
+    );
+    process.exit(1);
+  }
+}
+
+if (cmd === 'use') {
+  const { positional, out, force } = parseUseArgs(rest);
+  const spec = positional[0];
+  if (!spec) {
+    console.error('decree use: missing <path-or-package-name>');
+    printHelp();
+    process.exit(2);
+  }
+  try {
+    const result = usePackageContract(spec, process.cwd(), {
+      outPath: resolve(out),
+      force,
+    });
+    console.log(
+      `decree use: copied ${result.from} → ${result.path}`,
+    );
+    process.exit(0);
+  } catch (err) {
+    console.error(`decree use: ${err instanceof Error ? err.message : err}`);
     process.exit(1);
   }
 }
@@ -157,7 +310,6 @@ if (cmd === 'verify') {
     parsed.writeBaselinePath === undefined &&
     rest.some((a) => a === '--write-baseline' || a.startsWith('--write-baseline='))
   ) {
-    // allow --write-baseline=path form only through parser; bare flag without value
     if (rest.includes('--write-baseline') && !parsed.writeBaselinePath) {
       console.error('decree verify: --write-baseline requires a path');
       process.exit(2);

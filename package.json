@@ -16,24 +16,14 @@
     "docs/ADOPTION.md",
     "docs/GETTING_STARTED.md",
     "docs/INIT.md",
+    "docs/SOURCES.md",
     "docs/MCP.md"
   ],
   "scripts": {
     "test": "node --test tests/**/*.test.js",
-    "verify:clean": "node ./bin/decree.js verify fixtures/shadcn-clean",
-    "verify:dirty": "node ./bin/decree.js verify fixtures/shadcn-dirty",
-    "verify:mui": "node ./bin/decree.js verify fixtures/mui-clean && node ./bin/decree.js verify fixtures/mui-dirty; test $? -eq 1",
-    "verify:radix": "node ./bin/decree.js verify examples/radix-themes-clean && node ./bin/decree.js verify examples/radix-themes-dirty; test $? -eq 1",
     "verify": "node ./bin/decree.js verify",
-    "init:sample": "node ./bin/decree.js init fixtures/init-sample-pkg --out /tmp/decree-init-sample.contract.json --force",
-    "examples:install": "bash ./scripts/examples-install.sh",
-    "examples:init": "bash ./scripts/examples-init.sh",
-    "examples:verify": "bash ./scripts/examples-verify.sh",
-    "demo": "npm run examples:verify",
-    "trials": "node ./scripts/run-external-trials.mjs",
-    "pressure": "node ./scripts/run-pressure.mjs",
     "pack:check": "node ./scripts/pack-check.mjs",
-    "mcp:config": "node ./bin/decree.js mcp fixtures/shadcn-clean/decree.contract.json",
+    "mcp:config": "node ./bin/decree.js mcp demos/pulse-reports/packages/pulse-ui/decree.contract.json",
     "prepublishOnly": "npm test && npm run pack:check"
   },
   "engines": {

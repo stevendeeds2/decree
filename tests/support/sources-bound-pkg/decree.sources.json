@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "components": {
+    "include": ["src/components/ui"],
+    "exclude": ["**/*.stories.*", "**/*.test.*"]
+  },
+  "tokens": {
+    "mode": "dtcg-only",
+    "files": ["tokens.json"]
+  },
+  "ignoreComponentNames": ["App"]
+}
