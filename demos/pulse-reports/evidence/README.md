@@ -1,14 +1,11 @@
-# Evidence
+# Evidence screenshots
 
-Screenshots kept for the Pulse Reports case study.
+Canonical captures for the Pulse case study.
 
-| File | Subject |
-|------|---------|
-| `pulse-system-full.png` | System app (viewport) |
-| `pulse-system-fullpage.png` | System app (full page) |
-| `pulse-lookalike-full.png` | Lookalike app (AI from screenshot) |
+| File | What |
+|------|------|
+| `pulse-system-full.png` | Pulse Reports (uses @pulse/ui) |
+| `pulse-system-fullpage.png` | Full-page capture of Pulse Reports |
+| `pulse-lookalike-full.png` | Pulse Reports AI (screenshot rebuild) |
 
-Do not delete — used by the case-study narrative.
-
-`hub/evidence/` holds copies for the static landing server (cannot serve `../` paths).
-When you refresh screenshots here, also copy into `hub/evidence/`.
+Referenced from `../index.html`.

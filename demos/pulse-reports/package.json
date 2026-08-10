@@ -1,0 +1,13 @@
+{
+  "name": "pulse-reports-demo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pulse Reports case study — design system + two product apps",
+  "scripts": {
+    "postinstall": "npm install --prefix packages/pulse-ui --omit=peer && npm install --prefix apps/pulse-reports && npm install --prefix apps/pulse-reports-ai",
+    "dev": "npm run dev --prefix apps/pulse-reports",
+    "dev:ai": "npm run dev --prefix apps/pulse-reports-ai",
+    "build": "npm run build --prefix apps/pulse-reports",
+    "build:ai": "npm run build --prefix apps/pulse-reports-ai"
+  }
+}

@@ -8,17 +8,21 @@ If it’s not in the system, it doesn’t ship.
 
 ## Install
 
-```bash
-npm install -g @stevendeeds/decree
-# or use via npx / local bin — see docs/INSTALL.md for GitHub Packages auth
-```
-
-From this repo:
+### From this repository
 
 ```bash
-cd apps/decree   # or clone stevendeeds2/decree
+git clone https://github.com/stevendeeds2/decree.git
+cd decree
 npm install
 node bin/decree.js --help
+```
+
+### As a package
+
+```bash
+npm install -D @stevendeeds/decree
+# GitHub Packages auth: see docs/INSTALL.md
+npx decree --help
 ```
 
 ## Configure (your design system)
@@ -30,7 +34,7 @@ node bin/decree.js prepare path/to/your-design-system
 # writes decree.contract.json next to the package (see docs/SOURCES.md)
 ```
 
-2. **Use it in an app** (copy or link the rulebook):
+2. **Use it in an app** (copy the rulebook into the app):
 
 ```bash
 node bin/decree.js use path/to/your-design-system --out ./decree.contract.json
@@ -43,7 +47,7 @@ node bin/decree.js verify .
 ```
 
 Brownfield teams can ratchet with a baseline — [docs/ADOPTION.md](./docs/ADOPTION.md).  
-Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md) · init details: [docs/INIT.md](./docs/INIT.md) · MCP: [docs/MCP.md](./docs/MCP.md).
+Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md) · init: [docs/INIT.md](./docs/INIT.md) · MCP: [docs/MCP.md](./docs/MCP.md).
 
 ## Demos
 
@@ -55,15 +59,15 @@ Same product app, different design systems — under [`demos/`](./demos/).
 
 More system variants (e.g. Material UI) will land beside Pulse under `demos/`.
 
-## What ships
+## Layout
 
 | Path | Role |
 |------|------|
 | `bin/`, `src/` | Product CLI + MCP |
 | `docs/` | Install, adopt, init, sources, MCP |
 | `demos/` | Runnable case studies (not in the npm tarball) |
-| `tests/` | Unit tests (self-contained) |
+| `tests/` | Unit tests |
 
-## Package
+## Package name
 
-npm unscoped `decree` is taken. This project is **`@stevendeeds/decree`**.
+npm unscoped `decree` is taken. This project ships as **`@stevendeeds/decree`**.
