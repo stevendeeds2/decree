@@ -26,21 +26,20 @@
       <section class="panel" aria-labelledby="start-heading">
         <h2 id="start-heading">Start the demo apps</h2>
         <p class="callout">
-          From two terminals, under
-          <code>demos/pulse-reports/</code> (or absolute paths below).
-          First time: <code>npm install</code> in each app folder.
+          From <code>demos/pulse-reports/</code> (this folder — not the Decree
+          repo root). First time run <code>npm install</code> here; it wires
+          the package + both apps.
         </p>
-        <pre class="code"><code># Terminal 1 — Pulse Reports (uses @pulse/ui)
-cd apps/pulse-reports
-npm install   # once
+        <pre class="code"><code>cd demos/pulse-reports
+npm install
+
+# Terminal 1 — Pulse Reports (uses @pulse/ui)
 npm run dev
-# → http://127.0.0.1:5180
+# opens http://127.0.0.1:5180
 
 # Terminal 2 — Pulse Reports AI (screenshot rebuild)
-cd apps/pulse-reports-ai
-npm install   # once
-npm run dev
-# → http://127.0.0.1:5181</code></pre>
+npm run dev:ai
+# opens http://127.0.0.1:5181</code></pre>
         <p class="note">
           Design system package <code>packages/pulse-ui</code> is a dependency —
           no separate server. After the apps are up, use the Open links below.
@@ -144,8 +143,8 @@ npm run dev
       <section class="panel" aria-labelledby="trial-heading">
         <h2 id="trial-heading">Trial run (Decree)</h2>
         <p class="note" style="margin-top: 0">
-          From the <strong>Decree repo root</strong> (<code>apps/decree</code>).
-          Output is terminal findings.
+          From the <strong>Decree repo root</strong>. Output is terminal
+          findings.
         </p>
         <pre class="code"><code># Design system — regenerate contract
 node bin/decree.js prepare demos/pulse-reports/packages/pulse-ui

@@ -5,6 +5,8 @@ Product-shaped twin of Pulse Reports, rebuilt by an AI agent **from a screenshot
 Does **not** depend on `@pulse/ui`. Amber banner in the UI states provenance.
 
 ```bash
+# From Decree repo root
+cd demos/pulse-reports/apps/pulse-reports-ai
 npm install
 npm run dev   # http://127.0.0.1:5181
 ```
