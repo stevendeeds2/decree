@@ -16,6 +16,8 @@ Private package auth: [INSTALL.md](./INSTALL.md).
 Preferred (source-bound, no prune):
 
 ```bash
+node bin/decree.js sources path/to/your-ds-package
+# fill components.include + tokens in decree.sources.json
 node bin/decree.js prepare path/to/your-ds-package
 node bin/decree.js use path/to/your-ds-package --out ./decree.contract.json
 ```

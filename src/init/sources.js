@@ -1,5 +1,5 @@
-import { existsSync, readFileSync } from 'node:fs';
-import { isAbsolute, join, normalize, relative, resolve } from 'node:path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, isAbsolute, join, normalize, relative, resolve } from 'node:path';
 import { assertSafeScanPrefix } from '../verify/excludes.js';
 
 /**
@@ -18,6 +18,50 @@ import { assertSafeScanPrefix } from '../verify/excludes.js';
  *   nativeElementMap?: Record<string, string>,
  * }} DecreeSources
  */
+
+/**
+ * Full sources template — every schema key present (empty lists / map).
+ * Fill `components.include` and token paths, then `decree prepare`.
+ * @returns {DecreeSources}
+ */
+export function sourcesScaffoldTemplate() {
+  return {
+    version: 1,
+    components: {
+      include: [],
+      exclude: [],
+    },
+    tokens: {
+      mode: 'css-allowlist',
+      files: [],
+      cssAllowlist: [],
+    },
+    ignoreComponentNames: [],
+    nativeElementMap: {},
+  };
+}
+
+/**
+ * Write a scaffolded `decree.sources.json` with every option key.
+ * @param {string} packageRoot
+ * @param {{ force?: boolean, outPath?: string }} [opts]
+ * @returns {{ written: boolean, path: string, created: boolean }}
+ */
+export function writeSourcesScaffold(packageRoot, opts = {}) {
+  const outPath = opts.outPath ?? join(packageRoot, 'decree.sources.json');
+  const existed = existsSync(outPath);
+  if (existed && !opts.force) {
+    throw new Error(
+      `Sources already exist at ${outPath}. Re-run with --force to overwrite.`,
+    );
+  }
+  const template = sourcesScaffoldTemplate();
+  validateSources(template, outPath);
+  mkdirSync(dirname(outPath), { recursive: true });
+  writeFileSync(outPath, `${JSON.stringify(template, null, 2)}\n`, 'utf8');
+  return { written: true, path: outPath, created: !existed };
+}
+
 
 /**
  * @param {string} packageRoot

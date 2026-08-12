@@ -27,20 +27,27 @@ npx decree --help
 
 ## Configure (your design system)
 
-1. **Prepare a contract** from your design-system package (source-bound):
+1. **Scaffold sources** (every option key, empty — fill the form):
+
+```bash
+node bin/decree.js sources path/to/your-design-system
+# edit decree.sources.json — see docs/SOURCES.md
+```
+
+2. **Prepare a contract** from those sources:
 
 ```bash
 node bin/decree.js prepare path/to/your-design-system
-# writes decree.contract.json next to the package (see docs/SOURCES.md)
+# writes decree.contract.json next to the package
 ```
 
-2. **Use it in an app** (copy the rulebook into the app):
+3. **Use it in an app** (copy the rulebook into the app):
 
 ```bash
 node bin/decree.js use path/to/your-design-system --out ./decree.contract.json
 ```
 
-3. **Verify** the app:
+4. **Verify** the app:
 
 ```bash
 node bin/decree.js verify .

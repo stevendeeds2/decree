@@ -7,6 +7,7 @@ import {
   resolvePackageRoot,
   usePackageContract,
   writeContract,
+  writeSourcesScaffold,
 } from '../src/init/index.js';
 import { verifyPath } from '../src/verify/index.js';
 
@@ -17,6 +18,7 @@ function printHelp() {
   console.log(`decree — design system enforcement
 
 Commands:
+  sources [path]  Scaffold decree.sources.json (all options, empty values)
   init <pkg>      Build decree.contract.json from a design-system package
   prepare [path]  Regenerate contract from decree.sources.json (DS publish)
   use <pkg>       Copy a published package contract into the current app
@@ -24,7 +26,8 @@ Commands:
   mcp [contract]  Print MCP client config for the allowlist server
   help            Show this help
 
-Init / prepare:
+Sources / prepare:
+  decree sources [package-root] [--out decree.sources.json] [--force]
   decree init <path-or-package-name> [--out decree.contract.json] [--force] [--sources file]
   decree prepare [package-root] [--out decree.contract.json] [--check] [--sources file]
   decree use <path-or-package-name> [--out decree.contract.json] [--force]
@@ -35,7 +38,7 @@ Verify (brownfield ratchet):
 MCP server binary: decree-mcp [path/to/decree.contract.json]
 
 Recommended DS flow:
-  decree.sources.json  →  decree prepare  →  publish with decree.contract.json
+  decree sources  →  fill include/tokens  →  decree prepare  →  publish contract
   app: decree use @acme/ds  →  decree verify .
 
 Docs: docs/SOURCES.md · docs/INIT.md · docs/ADOPTION.md · docs/GETTING_STARTED.md
@@ -206,9 +209,65 @@ function parseUseArgs(args) {
   return { positional, out, force };
 }
 
+/**
+ * @param {string[]} args
+ * @returns {{ positional: string[], out?: string, force: boolean }}
+ */
+function parseSourcesArgs(args) {
+  /** @type {string | undefined} */
+  let out;
+  let force = false;
+  /** @type {string[]} */
+  const positional = [];
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === '--force') {
+      force = true;
+      continue;
+    }
+    if (a === '--out') {
+      out = args[++i];
+      continue;
+    }
+    if (a.startsWith('--out=')) {
+      out = a.slice('--out='.length);
+      continue;
+    }
+    if (a.startsWith('-')) {
+      console.error(`decree sources: unknown flag ${a}`);
+      process.exit(2);
+    }
+    positional.push(a);
+  }
+  return { positional, out, force };
+}
+
 if (cmd === 'help' || cmd === '--help' || cmd === '-h') {
   printHelp();
   process.exit(0);
+}
+
+if (cmd === 'sources') {
+  const { positional, out, force } = parseSourcesArgs(rest);
+  const rootSpec = positional[0] ?? '.';
+  try {
+    const packageRoot = resolve(rootSpec);
+    const result = writeSourcesScaffold(packageRoot, {
+      force,
+      outPath: out ? resolve(out) : undefined,
+    });
+    console.log(`decree sources: wrote ${result.path}`);
+    console.error(
+      'Fill components.include and tokens (cssAllowlist or files), then: decree prepare\n' +
+        'tokens.mode: dtcg-only | css-allowlist | legacy-scan — see docs/SOURCES.md',
+    );
+    process.exit(0);
+  } catch (err) {
+    console.error(
+      `decree sources: ${err instanceof Error ? err.message : err}`,
+    );
+    process.exit(1);
+  }
 }
 
 if (cmd === 'init') {

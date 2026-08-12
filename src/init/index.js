@@ -13,7 +13,13 @@ import {
 } from './sources.js';
 
 export { resolvePackageRoot } from './resolve.js';
-export { loadSources, validateSources } from './sources.js';
+export {
+  loadSources,
+  validateSources,
+  sourcesScaffoldTemplate,
+  writeSourcesScaffold,
+} from './sources.js';
+
 
 /**
  * @typedef {import('../contract/index.js').DecreeContract} DecreeContract
