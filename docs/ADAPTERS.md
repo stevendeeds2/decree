@@ -46,9 +46,16 @@ A missing `componentApis` key still means no prop enforcement for that name.
 
 ## Specs 2 input shapes
 
-- A catalog: `components: { Button: { title, props, invalidVariantCombinations } }`
-- A directory of `api.yaml` / `*.yaml` / `*.json` component files (`title` + `props`)
-- Sibling `tokens.json` or a top-level `tokens:` DTCG tree
+The adapter reads the published Specs 2 schema ([specsplugin.com/schema](https://www.specsplugin.com/schema/)):
+
+- A catalog: `components: { name: { title, anatomy, props, default, variants, invalidVariantCombinations, subcomponents, metadata } }`
+- Prop kinds: `EnumProp` (`type: string` + `enum`), `BooleanProp`, `StringProp`, and `NumberProp` are mapped; `SlotProp` and `ImageProp` are left behind
+- `values:` is accepted as a synonym for `enum` (the shape in the CLI overview example)
+- `invalidVariantCombinations` (PropConfigurations) → `forbiddenCombinations`
+- `default`, `variants`, `anatomy`, `subcomponents`, `metadata`, `$extensions`, `nullable`, `examples`, and slot constraints are read past — never copied to the contract
+- `deprecated: true` / `replacement` are Decree extensions; the Specs schema does not cover deprecation
+
+Also accepted: a directory of `api.yaml` / `*.yaml` / `*.json` component files (`title` + `props`), and sibling `tokens.json` or a top-level `tokens:` DTCG tree.
 
 YAML and JSON are accepted. Subcomponents are not promoted to the allowlist.
 

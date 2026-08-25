@@ -160,6 +160,150 @@ props:
       rmSync(dir, { recursive: true, force: true });
     }
   });
+
+  it('compiles a schema-faithful Specs 2 export (specsplugin.com/schema)', () => {
+    const dir = tmpDir('decree-specs-schema-');
+    try {
+      // Every prop kind and section from the published schema: EnumProp,
+      // BooleanProp, StringProp, NumberProp, SlotProp, ImageProp,
+      // $extensions, nullable, default/variants deltas, subcomponents,
+      // invalidVariantCombinations, metadata.
+      write(
+        dir,
+        'ds-button.yaml',
+        `components:
+  dsButton:
+    title: DS Button
+    anatomy:
+      root: { type: frame }
+      label: { type: text }
+      glyph: { type: instance, slot: true }
+    props:
+      appearance:
+        type: string
+        default: critical
+        enum: [critical, warning, success, info]
+        $extensions:
+          com.figma:
+            type: VARIANT
+      disabled:
+        type: boolean
+        default: false
+        $extensions:
+          com.figma:
+            type: BOOLEAN
+      label:
+        type: string
+        nullable: false
+        examples: ["Pay now", "Hold"]
+      headingLevel:
+        type: number
+        default: 2
+        nullable: false
+      icon:
+        type: slot
+        minChildren: 0
+        maxChildren: 1
+        anyOf: [DsIcon]
+      source:
+        type: image
+        default: null
+    default:
+      layout:
+        - root:
+            - glyph
+            - label
+      elements:
+        root:
+          styles:
+            fills: "{ds.color.background.filled}"
+            cornerRadius: "{ds.shape.border-radius.pill}"
+            paddingLeft: { value: 12, type: ABSOLUTE }
+    variants:
+      - configuration:
+          appearance: success
+        elements:
+          root:
+            styles:
+              fills: "{ds.color.background.success}"
+      - configuration:
+          disabled: true
+          appearance: warning
+        invalid: true
+    invalidVariantCombinations:
+      - disabled: true
+        appearance: warning
+    subcomponents:
+      dsButtonGlyph:
+        title: DS Button Glyph
+        anatomy:
+          root: { type: frame }
+    metadata:
+      generator: specs-cli
+      config:
+        include:
+          invalidCombinations: true
+`,
+      );
+      const contract = buildContractFromSpecs(dir, { name: '@acme/ds' });
+      validateContract(contract);
+      // Subcomponents are not promoted to the allowlist.
+      assert.deepEqual(contract.components, ['DSButton']);
+      assert.deepEqual(contract.componentApis.DSButton.props, {
+        appearance: {
+          enum: ['critical', 'warning', 'success', 'info'],
+          type: 'string',
+        },
+        disabled: { type: 'boolean' },
+        label: { type: 'string' },
+        headingLevel: { type: 'number' },
+      });
+      assert.deepEqual(contract.componentApis.DSButton.forbiddenCombinations, [
+        { disabled: true, appearance: 'warning' },
+      ]);
+      // Anatomy, variants, styles, and extensions never leak.
+      const raw = JSON.stringify(contract);
+      assert.ok(!raw.includes('anatomy'));
+      assert.ok(!raw.includes('$extensions'));
+      assert.ok(!raw.includes('ds.color.background'));
+      assert.ok(!raw.includes('DSButtonGlyph'));
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('accepts the CLI overview shape: type variant with values', () => {
+    const dir = tmpDir('decree-specs-values-');
+    try {
+      write(
+        dir,
+        'button.yaml',
+        `components:
+  dsButton:
+    title: DS Button
+    props:
+      size:
+        type: variant
+        values: [small, medium, large]
+      variant:
+        type: variant
+        values: [primary, secondary]
+`,
+      );
+      const contract = buildContractFromSpecs(dir, { name: '@acme/ds' });
+      validateContract(contract);
+      assert.deepEqual(contract.componentApis.DSButton.props.size, {
+        enum: ['small', 'medium', 'large'],
+        type: 'string',
+      });
+      assert.deepEqual(contract.componentApis.DSButton.props.variant, {
+        enum: ['primary', 'secondary'],
+        type: 'string',
+      });
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
 });
 
 describe('DS Contracts adapter', () => {

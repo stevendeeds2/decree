@@ -197,8 +197,16 @@ export function mapJudgeProp(name, def) {
   const raw = /** @type {Record<string, unknown>} */ (def);
   const type = raw.type;
   if (type === 'slot' || type === 'image') return null;
-  if (Array.isArray(raw.enum) && raw.enum.length > 0) {
-    const values = raw.enum.map((item) => {
+  // Specs 2 schema EnumProp uses `enum`; the CLI overview example uses
+  // `type: variant` with `values`. Accept both spellings.
+  const enumSource =
+    Array.isArray(raw.enum) && raw.enum.length > 0
+      ? raw.enum
+      : Array.isArray(raw.values) && raw.values.length > 0
+        ? raw.values
+        : null;
+  if (enumSource) {
+    const values = enumSource.map((item) => {
       if (typeof item === 'string' && item.length > 0) return item;
       if (typeof item === 'number' || typeof item === 'boolean') return String(item);
       return null;

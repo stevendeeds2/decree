@@ -2,7 +2,7 @@
 
 Nathan Curtis (Specs 2) and TJ Pitre (DS Contracts) define what a Harbor **Button** is. Decree blocks any app change — human or AI — that uses what the definition does not permit.
 
-The spec and contract files are modeled on their public work (Specs 2 emits schema-valid YAML; a DS contract is a machine-readable component definition) — the shape Decree consumes, ready to bind to real exports.
+`nathan/specs.yaml` follows the published Specs 2 schema ([specsplugin.com/schema](https://www.specsplugin.com/schema/)) — anatomy, prop kinds with `$extensions`, default/variants deltas, `invalidVariantCombinations`, metadata. The DS contract is modeled on TJ's public work. Point either adapter at a real export and it compiles the same slice.
 
 Not Corvy. Not stevendeeds.com. Not SD33DS.
 
