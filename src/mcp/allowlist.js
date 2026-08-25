@@ -6,6 +6,10 @@ import {
   getComponentDeprecation,
   getTokenDeprecation,
 } from '../verify/deprecations.js';
+import {
+  getComponentApi,
+  publicComponentApi,
+} from '../verify/component-apis.js';
 
 /** Soft cap so MCP validate_snippet cannot become a CPU sink. */
 export const MAX_SNIPPET_CHARS = 256_000;
@@ -16,6 +20,8 @@ export const MAX_SNIPPET_CHARS = 256_000;
 export function listPrimitives(contract) {
   return contract.components.map((name) => {
     const notice = getComponentDeprecation(contract, name);
+    const api = getComponentApi(contract, name);
+    const props = api ? publicComponentApi(api) : undefined;
     if (notice) {
       return {
         name,
@@ -23,6 +29,7 @@ export function listPrimitives(contract) {
         allowed: true,
         deprecated: true,
         deprecation: deprecationPublicFields(notice),
+        ...(props && Object.keys(props).length > 0 ? { api: props } : {}),
       };
     }
     return {
@@ -30,6 +37,7 @@ export function listPrimitives(contract) {
       kind: 'component',
       allowed: true,
       deprecated: false,
+      ...(props && Object.keys(props).length > 0 ? { api: props } : {}),
     };
   });
 }
@@ -91,10 +99,13 @@ export function describeAllowedPrimitive(contract, name, options = {}) {
   } else {
     message = `${name} is allowlisted.`;
   }
+  const api = getComponentApi(contract, name);
+  const props = api ? publicComponentApi(api) : undefined;
   return {
     allowed,
     deprecated,
     ...(notice ? { deprecation: deprecationPublicFields(notice) } : {}),
+    ...(props && Object.keys(props).length > 0 ? { api: props } : {}),
     message,
   };
 }

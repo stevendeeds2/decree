@@ -6,6 +6,8 @@ Soft tools explain the rules. Decree makes them binding — for humans, CI, and 
 
 If it’s not in the system, it doesn’t ship.
 
+North Star: what Decree will and will not become is in [docs/NORTH_STAR.md](./docs/NORTH_STAR.md).
+
 ## Install
 
 ### From this repository

@@ -13,6 +13,10 @@ import {
   getComponentDeprecation,
   getTokenDeprecation,
 } from './deprecations.js';
+import {
+  getComponentApi,
+  isPassthroughProp,
+} from './component-apis.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
@@ -150,6 +154,9 @@ export function scanSource(source, file, contract, options = {}) {
             tag.line,
           );
           if (finding) findings.push(finding);
+          findings.push(
+            ...componentApiFindings(allowlisted, tag, contract, file),
+          );
           continue;
         }
         if (localComponents.has(name)) continue;
@@ -294,6 +301,102 @@ function deprecatedTokenFinding(name, contract, file, line) {
     file,
     line,
   };
+}
+
+/**
+ * AST-only API checks. Missing componentApis / missing key → no findings.
+ * @param {string} resolvedName
+ * @param {import('./ast-scan.js').JsxTag} tag
+ * @param {import('../contract/index.js').DecreeContract} contract
+ * @param {string} file
+ * @returns {Finding[]}
+ */
+function componentApiFindings(resolvedName, tag, contract, file) {
+  const api = getComponentApi(contract, resolvedName);
+  if (!api || !api.props || Object.keys(api.props).length === 0) return [];
+
+  /** @type {Finding[]} */
+  const findings = [];
+  const allowedProps = new Set(Object.keys(api.props));
+  const attrs = tag.attrs || [];
+
+  for (const attr of attrs) {
+    if (isPassthroughProp(attr.name)) continue;
+    if (!allowedProps.has(attr.name)) {
+      findings.push({
+        code: CODES.UNKNOWN_PROP,
+        message: `Unknown prop ${attr.name} on <${resolvedName}> — not in the Decree component API`,
+        file,
+        line: tag.line,
+      });
+      continue;
+    }
+    if (attr.dynamic || attr.literalValue === undefined) continue;
+    const def = api.props[attr.name];
+    if (def.enum && !def.enum.includes(String(attr.literalValue))) {
+      findings.push({
+        code: CODES.INVALID_PROP_VALUE,
+        message: `Invalid prop ${attr.name}="${String(attr.literalValue)}" on <${resolvedName}> — allowed: ${def.enum.join(', ')}`,
+        file,
+        line: tag.line,
+      });
+      continue;
+    }
+    if (def.type && !literalMatchesType(attr.literalValue, def.type)) {
+      findings.push({
+        code: CODES.INVALID_PROP_VALUE,
+        message: `Invalid prop ${attr.name} on <${resolvedName}> — expected ${def.type}`,
+        file,
+        line: tag.line,
+      });
+    }
+  }
+
+  if (tag.spread) return findings;
+  const staticLiterals = new Map();
+  for (const attr of attrs) {
+    if (attr.dynamic || attr.literalValue === undefined) continue;
+    if (isPassthroughProp(attr.name)) continue;
+    staticLiterals.set(attr.name, attr.literalValue);
+  }
+  for (const combo of api.forbiddenCombinations || []) {
+    const keys = Object.keys(combo);
+    if (keys.length === 0) continue;
+    const matches = keys.every((key) => {
+      if (!staticLiterals.has(key)) return false;
+      return sameLiteral(staticLiterals.get(key), combo[key]);
+    });
+    if (matches) {
+      const shown = keys
+        .map((k) => `${k}=${JSON.stringify(combo[k])}`)
+        .join(', ');
+      findings.push({
+        code: CODES.INVALID_PROP_COMBO,
+        message: `Forbidden prop combination on <${resolvedName}> — ${shown}`,
+        file,
+        line: tag.line,
+      });
+    }
+  }
+  return findings;
+}
+
+/**
+ * @param {string | boolean | number} value
+ * @param {'boolean' | 'string' | 'number'} type
+ */
+function literalMatchesType(value, type) {
+  if (type === 'boolean') return typeof value === 'boolean';
+  if (type === 'number') return typeof value === 'number';
+  return typeof value === 'string';
+}
+
+/**
+ * @param {unknown} a
+ * @param {unknown} b
+ */
+function sameLiteral(a, b) {
+  return a === b || String(a) === String(b);
 }
 
 /** @param {string} s */

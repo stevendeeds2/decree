@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, normalize, relative, resolve } from 'node:path';
 import { assertSafeScanPrefix } from '../verify/excludes.js';
 import { parseDeprecations } from '../verify/deprecations.js';
+import { parseComponentApis } from '../verify/component-apis.js';
 
 /**
  * @typedef {{
@@ -27,6 +28,7 @@ import { parseDeprecations } from '../verify/deprecations.js';
  *     components?: Record<string, DecreeDeprecationNotice>,
  *     tokens?: Record<string, DecreeDeprecationNotice>,
  *   },
+ *   componentApis?: import('../verify/component-apis.js').ComponentApisMap,
  * }} DecreeSources
  */
 
@@ -53,6 +55,7 @@ export function sourcesScaffoldTemplate() {
       components: {},
       tokens: {},
     },
+    componentApis: {},
   };
 }
 
@@ -199,6 +202,13 @@ export function validateSources(input, pathForErrors = 'decree.sources.json') {
     out.deprecations = parseDeprecations(
       s.deprecations,
       `${pathForErrors}: deprecations`,
+    );
+  }
+
+  if (s.componentApis !== undefined) {
+    out.componentApis = parseComponentApis(
+      s.componentApis,
+      `${pathForErrors}: componentApis`,
     );
   }
 
