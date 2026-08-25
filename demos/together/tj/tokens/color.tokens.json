@@ -1,0 +1,12 @@
+{
+  "color": {
+    "action": {
+      "primary": { "$value": "#111111" }
+    }
+  },
+  "space": {
+    "control": {
+      "md": { "$value": "12px" }
+    }
+  }
+}

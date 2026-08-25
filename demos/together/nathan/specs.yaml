@@ -1,0 +1,53 @@
+# Specs 2-shaped catalog. Anatomy and default styles are authoring truth.
+# Decree must compile names, props, combos, tokens, and deprecations only.
+components:
+  Button:
+    title: Button
+    props:
+      variant:
+        type: string
+        enum: [primary, secondary]
+        default: primary
+      size:
+        type: string
+        enum: [sm, md, lg]
+        default: md
+      disabled:
+        type: boolean
+        default: false
+      label:
+        type: slot
+    invalidVariantCombinations:
+      - variant: secondary
+        size: lg
+    anatomy:
+      root: { type: frame }
+      label: { type: text }
+    default:
+      layout:
+        - root:
+            - label
+      elements:
+        root:
+          styles:
+            color: "{color.action.primary}"
+            padding: "{space.control.md}"
+  Ghost:
+    title: Ghost
+    deprecated: true
+    replacement: Button
+    props:
+      tone:
+        type: string
+        enum: [quiet]
+    anatomy:
+      root: { type: frame }
+tokens:
+  color:
+    action:
+      primary:
+        $value: "#111111"
+  space:
+    control:
+      md:
+        $value: "12px"

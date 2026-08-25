@@ -62,14 +62,15 @@ Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md) · init: 
 
 ## Demos
 
-Same product shape under established design systems — start at
-[`demos/index.html`](./demos/index.html).
+Same product shape under established design systems, plus a Specs 2 /
+DS Contracts pipeline — start at [`demos/index.html`](./demos/index.html).
 
 | Demo | System | Entry |
 |------|--------|--------|
 | **shadcn** | shadcn/ui (`@demo/shadcn-ui`) | [`demos/shadcn/`](./demos/shadcn/) · 5180 / 5181 |
 | **mui** | Material UI (`@demo/mui-ui`) | [`demos/mui/`](./demos/mui/) · 5190 / 5191 |
 | **antd** | Ant Design (`@demo/antd-ui`) | [`demos/antd/`](./demos/antd/) · 5200 / 5201 |
+| **together** | Specs 2 + DS Contracts + Decree | [`demos/together/`](./demos/together/) · `npm run demo:together` |
 
 ## Layout
 

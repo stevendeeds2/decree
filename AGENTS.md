@@ -16,7 +16,7 @@ They write what a Button **is**. Decree refuses any Button an app or agent **use
 |------|------|
 | `bin/`, `src/` | Product |
 | `docs/` | User docs that ship with the package |
-| `demos/` | Case studies by design system — start at `demos/index.html` (shadcn / mui / antd) |
+| `demos/` | Case studies by design system — start at `demos/index.html` (shadcn / mui / antd / together) |
 | `tests/` | Unit tests; small packages under `tests/support/` |
 
 ## Rules

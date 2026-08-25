@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "name": "@demo/harbor-ui",
+  "package": "@demo/harbor-ds-contracts",
+  "components": [
+    "Button",
+    "Ghost"
+  ],
+  "tokens": [
+    {
+      "name": "--color-action-primary"
+    },
+    {
+      "name": "--space-control-md"
+    }
+  ],
+  "nativeElementMap": {
+    "button": "Button"
+  },
+  "deprecations": {
+    "components": {
+      "Ghost": {
+        "replacement": "Button",
+        "reason": "Use Button instead"
+      }
+    }
+  },
+  "componentApis": {
+    "Button": {
+      "props": {
+        "disabled": {
+          "type": "boolean"
+        },
+        "size": {
+          "enum": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "type": "string"
+        },
+        "variant": {
+          "enum": [
+            "primary",
+            "secondary"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "Ghost": {
+      "props": {
+        "tone": {
+          "enum": [
+            "quiet"
+          ],
+          "type": "string"
+        }
+      }
+    }
+  }
+}

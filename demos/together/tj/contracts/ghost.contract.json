@@ -1,0 +1,21 @@
+{
+  "id": "harbor.ghost",
+  "name": "Ghost",
+  "version": "1.0.0",
+  "status": "deprecated",
+  "description": "Use Button instead",
+  "replacement": "Button",
+  "props": [
+    {
+      "name": "tone",
+      "type": { "enum": ["quiet"] },
+      "default": "quiet"
+    }
+  ],
+  "anatomy": {
+    "root": {
+      "tokens": { "opacity": "{opacity.quiet}" },
+      "layout": { "display": "flex" }
+    }
+  }
+}

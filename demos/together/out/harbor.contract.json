@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "name": "@demo/harbor-ui",
+  "package": "@demo/harbor-ui",
+  "components": [
+    "Button",
+    "Ghost"
+  ],
+  "tokens": [
+    {
+      "name": "--color-action-primary"
+    },
+    {
+      "name": "--space-control-md"
+    }
+  ],
+  "nativeElementMap": {
+    "button": "Button"
+  },
+  "componentApis": {
+    "Button": {
+      "props": {
+        "variant": {
+          "enum": [
+            "primary",
+            "secondary"
+          ],
+          "type": "string"
+        },
+        "size": {
+          "enum": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "type": "string"
+        },
+        "disabled": {
+          "type": "boolean"
+        }
+      },
+      "forbiddenCombinations": [
+        {
+          "variant": "secondary",
+          "size": "lg"
+        }
+      ]
+    },
+    "Ghost": {
+      "props": {
+        "tone": {
+          "enum": [
+            "quiet"
+          ],
+          "type": "string"
+        }
+      }
+    }
+  },
+  "deprecations": {
+    "components": {
+      "Ghost": {
+        "reason": "Deprecated in Specs",
+        "replacement": "Button"
+      }
+    }
+  },
+  "restyle": true
+}

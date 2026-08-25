@@ -35,3 +35,6 @@ jobs:
 
       - name: Shadcn demo verify
         run: npm run demo:verify
+
+      - name: Together prototype
+        run: npm run demo:together
