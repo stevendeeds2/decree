@@ -1,0 +1,51 @@
+{
+  "id": "harbor.button",
+  "name": "Button",
+  "version": "1.0.0",
+  "status": "stable",
+  "description": "Primary checkout action.",
+  "semantics": { "element": "button" },
+  "props": [
+    {
+      "name": "variant",
+      "type": { "enum": ["primary", "secondary"] },
+      "default": "primary",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Variant",
+          "values": { "primary": "Primary", "secondary": "Secondary" }
+        },
+        "code": { "prop": "variant" }
+      }
+    },
+    {
+      "name": "size",
+      "type": { "enum": ["sm", "md", "lg"] },
+      "default": "md",
+      "bindings": {
+        "figma": {
+          "kind": "VARIANT",
+          "property": "Size",
+          "values": { "sm": "Small", "md": "Medium", "lg": "Large" }
+        },
+        "code": { "prop": "size" }
+      }
+    },
+    { "name": "disabled", "type": "boolean", "default": false },
+    { "name": "title", "type": "text" }
+  ],
+  "anatomy": {
+    "root": {
+      "tokens": {
+        "background-color": "{color.action.primary}",
+        "padding-inline": "{space.control.md}"
+      },
+      "layout": { "display": "flex" }
+    }
+  },
+  "bindings": {
+    "figma": { "representation": "component" },
+    "code": { "anchors": { "importPath": "src/components/Button", "export": "Button" } }
+  }
+}

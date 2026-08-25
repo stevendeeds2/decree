@@ -16,7 +16,7 @@ A missing map means no prop enforcement. Shipped in PR #17 (DECREE #21).
 
 `decree prepare --from-specs` and `--from-ds-contracts`.
 
-Map names, props/enums, invalid combos, tokens, and deprecations. Not anatomy or styles. DECREE #23. See [ADAPTERS.md](./ADAPTERS.md).
+Map names, props/enums, invalid combos, tokens, and deprecations. Not anatomy or styles. Shipped in PR #18 (DECREE #23). See [ADAPTERS.md](./ADAPTERS.md). Prototype situation: [`demos/together/`](../demos/together/) (DECREE #25).
 
 ### 3. Restyle refusal
 
