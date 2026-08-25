@@ -20,7 +20,7 @@
     "docs/MCP.md"
   ],
   "scripts": {
-    "test": "node --test tests/**/*.test.js",
+    "test": "node --test tests/*.test.js",
     "verify": "node ./bin/decree.js verify",
     "pack:check": "node ./scripts/pack-check.mjs",
     "mcp:config": "node ./bin/decree.js mcp demos/shadcn/packages/ui/decree.contract.json",
