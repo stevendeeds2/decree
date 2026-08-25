@@ -11,3 +11,5 @@ Same product shape under established design systems. Start at
 | [together](./together/) | Specs 2 + DS Contracts + Decree | — | `node demos/together/prove.mjs` |
 
 Each demo: design-system package + compliant app + AI-from-screenshot twin + static landing.
+
+Real-app pilot: [PILOT-taxonomy.md](./PILOT-taxonomy.md) — Decree run on shadcn's open-source Taxonomy app. Drift found (raw `<button>`s despite a shipped `Button`), ratchet held.
