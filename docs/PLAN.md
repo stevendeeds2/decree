@@ -10,13 +10,13 @@ Optional `componentApis` map beside `components: string[]`.
 
 Verify codes: `DECREE_UNKNOWN_PROP`, `DECREE_INVALID_PROP_VALUE`, `DECREE_INVALID_PROP_COMBO`.
 
-A missing map means no prop enforcement. This slice is in progress (DECREE #21).
+A missing map means no prop enforcement. Shipped in PR #17 (DECREE #21).
 
 ### 2. Adapters
 
-`decree prepare --from-specs` and `--from-ds-contracts`. Only after APIs exist.
+`decree prepare --from-specs` and `--from-ds-contracts`.
 
-Map names, props/enums, invalid combos, tokens, and deprecations. Not anatomy or styles. DECREE #23.
+Map names, props/enums, invalid combos, tokens, and deprecations. Not anatomy or styles. DECREE #23. See [ADAPTERS.md](./ADAPTERS.md).
 
 ### 3. Restyle refusal
 

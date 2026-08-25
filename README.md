@@ -41,6 +41,7 @@ node bin/decree.js sources path/to/your-design-system
 ```bash
 node bin/decree.js prepare path/to/your-design-system
 # writes decree.contract.json next to the package
+# or compile a judge slice: --from-specs / --from-ds-contracts (docs/ADAPTERS.md)
 ```
 
 3. **Use it in an app** (copy the rulebook into the app):

@@ -19,6 +19,7 @@ import {
   isComponentFileAllowed,
   loadSources,
 } from './sources.js';
+import { buildContractFromExternal } from './adapters/index.js';
 
 export { resolvePackageRoot } from './resolve.js';
 export {
@@ -27,6 +28,11 @@ export {
   sourcesScaffoldTemplate,
   writeSourcesScaffold,
 } from './sources.js';
+export {
+  buildContractFromExternal,
+  buildContractFromSpecs,
+  buildContractFromDsContracts,
+} from './adapters/index.js';
 
 
 /**
@@ -241,6 +247,56 @@ export function preparePackage(packageRoot, opts = {}) {
     legacy,
     sourcesPath,
     message: `decree prepare: wrote ${result.path}`,
+    contract,
+    path: result.path,
+  };
+}
+
+/**
+ * Write or check a judge-slice contract compiled from Specs or DS Contracts.
+ * @param {'specs' | 'ds-contracts'} kind
+ * @param {string} inputRoot
+ * @param {{
+ *   outPath?: string,
+ *   check?: boolean,
+ *   name?: string,
+ * }} [opts]
+ */
+export function prepareFromExternal(kind, inputRoot, opts = {}) {
+  const contract = buildContractFromExternal(kind, inputRoot, {
+    name: opts.name,
+  });
+  const outPath = opts.outPath ?? join(inputRoot, 'decree.contract.json');
+  const label =
+    kind === 'specs'
+      ? 'decree prepare --from-specs'
+      : 'decree prepare --from-ds-contracts';
+
+  if (opts.check) {
+    if (!existsSync(outPath)) {
+      return {
+        ok: false,
+        message: `No contract at ${outPath} — run ${label} first`,
+        contract,
+      };
+    }
+    const existing = JSON.parse(readFileSync(outPath, 'utf8'));
+    validateContract(existing);
+    const equal = contractsEqual(contract, existing);
+    return {
+      ok: equal,
+      message: equal
+        ? `${label} --check: ok (${outPath})`
+        : `${label} --check: contract drift at ${outPath} — re-run ${label}`,
+      contract,
+      existing,
+    };
+  }
+
+  const result = writeContract(contract, outPath, { force: true });
+  return {
+    ok: true,
+    message: `${label}: wrote ${result.path}`,
     contract,
     path: result.path,
   };

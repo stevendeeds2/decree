@@ -9,6 +9,7 @@ Absolute `decree verify` is correct for greenfield and for the MUI flagship demo
 npx decree use @your/ds --force
 
 # Or bootstrap (DS authors): decree prepare with decree.sources.json — see SOURCES.md
+# Or compile a judge slice: decree prepare --from-specs / --from-ds-contracts — see ADAPTERS.md
 # Legacy: npx decree init ./node_modules/@your/ds --force   # noisy without sources
 
 # 2) Tune scan (typical consumer app)

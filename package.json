@@ -17,6 +17,7 @@
     "docs/GETTING_STARTED.md",
     "docs/INIT.md",
     "docs/SOURCES.md",
+    "docs/ADAPTERS.md",
     "docs/MCP.md"
   ],
   "scripts": {
@@ -45,6 +46,7 @@
   "dependencies": {
     "@babel/parser": "^7.29.8",
     "@modelcontextprotocol/sdk": "^1.30.0",
+    "yaml": "^2.9.0",
     "zod": "^4.4.3"
   }
 }

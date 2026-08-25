@@ -3,6 +3,7 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildContractFromPackage,
+  prepareFromExternal,
   preparePackage,
   resolvePackageRoot,
   usePackageContract,
@@ -30,6 +31,8 @@ Sources / prepare:
   decree sources [package-root] [--out decree.sources.json] [--force]
   decree init <path-or-package-name> [--out decree.contract.json] [--force] [--sources file]
   decree prepare [package-root] [--out decree.contract.json] [--check] [--sources file]
+  decree prepare --from-specs <dir> [--out decree.contract.json] [--check]
+  decree prepare --from-ds-contracts <dir> [--out decree.contract.json] [--check]
   decree use <path-or-package-name> [--out decree.contract.json] [--force]
 
 Verify (brownfield ratchet):
@@ -41,7 +44,7 @@ Recommended DS flow:
   decree sources  →  fill include/tokens  →  decree prepare  →  publish contract
   app: decree use @acme/ds  →  decree verify .
 
-Docs: docs/SOURCES.md · docs/INIT.md · docs/ADOPTION.md · docs/GETTING_STARTED.md
+Docs: docs/SOURCES.md · docs/INIT.md · docs/ADAPTERS.md · docs/ADOPTION.md · docs/GETTING_STARTED.md
 `);
 }
 
@@ -145,6 +148,12 @@ function parsePrepareArgs(args) {
   let check = false;
   /** @type {string | undefined} */
   let sources;
+  /** @type {string | undefined} */
+  let fromSpecs;
+  /** @type {string | undefined} */
+  let fromDsContracts;
+  /** @type {string | undefined} */
+  let name;
   /** @type {string[]} */
   const positional = [];
   for (let i = 0; i < args.length; i++) {
@@ -169,13 +178,38 @@ function parsePrepareArgs(args) {
       sources = a.slice('--sources='.length);
       continue;
     }
+    if (a === '--from-specs') {
+      fromSpecs = args[i + 1] && !args[i + 1].startsWith('-') ? args[++i] : '';
+      continue;
+    }
+    if (a.startsWith('--from-specs=')) {
+      fromSpecs = a.slice('--from-specs='.length);
+      continue;
+    }
+    if (a === '--from-ds-contracts') {
+      fromDsContracts =
+        args[i + 1] && !args[i + 1].startsWith('-') ? args[++i] : '';
+      continue;
+    }
+    if (a.startsWith('--from-ds-contracts=')) {
+      fromDsContracts = a.slice('--from-ds-contracts='.length);
+      continue;
+    }
+    if (a === '--name') {
+      name = args[++i];
+      continue;
+    }
+    if (a.startsWith('--name=')) {
+      name = a.slice('--name='.length);
+      continue;
+    }
     if (a.startsWith('-')) {
       console.error(`decree prepare: unknown flag ${a}`);
       process.exit(2);
     }
     positional.push(a);
   }
-  return { positional, out, check, sources };
+  return { positional, out, check, sources, fromSpecs, fromDsContracts, name };
 }
 
 /**
@@ -303,11 +337,42 @@ if (cmd === 'init') {
 }
 
 if (cmd === 'prepare') {
-  const { positional, out, check, sources } = parsePrepareArgs(rest);
-  const rootSpec = positional[0] ?? '.';
+  const parsed = parsePrepareArgs(rest);
+  const { positional, out, check, sources, fromSpecs, fromDsContracts, name } =
+    parsed;
+  if (fromSpecs !== undefined && fromDsContracts !== undefined) {
+    console.error(
+      'decree prepare: use only one of --from-specs or --from-ds-contracts',
+    );
+    process.exit(2);
+  }
+  const rootSpec =
+    (fromSpecs !== undefined && fromSpecs) ||
+    (fromDsContracts !== undefined && fromDsContracts) ||
+    positional[0] ||
+    '.';
   try {
-    const packageRoot = resolve(rootSpec);
-    const result = preparePackage(packageRoot, {
+    const inputRoot = resolve(rootSpec);
+    if (fromSpecs !== undefined || fromDsContracts !== undefined) {
+      const kind = fromSpecs !== undefined ? 'specs' : 'ds-contracts';
+      const result = prepareFromExternal(kind, inputRoot, {
+        outPath: out ? resolve(out) : undefined,
+        check,
+        name,
+      });
+      if (check) {
+        console.log(result.message);
+        process.exit(result.ok ? 0 : 1);
+      }
+      const apiCount = result.contract.componentApis
+        ? Object.keys(result.contract.componentApis).length
+        : 0;
+      console.log(
+        `${result.message} (${result.contract.components.length} components, ${apiCount} component APIs, ${result.contract.tokens.length} tokens)`,
+      );
+      process.exit(0);
+    }
+    const result = preparePackage(inputRoot, {
       outPath: out ? resolve(out) : undefined,
       check,
       force: true,
