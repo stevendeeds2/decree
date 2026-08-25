@@ -22,7 +22,7 @@ node bin/decree.js prepare path/to/your-ds-package
 node bin/decree.js use path/to/your-ds-package --out ./decree.contract.json
 ```
 
-See [SOURCES.md](./SOURCES.md) and [INIT.md](./INIT.md).
+See [SOURCES.md](./SOURCES.md) and [INIT.md](./INIT.md). To compile a judge slice from Specs 2 or DS Contracts, see [ADAPTERS.md](./ADAPTERS.md).
 
 ## 3. Verify your app
 

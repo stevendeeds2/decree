@@ -11,6 +11,8 @@ Bootstrap a v1 `decree.contract.json` from a design-system package.
 node bin/decree.js sources [package-root] [--out decree.sources.json] [--force]
 node bin/decree.js init <path-or-package-name> [--out decree.contract.json] [--force] [--sources file]
 node bin/decree.js prepare [package-root] [--check] [--out decree.contract.json]
+node bin/decree.js prepare --from-specs <dir> [--check] [--out decree.contract.json]
+node bin/decree.js prepare --from-ds-contracts <dir> [--check] [--out decree.contract.json]
 node bin/decree.js use <path-or-package-name> [--out decree.contract.json] [--force]
 ```
 
@@ -23,6 +25,8 @@ node bin/decree.js use <path-or-package-name> [--out decree.contract.json] [--fo
 | `--force` | Overwrite existing contract / sources |
 | `--sources` | Path to `decree.sources.json` (default: `<pkg>/decree.sources.json`) |
 | `prepare --check` | Exit 1 if sources regenerate a different contract than on disk |
+| `prepare --from-specs` | Compile a judge slice from Specs 2 (names, props, combos, tokens, deprecations) |
+| `prepare --from-ds-contracts` | Compile a judge slice from DS Contracts |
 
 
 ## What it extracts

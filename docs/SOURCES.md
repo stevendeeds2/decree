@@ -125,6 +125,8 @@ Writes every schema key so you fill a form instead of inventing a format:
 decree sources                 # scaffold sources (once)
 decree prepare                 # write decree.contract.json from sources
 decree prepare --check         # fail if committed contract drifted
+decree prepare --from-specs <dir>            # Specs 2 → judge slice
+decree prepare --from-ds-contracts <dir>     # DS Contracts → judge slice
 
 # still supported
 decree init ./packages/ds --force

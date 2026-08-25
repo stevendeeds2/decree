@@ -191,7 +191,7 @@ export function parseExportedComponents(source) {
  * @param {string[]} [out]
  * @returns {string[]}
  */
-function flattenDtcgPaths(node, prefix = '', out = []) {
+export function flattenDtcgPaths(node, prefix = '', out = []) {
   if (!node || typeof node !== 'object' || Array.isArray(node)) return out;
   for (const [key, value] of Object.entries(
     /** @type {Record<string, unknown>} */ (node),
