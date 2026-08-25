@@ -5,6 +5,7 @@ import parser from '@babel/parser';
  *   name: string,
  *   literalValue?: string | boolean | number,
  *   dynamic?: boolean,
+ *   stringLiterals?: string[],
  * }} JsxAttr
  * @typedef {{
  *   name: string,
@@ -121,7 +122,12 @@ function extractJsxAttrs(opening) {
     if (literal.ok) {
       attrs.push({ name, literalValue: literal.value });
     } else {
-      attrs.push({ name, dynamic: true });
+      const stringLiterals = collectStringLiterals(attr.value);
+      attrs.push({
+        name,
+        dynamic: true,
+        ...(stringLiterals.length > 0 ? { stringLiterals } : {}),
+      });
     }
   }
   return { attrs, spread };
@@ -157,6 +163,35 @@ function literalFromJsxValue(valueNode) {
     return literalFromExpression(valueNode.expression);
   }
   return { ok: false };
+}
+
+/**
+ * Static strings inside a dynamic attr (cn('w-[32px]'), template parts).
+ * @param {any} node
+ * @param {string[]} [out]
+ * @returns {string[]}
+ */
+function collectStringLiterals(node, out = []) {
+  if (!node || typeof node !== 'object') return out;
+  if (node.type === 'StringLiteral' && typeof node.value === 'string') {
+    out.push(node.value);
+    return out;
+  }
+  if (node.type === 'TemplateLiteral' && Array.isArray(node.quasis)) {
+    for (const quasi of node.quasis) {
+      const raw = quasi?.value?.cooked ?? quasi?.value?.raw;
+      if (typeof raw === 'string' && raw.length > 0) out.push(raw);
+    }
+  }
+  for (const value of Object.values(node)) {
+    if (!value) continue;
+    if (Array.isArray(value)) {
+      for (const child of value) collectStringLiterals(child, out);
+    } else if (typeof value === 'object' && value.type) {
+      collectStringLiterals(value, out);
+    }
+  }
+  return out;
 }
 
 /**

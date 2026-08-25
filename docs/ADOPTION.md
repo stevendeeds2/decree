@@ -35,6 +35,7 @@ Example workflow: [`.github/examples/decree-verify.yml`](../.github/examples/dec
 - **Fail** if someone introduces a new forgery / hex / unknown component.
 - Deprecated contract components and tokens also fail verify (`DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN`). Existing usage can be ratcheted with a baseline.
 - If the contract includes `componentApis`, unknown props and illegal static values also fail (`DECREE_UNKNOWN_PROP` / `DECREE_INVALID_PROP_VALUE` / `DECREE_INVALID_PROP_COMBO`). Ratchet leftover usage with a baseline.
+- If the contract includes `restyle`, `style=` / `sx=` / paint-or-size arbitrary class on system primitives also fail (`DECREE_RESTYLE_STYLE` / `DECREE_RESTYLE_SX` / `DECREE_RESTYLE_ARBITRARY_CLASS`). Layout utilities are allowed. Leave `restyle` off for MUI-style `sx` codebases until you are ready.
 
 Optional budget:
 

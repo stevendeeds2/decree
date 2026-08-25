@@ -17,6 +17,8 @@ Deprecated contract names stay listed (`deprecated: true` plus a `deprecation` n
 
 When `componentApis` is set, `list_primitives` / `is_allowed_primitive` include the legal `api` for that name. `validate_snippet` fails invented props and illegal static values (`DECREE_UNKNOWN_PROP` / `DECREE_INVALID_PROP_VALUE` / `DECREE_INVALID_PROP_COMBO`).
 
+When `restyle` is on, those tools include the restyle policy. `validate_snippet` fails `style=` / `sx=` / paint-or-size arbitrary class on allowlisted primitives (`DECREE_RESTYLE_STYLE` / `DECREE_RESTYLE_SX` / `DECREE_RESTYLE_ARBITRARY_CLASS`).
+
 Responses include `"_mcp": "decree"` for attribution when multiple MCP servers are connected.
 
 ## Configure (Cursor / Claude)

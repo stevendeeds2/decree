@@ -1,5 +1,5 @@
 # Example: copy to .github/workflows/decree-verify.yml and adjust.
-# Requires @stevendeeds/decree published to GitHub Packages (see docs/INSTALL.md).
+# Installs Decree from git (registry publish is still blocked — see docs/PUBLISH.md).
 # Lives under .github/examples/ so GitHub Actions does not run it in this repo.
 name: decree-verify
 
@@ -10,7 +10,6 @@ on:
 
 permissions:
   contents: read
-  packages: read
 
 jobs:
   verify:
@@ -21,18 +20,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          registry-url: https://npm.pkg.github.com
-          scope: '@stevendeeds'
+          cache: npm
 
       - name: Install app deps
         run: npm ci
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Decree
-        run: npm install -D @stevendeeds/decree@0.1.0
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install Decree from git
+        run: npm install -D github:stevendeeds2/decree
 
       - name: Decree verify (ratchet)
         run: npx decree verify . --baseline decree.baseline.json

@@ -10,6 +10,11 @@ import {
   hasComponentApiEntries,
 } from '../verify/component-apis.js';
 import {
+  canonicalizeRestyle,
+  parseRestyle,
+  restyleEnabled,
+} from '../verify/restyle.js';
+import {
   extractComponents,
   extractTokens,
   inferNativeElementMap,
@@ -133,6 +138,12 @@ export function buildContractFromPackage(packageRoot, options = {}) {
   if (sources?.componentApis && hasComponentApiEntries(sources.componentApis)) {
     contract.componentApis = sources.componentApis;
   }
+  if (sources?.restyle !== undefined) {
+    const restyle = parseRestyle(sources.restyle);
+    if (restyleEnabled(restyle)) {
+      contract.restyle = restyle;
+    }
+  }
   validateContract(contract);
   return { contract, legacy, sourcesPath };
 }
@@ -179,10 +190,16 @@ export function canonicalizeContract(contract) {
   };
   const deprecations = canonicalizeDeprecations(contract.deprecations);
   const componentApis = canonicalizeComponentApis(contract.componentApis);
+  const restyle = canonicalizeRestyle(
+    contract.restyle === undefined
+      ? undefined
+      : parseRestyle(contract.restyle),
+  );
   return {
     ...canonical,
     ...(deprecations ? { deprecations } : {}),
     ...(componentApis ? { componentApis } : {}),
+    ...(restyle ? { restyle } : {}),
   };
 }
 

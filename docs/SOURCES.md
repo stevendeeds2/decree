@@ -44,7 +44,12 @@ Writes every schema key so you fill a form instead of inventing a format:
     "components": {},
     "tokens": {}
   },
-  "componentApis": {}
+  "componentApis": {},
+  "restyle": {
+    "style": false,
+    "sx": false,
+    "arbitraryClass": false
+  }
 }
 ```
 
@@ -61,6 +66,7 @@ Writes every schema key so you fill a form instead of inventing a format:
 | `nativeElementMap` | Map native tags → allowlisted components (`"a": "Button"`) |
 | `deprecations` | Notices for still-allowlisted components/tokens (`replacement`, `reason`, `since`, `removeAfter`) |
 | `componentApis` | Optional prop/enum map copied onto the contract (`props`, `forbiddenCombinations`). Missing key = no prop enforcement |
+| `restyle` | Optional. `true` or `{ style, sx, arbitraryClass }` copied when any flag is on. Missing = no restyle enforcement |
 
 ### Token modes
 

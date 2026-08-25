@@ -22,10 +22,11 @@ node bin/decree.js --help
 ### As a package
 
 ```bash
-npm install -D @stevendeeds/decree
-# GitHub Packages auth: see docs/INSTALL.md
+npm install -D github:stevendeeds2/decree
 npx decree --help
 ```
+
+Registry publish is blocked until a `stevendeeds` GitHub (or npm) org owns `@stevendeeds` — [docs/PUBLISH.md](./docs/PUBLISH.md). Git install is the supported channel.
 
 ## Configure (your design system)
 

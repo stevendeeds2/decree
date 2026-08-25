@@ -8,6 +8,7 @@ import {
   assertComponentApisReferToAllowlist,
   parseComponentApis,
 } from '../verify/component-apis.js';
+import { parseRestyle } from '../verify/restyle.js';
 
 /**
  * @typedef {{ name: string, value?: string }} DecreeToken
@@ -36,6 +37,7 @@ import {
  *   scan?: DecreeScanConfig,
  *   deprecations?: DecreeDeprecations,
  *   componentApis?: import('../verify/component-apis.js').ComponentApisMap,
+ *   restyle?: boolean | import('../verify/restyle.js').RestylePolicy,
  * }} DecreeContract
  */
 
@@ -127,6 +129,9 @@ export function validateContract(input) {
       apis,
       /** @type {string[]} */ (c.components),
     );
+  }
+  if (c.restyle !== undefined) {
+    parseRestyle(c.restyle, 'restyle');
   }
 }
 
