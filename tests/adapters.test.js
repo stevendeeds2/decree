@@ -362,20 +362,106 @@ props:
     }
   });
 
-  it('refuses both adapter flags', () => {
-    const result = spawnSync(
-      process.execPath,
-      [
-        decreeBin,
-        'prepare',
-        '--from-specs',
-        '.',
-        '--from-ds-contracts',
-        '.',
-      ],
-      { encoding: 'utf8' },
-    );
-    assert.equal(result.status, 2);
-    assert.match(result.stderr, /only one of/);
+  it('merges both adapter flags into one contract (Specs wins APIs, DS wins semantics)', () => {
+    const specsDir = tmpDir('decree-cli-pair-specs-');
+    const dsDir = tmpDir('decree-cli-pair-ds-');
+    const outDir = tmpDir('decree-cli-pair-out-');
+    try {
+      write(
+        specsDir,
+        'Button.yaml',
+        `title: Button
+props:
+  variant:
+    type: string
+    enum: [primary, secondary]
+invalidVariantCombinations:
+  - variant: secondary
+`,
+      );
+      write(
+        dsDir,
+        'contracts/button.contract.json',
+        JSON.stringify({
+          id: 'ds.button',
+          name: 'Button',
+          semantics: { element: 'button' },
+          props: [{ name: 'variant', type: { enum: ['primary'] } }],
+        }),
+      );
+      write(
+        dsDir,
+        'contracts/input.contract.json',
+        JSON.stringify({
+          id: 'ds.input',
+          name: 'Input',
+          semantics: { element: 'input' },
+          props: [{ name: 'size', type: { enum: ['sm', 'md'] } }],
+        }),
+      );
+      const outPath = join(outDir, 'decree.contract.json');
+      const result = spawnSync(
+        process.execPath,
+        [
+          decreeBin,
+          'prepare',
+          '--from-specs',
+          specsDir,
+          '--from-ds-contracts',
+          dsDir,
+          '--name',
+          '@demo/pair-ui',
+          '--out',
+          outPath,
+        ],
+        { encoding: 'utf8' },
+      );
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(result.stdout, /2 component APIs/);
+      const contract = JSON.parse(readFileSync(outPath, 'utf8'));
+      validateContract(contract);
+      assert.deepEqual(contract.components, ['Button', 'Input']);
+      // Specs is the record for a shared component's API.
+      assert.deepEqual(contract.componentApis.Button.props.variant.enum, [
+        'primary',
+        'secondary',
+      ]);
+      assert.equal(
+        contract.componentApis.Button.forbiddenCombinations.length,
+        1,
+      );
+      assert.deepEqual(contract.componentApis.Input.props.size.enum, [
+        'sm',
+        'md',
+      ]);
+      // DS Contracts is the record for native element semantics.
+      assert.equal(contract.nativeElementMap.button, 'Button');
+      assert.equal(contract.nativeElementMap.input, 'Input');
+      // Merge never turns on restyle by itself.
+      assert.equal(contract.restyle, undefined);
+
+      const check = spawnSync(
+        process.execPath,
+        [
+          decreeBin,
+          'prepare',
+          '--from-specs',
+          specsDir,
+          '--from-ds-contracts',
+          dsDir,
+          '--name',
+          '@demo/pair-ui',
+          '--out',
+          outPath,
+          '--check',
+        ],
+        { encoding: 'utf8' },
+      );
+      assert.equal(check.status, 0, check.stderr + check.stdout);
+    } finally {
+      rmSync(specsDir, { recursive: true, force: true });
+      rmSync(dsDir, { recursive: true, force: true });
+      rmSync(outDir, { recursive: true, force: true });
+    }
   });
 });

@@ -289,7 +289,90 @@ export function prepareFromExternal(kind, inputRoot, opts = {}) {
       ? 'decree prepare --from-specs'
       : 'decree prepare --from-ds-contracts';
 
-  if (opts.check) {
+  return checkOrWriteExternal(contract, outPath, label, opts.check);
+}
+
+/**
+ * Compile Specs 2 and DS Contracts sources and write one merged contract.
+ * @param {string} specsRoot
+ * @param {string} dsContractsRoot
+ * @param {{
+ *   outPath: string,
+ *   check?: boolean,
+ *   name?: string,
+ * }} opts
+ */
+export function prepareFromExternalPair(specsRoot, dsContractsRoot, opts) {
+  const fromSpecs = buildContractFromExternal('specs', specsRoot, {
+    name: opts.name,
+  });
+  const fromDs = buildContractFromExternal('ds-contracts', dsContractsRoot, {
+    name: opts.name,
+  });
+  const contract = mergeExternalContracts(fromSpecs, fromDs, {
+    name: opts.name,
+  });
+  return checkOrWriteExternal(
+    contract,
+    opts.outPath,
+    'decree prepare --from-specs --from-ds-contracts',
+    opts.check,
+  );
+}
+
+/**
+ * Merge two adapter-compiled contracts into one enforceable contract.
+ *
+ * Deterministic rules: components and tokens are unioned. When both sources
+ * define the same component, Specs is the record for its API and deprecation
+ * (it carries forbidden combinations); DS Contracts is the record for native
+ * element semantics. Restyle is never added here — that is team policy set
+ * on the merged contract.
+ * @param {DecreeContract} fromSpecs
+ * @param {DecreeContract} fromDs
+ * @param {{ name?: string }} [opts]
+ * @returns {DecreeContract}
+ */
+export function mergeExternalContracts(fromSpecs, fromDs, opts = {}) {
+  const name = opts.name ?? fromSpecs.name ?? fromDs.name;
+  const tokens = new Map();
+  for (const token of [...fromSpecs.tokens, ...fromDs.tokens]) {
+    tokens.set(token.name, token);
+  }
+  const componentApis = { ...fromDs.componentApis, ...fromSpecs.componentApis };
+  const deprecatedComponents = {
+    ...fromDs.deprecations?.components,
+    ...fromSpecs.deprecations?.components,
+  };
+  /** @type {DecreeContract} */
+  const contract = {
+    version: 1,
+    ...(name ? { name, package: name } : {}),
+    components: [
+      ...new Set([...fromSpecs.components, ...fromDs.components]),
+    ].sort((a, b) => a.localeCompare(b)),
+    tokens: [...tokens.values()].sort((a, b) => a.name.localeCompare(b.name)),
+    nativeElementMap: {
+      ...fromSpecs.nativeElementMap,
+      ...fromDs.nativeElementMap,
+    },
+    ...(Object.keys(componentApis).length ? { componentApis } : {}),
+    ...(Object.keys(deprecatedComponents).length
+      ? { deprecations: { components: deprecatedComponents } }
+      : {}),
+  };
+  validateContract(contract);
+  return contract;
+}
+
+/**
+ * @param {DecreeContract} contract
+ * @param {string} outPath
+ * @param {string} label
+ * @param {boolean} [check]
+ */
+function checkOrWriteExternal(contract, outPath, label, check) {
+  if (check) {
     if (!existsSync(outPath)) {
       return {
         ok: false,

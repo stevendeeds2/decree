@@ -91,7 +91,7 @@
           tokens, retirements — and fails CI when a change breaks them. It is
           not a spec tool, a Figma tool, or a code generator.
         </p>
-        <p class="meta">decree prepare --from-specs · --from-ds-contracts</p>
+        <p class="meta">decree prepare --from-specs nathan --from-ds-contracts tj</p>
       </article>
 
       <h2>The situation</h2>
@@ -116,6 +116,27 @@
           real exports.
         </li>
       </ol>
+
+      <h2>What refusal looks like</h2>
+      <p class="lede">
+        Real output from <code>decree verify</code> on the dirty app — a named,
+        stable error code per violation, with file and line:
+      </p>
+      <pre><code>DECREE_INVALID_PROP_VALUE    App.tsx:5   Invalid prop variant="ghost" on &lt;Button&gt; — allowed: primary, secondary
+DECREE_INVALID_PROP_COMBO    App.tsx:6   Forbidden prop combination on &lt;Button&gt; — variant="secondary", size="lg"
+DECREE_RESTYLE_STYLE         App.tsx:9   Restyle of &lt;Button&gt; via style= — use a contract variant or token instead
+DECREE_DEPRECATED_COMPONENT  App.tsx:12  Deprecated component &lt;Ghost&gt; — use &lt;Button&gt; instead (Deprecated in Specs)
+DECREE_UNKNOWN_COMPONENT     App.tsx:13  Unknown component &lt;MagicButton&gt; — not in the Decree contract allowlist
+DECREE_NATIVE_ELEMENT        App.tsx:14  Native &lt;button&gt; used — use allowlisted &lt;Button&gt; instead</code></pre>
+
+      <h2>Agents ask first</h2>
+      <p class="lede">
+        The same contract also runs as an MCP server. An AI agent can list
+        what the system permits and have a snippet refused <em>before</em> it
+        writes code — <code>&lt;Button variant="ghost"&gt;</code> never makes
+        it into the pull request.
+      </p>
+      <pre><code>decree mcp decree.contract.json</code></pre>
 
       <h2>Run the proof</h2>
       <pre><code>node demos/together/prove.mjs</code></pre>

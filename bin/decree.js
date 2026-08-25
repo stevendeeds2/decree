@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import {
   buildContractFromPackage,
   prepareFromExternal,
+  prepareFromExternalPair,
   preparePackage,
   resolvePackageRoot,
   usePackageContract,
@@ -33,6 +34,7 @@ Sources / prepare:
   decree prepare [package-root] [--out decree.contract.json] [--check] [--sources file]
   decree prepare --from-specs <dir> [--out decree.contract.json] [--check]
   decree prepare --from-ds-contracts <dir> [--out decree.contract.json] [--check]
+  decree prepare --from-specs <dir> --from-ds-contracts <dir> [--out decree.contract.json] [--check]
   decree use <path-or-package-name> [--out decree.contract.json] [--force]
 
 Verify (brownfield ratchet):
@@ -341,10 +343,39 @@ if (cmd === 'prepare') {
   const { positional, out, check, sources, fromSpecs, fromDsContracts, name } =
     parsed;
   if (fromSpecs !== undefined && fromDsContracts !== undefined) {
-    console.error(
-      'decree prepare: use only one of --from-specs or --from-ds-contracts',
-    );
-    process.exit(2);
+    if (!fromSpecs || !fromDsContracts) {
+      console.error(
+        'decree prepare: --from-specs and --from-ds-contracts each need a directory',
+      );
+      process.exit(2);
+    }
+    try {
+      const result = prepareFromExternalPair(
+        resolve(fromSpecs),
+        resolve(fromDsContracts),
+        {
+          outPath: resolve(out ?? 'decree.contract.json'),
+          check,
+          name,
+        },
+      );
+      if (check) {
+        console.log(result.message);
+        process.exit(result.ok ? 0 : 1);
+      }
+      const apiCount = result.contract.componentApis
+        ? Object.keys(result.contract.componentApis).length
+        : 0;
+      console.log(
+        `${result.message} (${result.contract.components.length} components, ${apiCount} component APIs, ${result.contract.tokens.length} tokens)`,
+      );
+      process.exit(0);
+    } catch (err) {
+      console.error(
+        `decree prepare: ${err instanceof Error ? err.message : err}`,
+      );
+      process.exit(1);
+    }
   }
   const rootSpec =
     (fromSpecs !== undefined && fromSpecs) ||

@@ -9,9 +9,21 @@ Do not expect anatomy, layout, styles, or generated code. That stays in Specs / 
 ```bash
 decree prepare --from-specs path/to/specs [--out decree.contract.json] [--check]
 decree prepare --from-ds-contracts path/to/ds-contracts [--out decree.contract.json] [--check]
+decree prepare --from-specs specs/ --from-ds-contracts contracts/ [--out decree.contract.json] [--check]
 ```
 
 `--check` fails if the committed contract drifted from a fresh compile.
+
+## Using both sources at once
+
+When a team has a Specs catalog **and** DS contract files, pass both flags to compile one merged contract (default output: `./decree.contract.json`). Merge rules are deterministic:
+
+| Field | Rule |
+|-------|------|
+| `components`, `tokens` | Union of both sources |
+| `componentApis`, `deprecations` | Specs is the record when both define the same component (it carries forbidden combinations) |
+| `nativeElementMap` | DS Contracts is the record (`semantics.element`) |
+| `restyle` | Never set by the merge — turn it on in the contract as team policy |
 
 ## What is mapped
 

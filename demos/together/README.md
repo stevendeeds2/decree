@@ -9,6 +9,12 @@ Not Corvy. Not stevendeeds.com. Not SD33DS.
 ```bash
 # from the Decree repo root
 node demos/together/prove.mjs
+
+# or compile the merged contract yourself — one product command:
+node bin/decree.js prepare \
+  --from-specs demos/together/nathan \
+  --from-ds-contracts demos/together/tj \
+  --name @demo/harbor-ui --out /tmp/harbor.contract.json
 ```
 
 | Role | Path | What they own |
