@@ -1,28 +1,41 @@
-# Specs 2-shaped catalog. Anatomy and default styles are authoring truth.
-# Decree must compile names, props, combos, tokens, and deprecations only.
+# Specs 2 catalog following the published schema (specsplugin.com/schema):
+# anatomy, props (EnumProp / BooleanProp / SlotProp with $extensions),
+# default + variants deltas, invalidVariantCombinations, metadata.
+# Anatomy and styles are authoring truth; Decree compiles names, props,
+# combos, tokens, and deprecations only.
+# `deprecated` / `replacement` are Decree extensions the schema doesn't cover.
 components:
   Button:
     title: Button
+    anatomy:
+      root: { type: frame }
+      label: { type: text }
     props:
       variant:
         type: string
         enum: [primary, secondary]
         default: primary
+        $extensions:
+          com.figma:
+            type: VARIANT
       size:
         type: string
         enum: [sm, md, lg]
         default: md
+        $extensions:
+          com.figma:
+            type: VARIANT
       disabled:
         type: boolean
         default: false
+        $extensions:
+          com.figma:
+            type: BOOLEAN
       label:
         type: slot
-    invalidVariantCombinations:
-      - variant: secondary
-        size: lg
-    anatomy:
-      root: { type: frame }
-      label: { type: text }
+        default: "{Label}"
+        minChildren: 1
+        maxChildren: 1
     default:
       layout:
         - root:
@@ -32,6 +45,25 @@ components:
           styles:
             color: "{color.action.primary}"
             padding: "{space.control.md}"
+    variants:
+      - configuration:
+          variant: secondary
+        elements:
+          root:
+            styles:
+              color: "{color.action.secondary}"
+      - configuration:
+          variant: secondary
+          size: lg
+        invalid: true
+    invalidVariantCombinations:
+      - variant: secondary
+        size: lg
+    metadata:
+      generator: specs-cli
+      config:
+        include:
+          invalidCombinations: true
   Ghost:
     title: Ghost
     deprecated: true
@@ -40,6 +72,7 @@ components:
       tone:
         type: string
         enum: [quiet]
+        default: quiet
     anatomy:
       root: { type: frame }
 tokens:

@@ -3,7 +3,7 @@
  * Together prototype: Nathan Specs 2 + TJ DS Contracts → Decree judge.
  * Run from repo root: node demos/together/prove.mjs
  */
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
@@ -11,6 +11,8 @@ import {
   buildContractFromDsContracts,
   buildContractFromSpecs,
   canonicalizeContract,
+  contractsEqual,
+  mergeExternalContracts,
 } from '../../src/init/index.js';
 import { validateContract } from '../../src/contract/index.js';
 import { verifyPath } from '../../src/verify/index.js';
@@ -39,7 +41,11 @@ if (fromDs.nativeElementMap?.button !== 'Button') {
   fail('DS Contracts compile must map native <button> → Button');
 }
 
-const contract = mergeJudgeSlice(fromSpecs, fromDs);
+// Product merge; restyle is Harbor's own policy on top of it.
+const merged = mergeExternalContracts(fromSpecs, fromDs, {
+  name: '@demo/harbor-ui',
+});
+const contract = { ...merged, restyle: true };
 validateContract(contract);
 writeFileSync(
   join(outDir, 'from-specs.contract.json'),
@@ -97,74 +103,40 @@ if (agent.ok || !agent.findings.some((f) => f.code === CODES.INVALID_PROP_VALUE)
   fail('MCP validate_snippet must refuse variant="ghost"');
 }
 
-const cliSpecs = spawnSync(
+// One product command replaces the hand merge:
+//   decree prepare --from-specs nathan --from-ds-contracts tj --out ...
+const cliOut = join(outDir, 'cli-together.contract.json');
+const cli = spawnSync(
   process.execPath,
   [
     join(repo, 'bin/decree.js'),
     'prepare',
     '--from-specs',
     join(root, 'nathan'),
-    '--out',
-    join(outDir, 'cli-from-specs.contract.json'),
-  ],
-  { encoding: 'utf8' },
-);
-if (cliSpecs.status !== 0) fail(`CLI --from-specs failed: ${cliSpecs.stderr}`);
-
-const cliDs = spawnSync(
-  process.execPath,
-  [
-    join(repo, 'bin/decree.js'),
-    'prepare',
     '--from-ds-contracts',
     join(root, 'tj'),
+    '--name',
+    '@demo/harbor-ui',
     '--out',
-    join(outDir, 'cli-from-ds-contracts.contract.json'),
+    cliOut,
   ],
   { encoding: 'utf8' },
 );
-if (cliDs.status !== 0) fail(`CLI --from-ds-contracts failed: ${cliDs.stderr}`);
+if (cli.status !== 0) fail(`combined CLI prepare failed: ${cli.stderr}`);
+const cliContract = JSON.parse(readFileSync(cliOut, 'utf8'));
+if (!contractsEqual(cliContract, merged)) {
+  fail('combined CLI contract must equal the product merge');
+}
 
 console.log('together: PASS');
 console.log(
   `  Specs Button API + combos · DS native <button> · merged judge · clean ok · dirty ${dirty.findings.length} findings`,
 );
-console.log(`  codes: ${[...codes].sort().join(', ')}`);
-
-/**
- * Decree policy on top of both authoring sources.
- * @param {import('../../src/contract/index.js').DecreeContract} fromSpecs
- * @param {import('../../src/contract/index.js').DecreeContract} fromDs
- */
-function mergeJudgeSlice(fromSpecs, fromDs) {
-  return {
-    version: 1,
-    name: '@demo/harbor-ui',
-    package: '@demo/harbor-ui',
-    components: [...new Set([...fromSpecs.components, ...fromDs.components])].sort(),
-    tokens: mergeTokens(fromSpecs.tokens, fromDs.tokens),
-    nativeElementMap: {
-      ...fromSpecs.nativeElementMap,
-      ...fromDs.nativeElementMap,
-    },
-    componentApis: {
-      ...fromDs.componentApis,
-      ...fromSpecs.componentApis,
-    },
-    deprecations: {
-      components: {
-        ...fromDs.deprecations?.components,
-        ...fromSpecs.deprecations?.components,
-      },
-    },
-    restyle: true,
-  };
-}
-
-function mergeTokens(a, b) {
-  const map = new Map();
-  for (const token of [...a, ...b]) map.set(token.name, token);
-  return [...map.values()].sort((x, y) => x.name.localeCompare(y.name));
+console.log('\n  dirty app refusals:');
+for (const finding of dirty.findings) {
+  console.log(
+    `    ${finding.code}  ${finding.file}:${finding.line}  ${finding.message}`,
+  );
 }
 
 /**

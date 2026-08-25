@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Harbor checkout — clean app</title>
+    <style>
+      :root {
+        --color-action-primary: #111111;
+        --space-control-md: 12px;
+        --bg: #f7f7f5;
+        --text: #1a1a1a;
+        --muted: #5c5c5c;
+        --border: #e4e4e0;
+        --surface: #fff;
+        --font: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      main { width: min(100% - 2.5rem, 26rem); margin: 3rem auto; }
+      .banner {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+      .banner strong { color: #0a7a3d; }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.5rem;
+      }
+      h1 { margin: 0 0 0.25rem; font-size: 1.25rem; }
+      .order { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.25rem; }
+      .order span { float: right; color: var(--text); font-weight: 600; }
+      form { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+      .btn {
+        font-family: var(--font);
+        font-size: 0.95rem;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        padding: calc(var(--space-control-md) * 0.66) var(--space-control-md);
+      }
+      .btn-primary {
+        background: var(--color-action-primary);
+        color: #fff;
+      }
+      .btn-secondary {
+        background: transparent;
+        color: var(--color-action-primary);
+        border-color: var(--color-action-primary);
+      }
+      .btn-sm { font-size: 0.85rem; padding: 0.35rem 0.7rem; }
+      .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+      .foot {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="banner">apps/clean/App.tsx · decree verify → <strong>ok</strong></p>
+      <div class="card">
+        <h1>Harbor — Checkout</h1>
+        <p class="order">Order total <span>$48.00</span></p>
+        <form>
+          <button class="btn btn-primary" type="button">Pay now</button>
+          <button class="btn btn-secondary btn-sm" type="button" disabled>Hold</button>
+        </form>
+      </div>
+      <p class="foot">
+        Static render of App.tsx — every element mirrors the file 1:1.
+        Only Buttons the contract permits: variant="primary" size="md",
+        variant="secondary" size="sm" disabled.
+      </p>
+    </main>
+  </body>
+</html>

@@ -63,3 +63,5 @@ Baseline is a **temporary on-ramp**, not permanent permission to invent UI.
 ## Demo
 
 Case studies live under [`demos/`](../demos/) (Pulse Reports today). Use baseline for brownfield CI on your own apps.
+
+This exact flow was piloted on a real open-source app — see [demos/PILOT-taxonomy.md](../demos/PILOT-taxonomy.md): 83 findings baselined on day 1, an injected violation caught with exit 1.

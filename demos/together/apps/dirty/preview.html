@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Harbor checkout — dirty app</title>
+    <style>
+      :root {
+        --color-action-primary: #111111;
+        --space-control-md: 12px;
+        --bg: #f7f7f5;
+        --text: #1a1a1a;
+        --muted: #5c5c5c;
+        --border: #e4e4e0;
+        --surface: #fff;
+        --font: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      body {
+        margin: 0;
+        font-family: var(--font);
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+      }
+      main { width: min(100% - 2.5rem, 30rem); margin: 3rem auto; }
+      .banner {
+        font-family: var(--mono);
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+      .banner strong { color: #b3261e; }
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 1.5rem;
+      }
+      h1 { margin: 0 0 0.25rem; font-size: 1.25rem; }
+      .order { color: var(--muted); font-size: 0.9rem; margin: 0 0 1.25rem; }
+      .order span { float: right; color: var(--text); font-weight: 600; }
+      form { display: flex; gap: 0.7rem 0.6rem; flex-wrap: wrap; align-items: center; }
+      .item { display: flex; flex-direction: column; gap: 0.25rem; }
+      .btn {
+        font-family: var(--font);
+        font-size: 0.95rem;
+        border-radius: 6px;
+        border: 1px solid transparent;
+        cursor: pointer;
+        padding: calc(var(--space-control-md) * 0.66) var(--space-control-md);
+      }
+      /* variant="ghost" — not in the contract */
+      .btn-ghost { background: rgba(17, 17, 17, 0.08); color: rgba(17, 17, 17, 0.55); }
+      /* variant="secondary" size="lg" — forbidden combination */
+      .btn-secondary-lg {
+        background: transparent;
+        color: var(--color-action-primary);
+        border-color: var(--color-action-primary);
+        font-size: 1.15rem;
+        padding: 0.85rem 1.5rem;
+      }
+      /* style={{ background: "red" }} — restyle of a primitive */
+      .btn-painted { background: red; color: #fff; }
+      /* <Ghost> — deprecated component */
+      .btn-old-ghost {
+        background: transparent;
+        color: var(--muted);
+        border: 1px dashed var(--muted);
+      }
+      /* <MagicButton> — invented, not in the system */
+      .btn-magic {
+        background: linear-gradient(135deg, #7b2ff7, #f107a3);
+        color: #fff;
+        border-radius: 999px;
+      }
+      /* raw <button> — native element, browser default styling */
+      .tag {
+        font-family: var(--mono);
+        font-size: 0.62rem;
+        color: #b3261e;
+        letter-spacing: 0.01em;
+      }
+      .foot {
+        font-family: var(--mono);
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="banner">apps/dirty/App.tsx · decree verify → <strong>failed, 6 findings</strong></p>
+      <div class="card">
+        <h1>Harbor — Checkout</h1>
+        <p class="order">Order total <span>$48.00</span></p>
+        <form>
+          <span class="item">
+            <button class="btn btn-ghost" type="button">Pay now</button>
+            <span class="tag">DECREE_INVALID_PROP_VALUE</span>
+          </span>
+          <span class="item">
+            <button class="btn btn-secondary-lg" type="button">Express</button>
+            <span class="tag">DECREE_INVALID_PROP_COMBO</span>
+          </span>
+          <span class="item">
+            <button class="btn btn-painted" type="button">Paint over</button>
+            <span class="tag">DECREE_RESTYLE_STYLE</span>
+          </span>
+          <span class="item">
+            <button class="btn btn-old-ghost" type="button">Old quiet</button>
+            <span class="tag">DECREE_DEPRECATED_COMPONENT</span>
+          </span>
+          <span class="item">
+            <button class="btn btn-magic" type="button">Invented</button>
+            <span class="tag">DECREE_UNKNOWN_COMPONENT</span>
+          </span>
+          <span class="item">
+            <button type="submit">Native</button>
+            <span class="tag">DECREE_NATIVE_ELEMENT</span>
+          </span>
+        </form>
+      </div>
+      <p class="foot">
+        Static render of App.tsx — every element mirrors the file 1:1.
+        This is what ships if nobody refuses: a ghost variant, a forbidden
+        size combo, a painted-over primitive, the retired Ghost, an invented
+        MagicButton, and a raw browser button.
+      </p>
+    </main>
+  </body>
+</html>
