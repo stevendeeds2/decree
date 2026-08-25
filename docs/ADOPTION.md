@@ -32,6 +32,7 @@ Example workflow: [`.github/workflows/decree-verify.example.yml`](../.github/wor
 
 - **Pass** if there are **0 new** findings (debt already in the baseline is ignored).
 - **Fail** if someone introduces a new forgery / hex / unknown component.
+- Deprecated contract components and tokens also fail verify (`DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN`). Existing usage can be ratcheted with a baseline.
 
 Optional budget:
 

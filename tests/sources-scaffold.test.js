@@ -31,6 +31,8 @@ describe('decree sources scaffold', () => {
     assert.deepEqual(validated.tokens?.cssAllowlist, []);
     assert.deepEqual(validated.ignoreComponentNames, []);
     assert.deepEqual(validated.nativeElementMap, {});
+    assert.deepEqual(validated.deprecations?.components, {});
+    assert.deepEqual(validated.deprecations?.tokens, {});
   });
 
   it('writes decree.sources.json and refuses overwrite without force', () => {
@@ -44,6 +46,8 @@ describe('decree sources scaffold', () => {
     assert.ok('tokens' in raw);
     assert.ok('ignoreComponentNames' in raw);
     assert.ok('nativeElementMap' in raw);
+    assert.ok('deprecations' in raw);
+    assert.deepEqual(raw.deprecations, { components: {}, tokens: {} });
 
     assert.throws(
       () => writeSourcesScaffold(dir, { force: false }),

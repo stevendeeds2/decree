@@ -1,8 +1,15 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, isAbsolute, join, normalize, relative, resolve } from 'node:path';
 import { assertSafeScanPrefix } from '../verify/excludes.js';
+import { parseDeprecations } from '../verify/deprecations.js';
 
 /**
+ * @typedef {{
+ *   replacement?: string,
+ *   reason?: string,
+ *   since?: string,
+ *   removeAfter?: string,
+ * }} DecreeDeprecationNotice
  * @typedef {{
  *   version: 1,
  *   components?: {
@@ -16,6 +23,10 @@ import { assertSafeScanPrefix } from '../verify/excludes.js';
  *   },
  *   ignoreComponentNames?: string[],
  *   nativeElementMap?: Record<string, string>,
+ *   deprecations?: {
+ *     components?: Record<string, DecreeDeprecationNotice>,
+ *     tokens?: Record<string, DecreeDeprecationNotice>,
+ *   },
  * }} DecreeSources
  */
 
@@ -38,6 +49,10 @@ export function sourcesScaffoldTemplate() {
     },
     ignoreComponentNames: [],
     nativeElementMap: {},
+    deprecations: {
+      components: {},
+      tokens: {},
+    },
   };
 }
 
@@ -178,6 +193,13 @@ export function validateSources(input, pathForErrors = 'decree.sources.json') {
       map[k] = v;
     }
     out.nativeElementMap = map;
+  }
+
+  if (s.deprecations !== undefined) {
+    out.deprecations = parseDeprecations(
+      s.deprecations,
+      `${pathForErrors}: deprecations`,
+    );
   }
 
   return out;

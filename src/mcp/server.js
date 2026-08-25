@@ -15,7 +15,7 @@ import { resolveExcludePrefixes } from '../verify/excludes.js';
 import {
   listPrimitives,
   listTokens,
-  isAllowedPrimitive,
+  describeAllowedPrimitive,
   validateSnippet,
 } from './allowlist.js';
 
@@ -55,7 +55,7 @@ export function createDecreeMcpServer(contractPath) {
 
   server.tool(
     'list_primitives',
-    'List design-system components the agent is allowed to use. Never invent names outside this list.',
+    'List design-system components the agent is allowed to use. Never invent names outside this list. Do not use deprecated primitives for new UI; use the listed replacement.',
     {},
     async () => ({
       content: [
@@ -64,7 +64,7 @@ export function createDecreeMcpServer(contractPath) {
           text: JSON.stringify(
             {
               _mcp: 'decree',
-              rule: 'Use only these primitives (plus localComponents when profile is app). Inventing components is forbidden.',
+              rule: 'Use only these primitives (plus localComponents when profile is app). Inventing components is forbidden. Do not use deprecated primitives for new UI; use the listed replacement.',
               primitives: listPrimitives(contract),
               localComponents: [...localComponents].sort(),
               profile: contract.scan?.profile === 'app' ? 'app' : 'strict',
@@ -80,7 +80,7 @@ export function createDecreeMcpServer(contractPath) {
 
   server.tool(
     'list_tokens',
-    'List design tokens the agent is allowed to use. Never hardcode hex or invent token names.',
+    'List design tokens the agent is allowed to use. Never hardcode hex or invent token names. Do not use deprecated tokens for new UI; use the listed replacement.',
     {},
     async () => ({
       content: [
@@ -89,7 +89,7 @@ export function createDecreeMcpServer(contractPath) {
           text: JSON.stringify(
             {
               _mcp: 'decree',
-              rule: 'Use only these tokens. Hardcoded colors/spacing are forbidden.',
+              rule: 'Use only these tokens. Hardcoded colors/spacing are forbidden. Do not use deprecated tokens for new UI; use the listed replacement.',
               tokens: listTokens(contract),
             },
             null,
@@ -105,7 +105,7 @@ export function createDecreeMcpServer(contractPath) {
     'Check whether a component name is on the Decree allowlist (contract + app-local when profile is app).',
     { name: z.string().describe('Component name, e.g. Button') },
     async ({ name }) => {
-      const allowed = isAllowedPrimitive(contract, name, { localComponents });
+      const info = describeAllowedPrimitive(contract, name, { localComponents });
       return {
         content: [
           {
@@ -114,10 +114,10 @@ export function createDecreeMcpServer(contractPath) {
               {
                 _mcp: 'decree',
                 name,
-                allowed,
-                message: allowed
-                  ? `${name} is allowlisted.`
-                  : `${name} is NOT allowlisted. Do not invent it — use list_primitives.`,
+                allowed: info.allowed,
+                deprecated: info.deprecated,
+                ...(info.deprecation ? { deprecation: info.deprecation } : {}),
+                message: info.message,
               },
               null,
               2,

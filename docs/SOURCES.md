@@ -39,7 +39,11 @@ Writes every schema key so you fill a form instead of inventing a format:
     "cssAllowlist": []
   },
   "ignoreComponentNames": [],
-  "nativeElementMap": {}
+  "nativeElementMap": {},
+  "deprecations": {
+    "components": {},
+    "tokens": {}
+  }
 }
 ```
 
@@ -54,6 +58,7 @@ Writes every schema key so you fill a form instead of inventing a format:
 | `tokens.cssAllowlist` | CSS files whose `--*` vars become contract tokens |
 | `ignoreComponentNames` | Drop accidental exports (`App`, `ThemeProvider`, …) |
 | `nativeElementMap` | Map native tags → allowlisted components (`"a": "Button"`) |
+| `deprecations` | Notices for still-allowlisted components/tokens (`replacement`, `reason`, `since`, `removeAfter`) |
 
 ### Token modes
 
@@ -81,6 +86,23 @@ Writes every schema key so you fill a form instead of inventing a format:
     "button": "Button",
     "input": "Input",
     "a": "Button"
+  },
+  "deprecations": {
+    "components": {
+      "LegacyButton": {
+        "replacement": "Button",
+        "reason": "Merged into Button",
+        "since": "2026-08-01",
+        "removeAfter": "2026-12-01"
+      }
+    },
+    "tokens": {
+      "--brand-blue": {
+        "replacement": "--primary",
+        "reason": "Renamed to semantic token",
+        "since": "2026-08-01"
+      }
+    }
   }
 }
 ```
