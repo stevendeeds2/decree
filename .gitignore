@@ -6,3 +6,4 @@ dist/
 .env.*
 coverage/
 .turbo/
+demos/together/out/cli-*.contract.json
