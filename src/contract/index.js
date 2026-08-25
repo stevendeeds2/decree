@@ -1,8 +1,22 @@
 import { readFileSync } from 'node:fs';
 import { assertSafeScanPrefix } from '../verify/excludes.js';
+import {
+  assertDeprecationsReferToAllowlist,
+  parseDeprecations,
+} from '../verify/deprecations.js';
 
 /**
  * @typedef {{ name: string, value?: string }} DecreeToken
+ * @typedef {{
+ *   replacement?: string,
+ *   reason?: string,
+ *   since?: string,
+ *   removeAfter?: string,
+ * }} DecreeDeprecationNotice
+ * @typedef {{
+ *   components?: Record<string, DecreeDeprecationNotice>,
+ *   tokens?: Record<string, DecreeDeprecationNotice>,
+ * }} DecreeDeprecations
  * @typedef {{
  *   profile?: 'strict' | 'app',
  *   localComponentPrefixes?: string[],
@@ -16,6 +30,7 @@ import { assertSafeScanPrefix } from '../verify/excludes.js';
  *   tokens: DecreeToken[],
  *   nativeElementMap: Record<string, string>,
  *   scan?: DecreeScanConfig,
+ *   deprecations?: DecreeDeprecations,
  * }} DecreeContract
  */
 
@@ -83,6 +98,23 @@ export function validateContract(input) {
     ) {
       throw new Error('Decree scan.excludeDefaults must be a boolean');
     }
+  }
+  if (c.deprecations !== undefined) {
+    const deprecations = parseDeprecations(c.deprecations, 'deprecations');
+    /** @type {string[]} */
+    const tokenNames = [];
+    if (Array.isArray(c.tokens)) {
+      for (const token of c.tokens) {
+        if (token && typeof token === 'object' && typeof token.name === 'string') {
+          tokenNames.push(token.name);
+        }
+      }
+    }
+    assertDeprecationsReferToAllowlist(
+      deprecations,
+      /** @type {string[]} */ (c.components),
+      tokenNames,
+    );
   }
 }
 

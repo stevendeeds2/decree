@@ -1,5 +1,6 @@
 # Example: copy to .github/workflows/decree-verify.yml and adjust.
 # Requires @stevendeeds/decree published to GitHub Packages (see docs/INSTALL.md).
+# Lives under .github/examples/ so GitHub Actions does not run it in this repo.
 name: decree-verify
 
 on:

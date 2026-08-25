@@ -40,8 +40,8 @@ See [ADOPTION.md](./ADOPTION.md) for brownfield ratchet and [GETTING_STARTED.md]
 
 ## CI (copy the example)
 
-Template workflow (not enabled by default):  
-[`.github/workflows/decree-verify.example.yml`](../.github/workflows/decree-verify.example.yml)
+Template workflow (copy into a consumer app; not run in this repo):  
+[`.github/examples/decree-verify.yml`](../.github/examples/decree-verify.yml)
 
 ## From this repo (no registry)
 

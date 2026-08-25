@@ -2,6 +2,10 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { validateContract } from '../contract/index.js';
 import {
+  canonicalizeDeprecations,
+  hasDeprecationEntries,
+} from '../verify/deprecations.js';
+import {
   extractComponents,
   extractTokens,
   inferNativeElementMap,
@@ -99,6 +103,23 @@ export function buildContractFromPackage(packageRoot, options = {}) {
     tokens,
     nativeElementMap,
   };
+  if (sources?.deprecations && hasDeprecationEntries(sources.deprecations)) {
+    /** @type {NonNullable<DecreeContract['deprecations']>} */
+    const deprecations = {};
+    if (
+      sources.deprecations.components &&
+      Object.keys(sources.deprecations.components).length > 0
+    ) {
+      deprecations.components = sources.deprecations.components;
+    }
+    if (
+      sources.deprecations.tokens &&
+      Object.keys(sources.deprecations.tokens).length > 0
+    ) {
+      deprecations.tokens = sources.deprecations.tokens;
+    }
+    contract.deprecations = deprecations;
+  }
   validateContract(contract);
   return { contract, legacy, sourcesPath };
 }
@@ -126,7 +147,7 @@ export function writeContract(contract, outPath, opts = {}) {
  * @param {DecreeContract} contract
  */
 export function canonicalizeContract(contract) {
-  return {
+  const canonical = {
     version: contract.version,
     name: contract.name,
     package: /** @type {{ package?: string }} */ (contract).package,
@@ -143,6 +164,11 @@ export function canonicalizeContract(contract) {
       ),
     ),
   };
+  const deprecations = canonicalizeDeprecations(contract.deprecations);
+  if (deprecations) {
+    return { ...canonical, deprecations };
+  }
+  return canonical;
 }
 
 /**

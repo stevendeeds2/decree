@@ -7,6 +7,12 @@ import {
   extractCssVarsFromJs,
   tokenNameSet,
 } from './tokens.js';
+import {
+  formatDeprecatedComponentMessage,
+  formatDeprecatedTokenMessage,
+  getComponentDeprecation,
+  getTokenDeprecation,
+} from './deprecations.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
@@ -135,11 +141,19 @@ export function scanSource(source, file, contract, options = {}) {
         }
         const name = tag.name;
         if (REACT_RUNTIME_COMPONENTS.has(name)) continue;
-        if (allow.has(name)) continue;
+        const allowlisted = resolveAllowlistedName(name, allow, aliases);
+        if (allowlisted) {
+          const finding = deprecatedComponentFinding(
+            allowlisted,
+            contract,
+            file,
+            tag.line,
+          );
+          if (finding) findings.push(finding);
+          continue;
+        }
         if (localComponents.has(name)) continue;
         if (hosts.has(name)) continue;
-        const resolved = aliases.get(name);
-        if (resolved && allow.has(resolved)) continue;
         findings.push({
           code: CODES.UNKNOWN_COMPONENT,
           message: `Unknown component <${name}> — not in the Decree contract allowlist`,
@@ -156,11 +170,19 @@ export function scanSource(source, file, contract, options = {}) {
         for (const match of line.matchAll(JSX_COMPONENT_RE)) {
           const name = match[1];
           if (REACT_RUNTIME_COMPONENTS.has(name)) continue;
-          if (allow.has(name)) continue;
+          const allowlisted = resolveAllowlistedName(name, allow, aliases);
+          if (allowlisted) {
+            const finding = deprecatedComponentFinding(
+              allowlisted,
+              contract,
+              file,
+              lineNo,
+            );
+            if (finding) findings.push(finding);
+            continue;
+          }
           if (localComponents.has(name)) continue;
           if (hosts.has(name)) continue;
-          const resolved = aliases.get(name);
-          if (resolved && allow.has(resolved)) continue;
           findings.push({
             code: CODES.UNKNOWN_COMPONENT,
             message: `Unknown component <${name}> — not in the Decree contract allowlist`,
@@ -199,7 +221,10 @@ export function scanSource(source, file, contract, options = {}) {
               file,
               line: i + 1,
             });
+            continue;
           }
+          const finding = deprecatedTokenFinding(name, contract, file, i + 1);
+          if (finding) findings.push(finding);
         }
       }
     } else if (JSX_EXT.test(file)) {
@@ -211,12 +236,64 @@ export function scanSource(source, file, contract, options = {}) {
             file,
             line,
           });
+          continue;
         }
+        const finding = deprecatedTokenFinding(name, contract, file, line);
+        if (finding) findings.push(finding);
       }
     }
   }
 
   return findings;
+}
+
+/**
+ * @param {string} name
+ * @param {Set<string>} allow
+ * @param {Map<string, string>} aliases
+ * @returns {string | null}
+ */
+function resolveAllowlistedName(name, allow, aliases) {
+  if (allow.has(name)) return name;
+  const resolved = aliases.get(name);
+  if (resolved && allow.has(resolved)) return resolved;
+  return null;
+}
+
+/**
+ * @param {string} resolvedName
+ * @param {import('../contract/index.js').DecreeContract} contract
+ * @param {string} file
+ * @param {number} line
+ * @returns {Finding | null}
+ */
+function deprecatedComponentFinding(resolvedName, contract, file, line) {
+  const notice = getComponentDeprecation(contract, resolvedName);
+  if (!notice) return null;
+  return {
+    code: CODES.DEPRECATED_COMPONENT,
+    message: formatDeprecatedComponentMessage(resolvedName, notice),
+    file,
+    line,
+  };
+}
+
+/**
+ * @param {string} name
+ * @param {import('../contract/index.js').DecreeContract} contract
+ * @param {string} file
+ * @param {number} line
+ * @returns {Finding | null}
+ */
+function deprecatedTokenFinding(name, contract, file, line) {
+  const notice = getTokenDeprecation(contract, name);
+  if (!notice) return null;
+  return {
+    code: CODES.DEPRECATED_TOKEN,
+    message: formatDeprecatedTokenMessage(name, notice),
+    file,
+    line,
+  };
 }
 
 /** @param {string} s */
