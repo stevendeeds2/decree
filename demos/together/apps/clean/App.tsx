@@ -8,6 +8,9 @@ export function Checkout() {
       <Button variant="secondary" size="sm" disabled>
         Hold
       </Button>
+      <Button variant="ghost" style={{ background: "#ff2d55" }}>
+        Limited offer
+      </Button>
     </form>
   );
 }
