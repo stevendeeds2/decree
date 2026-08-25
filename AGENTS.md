@@ -8,6 +8,8 @@ Enforcement layer for design systems: **contracts + CI verify + agent allowlists
 
 Pitch: *If it’s not in the system, it doesn’t ship.*
 
+They write what a Button **is**. Decree refuses any Button an app or agent **used that the contract did not permit**. See [docs/NORTH_STAR.md](docs/NORTH_STAR.md) and [docs/PLAN.md](docs/PLAN.md).
+
 ## Layout
 
 | Path | Role |
