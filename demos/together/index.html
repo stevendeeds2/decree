@@ -56,16 +56,18 @@
     <main>
       <h1>Together</h1>
       <p class="lede">
-        They write what a Button <strong>is</strong>. Decree refuses any Button
-        a checkout <strong>used that they did not permit</strong>.
+        The design system team defines what a Button <strong>is</strong>.
+        Decree blocks any pull request — from a person or an AI agent — that
+        uses a Button <strong>the definition does not permit</strong>.
       </p>
 
       <article class="card">
         <h3>Nathan — Specs 2</h3>
         <p>
-          Authors Harbor Button in YAML: <code>primary | secondary</code>,
-          sizes, illegal <code>secondary + lg</code>, Ghost deprecated.
-          Anatomy and default styles stay in the spec.
+          Defines the Harbor Button as a structured spec:
+          <code>primary | secondary</code>, three sizes,
+          <code>secondary + lg</code> is illegal, Ghost is retired. Anatomy
+          and default styles stay in the spec — Decree never reads them.
         </p>
         <p class="meta">demos/together/nathan/specs.yaml</p>
       </article>
@@ -73,33 +75,46 @@
       <article class="card">
         <h3>TJ — DS Contracts</h3>
         <p>
-          Authors the same Button as a contract: props, Figma/code bindings,
-          <code>semantics.element: button</code>. Anatomy and bindings stay
-          in the contract file.
+          Defines the same Button as a machine-readable contract: the same
+          props plus Figma and code bindings, and the fact that it renders a
+          real <code>&lt;button&gt;</code>. Bindings stay in the contract —
+          Decree never reads them.
         </p>
         <p class="meta">demos/together/tj/contracts/button.contract.json</p>
       </article>
 
       <article class="card">
-        <h3>Decree — judge slice</h3>
+        <h3>Decree — enforcement</h3>
         <p>
-          Compiles names, props, combos, tokens, deprecations, native
-          <code>&lt;button&gt;</code>, and restyle refusal. Does not become
-          a spec language or a code generator.
+          Compiles both files down to the rules it can check in app code —
+          component names, props, allowed values, illegal combinations,
+          tokens, retirements — and fails CI when a change breaks them. It is
+          not a spec tool, a Figma tool, or a code generator.
         </p>
         <p class="meta">decree prepare --from-specs · --from-ds-contracts</p>
       </article>
 
       <h2>The situation</h2>
       <ol>
-        <li>Harbor is a fictional third-party system (not Corvy, not SD33DS).</li>
-        <li>A clean checkout uses <code>variant="primary"</code> and <code>size="md"</code>.</li>
+        <li>Harbor is a fictional design system, invented for this demo.</li>
         <li>
-          A dirty checkout uses <code>ghost</code>, a forbidden combo,
-          <code>style=</code>, deprecated Ghost, an invented MagicButton, and a
-          raw <code>&lt;button&gt;</code>.
+          A clean app builds its checkout page with
+          <code>variant="primary"</code> and <code>size="md"</code>.
+          Verify <strong>passes</strong>.
         </li>
-        <li>Decree verify passes the clean app and fails the dirty one.</li>
+        <li>
+          A dirty app — the kind of code an unsupervised agent produces —
+          uses a <code>ghost</code> variant that does not exist, the illegal
+          <code>secondary + lg</code> combination, an inline
+          <code>style=</code>, the retired Ghost, an invented MagicButton,
+          and a raw <code>&lt;button&gt;</code>. Verify <strong>fails</strong>
+          with a named error code for each.
+        </li>
+        <li>
+          The spec and contract files here are modeled on Nathan's and TJ's
+          public work — the shape Decree wants to consume, ready to bind to
+          real exports.
+        </li>
       </ol>
 
       <h2>Run the proof</h2>

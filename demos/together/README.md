@@ -1,6 +1,8 @@
 # Together — Specs 2 + DS Contracts + Decree
 
-Nathan Curtis (Specs 2) and TJ Pitre (DS Contracts) write what a Harbor **Button** is. Decree refuses a checkout that used what they did not permit.
+Nathan Curtis (Specs 2) and TJ Pitre (DS Contracts) define what a Harbor **Button** is. Decree blocks any app change — human or AI — that uses what the definition does not permit.
+
+The spec and contract files are modeled on their public work (Specs 2 emits schema-valid YAML; a DS contract is a machine-readable component definition) — the shape Decree consumes, ready to bind to real exports.
 
 Not Corvy. Not stevendeeds.com. Not SD33DS.
 
@@ -11,11 +13,11 @@ node demos/together/prove.mjs
 
 | Role | Path | What they own |
 |------|------|----------------|
-| Nathan / Specs 2 | `nathan/specs.yaml` | Button props, invalid combo, tokens, Ghost deprecated. Anatomy stays here. |
-| TJ / DS Contracts | `tj/contracts/*.contract.json` | Same Button as a contract, Figma/code bindings, `semantics.element`. Anatomy stays here. |
-| Decree | `out/harbor.contract.json` | Judge slice only: names, props, combos, tokens, deprecations, restyle, native `<button>`. |
+| Nathan / Specs 2 | `nathan/specs.yaml` | Button props, illegal combo, tokens, Ghost retired. Anatomy stays here. |
+| TJ / DS Contracts | `tj/contracts/*.contract.json` | Same Button as a contract, Figma/code bindings, `semantics.element`. Bindings stay here. |
+| Decree | `out/harbor.contract.json` | Only the rules it can enforce: names, props, values, combinations, tokens, retirements, visual overrides, native `<button>`. |
 
 - `apps/clean` — legal `variant` / `size`. Verify **passes**.
-- `apps/dirty` — ghost variant, forbidden combo, `style=`, deprecated Ghost, invented `MagicButton`, native `<button>`. Verify **fails**.
+- `apps/dirty` — nonexistent ghost variant, illegal combo, inline `style=`, retired Ghost, invented `MagicButton`, raw `<button>`. Verify **fails** with a named error code for each.
 
 Landing: [index.html](./index.html). Adapters: [docs/ADAPTERS.md](../../docs/ADAPTERS.md). Board: DECREE #25.
