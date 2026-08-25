@@ -16,7 +16,7 @@ Stay the judge. They stay the authors. The join later is adapters that compile a
 
 ## What Decree will become
 
-- A contract that names permitted components, then (when configured) permitted props, values, combinations, and tokens.
+- A contract that names permitted components, then (when configured) permitted props, values, combinations, tokens, and restyle refusal.
 - CI verify that refuses usage the contract did not permit.
 - Agent MCP allowlists that expose only that same permitted surface.
 - Adapters that compile a judge slice from Specs 2 or DS Contracts after component APIs exist.

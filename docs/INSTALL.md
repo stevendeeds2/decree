@@ -1,54 +1,53 @@
 # Install Decree (`@stevendeeds/decree`)
 
-Private package. Channel for `0.1.0`: **GitHub Packages** (`https://npm.pkg.github.com`).
+Node ≥ 20.
 
-## Scope / owner note
+## Supported: install from git
 
-The npm scope is `@stevendeeds`. The GitHub repo lives under **`stevendeeds2`**.  
-GitHub Packages requires the package scope to match the **owning user or org**.
-
-Until a `stevendeeds` GitHub org owns the package (or the package is renamed to `@stevendeeds2/decree`), `npm publish` to GitHub Packages will fail with a scope mismatch.
-
-Install instructions below assume the package is published under `@stevendeeds/decree` on GitHub Packages (after the owner/scope is aligned).
-
-## Consumer setup (Node ≥ 20)
-
-1. Create or edit `~/.npmrc` (or project `.npmrc`):
-
-```ini
-@stevendeeds:registry=https://npm.pkg.github.com
-//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
-```
-
-2. Use a GitHub PAT (classic) with at least `read:packages` (and `repo` if the package is linked to a private repo). In Actions, `GITHUB_TOKEN` works for packages in the same org/user when permissions allow.
-
-3. Install:
+GitHub Packages is blocked until a `stevendeeds` org owns the package (scope `@stevendeeds` vs repo owner `stevendeeds2`). Until then, install the same bits from git:
 
 ```bash
-npm install -D @stevendeeds/decree@0.1.0
+npm install -D github:stevendeeds2/decree
+npx decree --help
 ```
 
-4. Run:
-
-```bash
-npx decree init ./node_modules/@your/ds --force
-npx decree verify . --write-baseline decree.baseline.json
-npx decree verify . --baseline decree.baseline.json
-```
-
-See [ADOPTION.md](./ADOPTION.md) for brownfield ratchet and [GETTING_STARTED.md](./GETTING_STARTED.md) for the full walkthrough.
-
-## CI (copy the example)
-
-Template workflow (copy into a consumer app; not run in this repo):  
-[`.github/examples/decree-verify.yml`](../.github/examples/decree-verify.yml)
-
-## From this repo (no registry)
+From a cloned repo:
 
 ```bash
 git clone https://github.com/stevendeeds2/decree.git
 cd decree
 npm install
-open demos/index.html
 node bin/decree.js --help
 ```
+
+## After GitHub Packages / npmjs is aligned
+
+See [PUBLISH.md](./PUBLISH.md). Then:
+
+```ini
+# ~/.npmrc or project .npmrc
+@stevendeeds:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
+```
+
+```bash
+npm install -D @stevendeeds/decree@0.1.0
+```
+
+## First commands
+
+```bash
+npx decree sources ./packages/ui
+# fill decree.sources.json — see SOURCES.md
+npx decree prepare ./packages/ui
+npx decree use ./packages/ui --force
+npx decree verify .
+```
+
+Or compile a judge slice from Specs 2 / DS Contracts: [ADAPTERS.md](./ADAPTERS.md).
+
+Brownfield ratchet: [ADOPTION.md](./ADOPTION.md). Walkthrough: [GETTING_STARTED.md](./GETTING_STARTED.md).
+
+## CI
+
+Template: [`.github/examples/decree-verify.yml`](../.github/examples/decree-verify.yml) — installs from git so it works before a registry publish.

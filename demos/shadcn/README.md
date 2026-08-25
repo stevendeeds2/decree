@@ -1,5 +1,7 @@
 # Decree demo — shadcn/ui
 
+The published `@demo/shadcn-ui` contract includes a hand-authored Button API and `restyle: true`. `npm run demo:verify` from the repo root must stay clean.
+
 ```bash
 open demos/shadcn/index.html
 cd demos/shadcn && npm install && npm run dev    # :5180

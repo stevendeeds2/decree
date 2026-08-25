@@ -13,5 +13,20 @@
     "button": "Button",
     "input": "Input",
     "select": "Select"
-  }
+  },
+  "componentApis": {
+    "Button": {
+      "props": {
+        "variant": {
+          "enum": ["default", "destructive", "outline", "secondary", "ghost", "link"]
+        },
+        "size": {
+          "enum": ["default", "sm", "lg", "icon"]
+        },
+        "asChild": { "type": "boolean" },
+        "disabled": { "type": "boolean" }
+      }
+    }
+  },
+  "restyle": true
 }

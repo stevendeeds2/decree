@@ -10,6 +10,7 @@ import {
   getComponentApi,
   publicComponentApi,
 } from '../verify/component-apis.js';
+import { getRestylePolicy, restyleEnabled } from '../verify/restyle.js';
 
 /** Soft cap so MCP validate_snippet cannot become a CPU sink. */
 export const MAX_SNIPPET_CHARS = 256_000;
@@ -18,6 +19,7 @@ export const MAX_SNIPPET_CHARS = 256_000;
  * @param {import('../contract/index.js').DecreeContract} contract
  */
 export function listPrimitives(contract) {
+  const restyle = publicRestyle(contract);
   return contract.components.map((name) => {
     const notice = getComponentDeprecation(contract, name);
     const api = getComponentApi(contract, name);
@@ -30,6 +32,7 @@ export function listPrimitives(contract) {
         deprecated: true,
         deprecation: deprecationPublicFields(notice),
         ...(props && Object.keys(props).length > 0 ? { api: props } : {}),
+        ...(restyle ? { restyle } : {}),
       };
     }
     return {
@@ -38,8 +41,17 @@ export function listPrimitives(contract) {
       allowed: true,
       deprecated: false,
       ...(props && Object.keys(props).length > 0 ? { api: props } : {}),
+      ...(restyle ? { restyle } : {}),
     };
   });
+}
+
+/**
+ * @param {import('../contract/index.js').DecreeContract} contract
+ */
+function publicRestyle(contract) {
+  const policy = getRestylePolicy(contract);
+  return policy && restyleEnabled(policy) ? policy : undefined;
 }
 
 /**
@@ -101,11 +113,13 @@ export function describeAllowedPrimitive(contract, name, options = {}) {
   }
   const api = getComponentApi(contract, name);
   const props = api ? publicComponentApi(api) : undefined;
+  const restyle = publicRestyle(contract);
   return {
     allowed,
     deprecated,
     ...(notice ? { deprecation: deprecationPublicFields(notice) } : {}),
     ...(props && Object.keys(props).length > 0 ? { api: props } : {}),
+    ...(restyle ? { restyle } : {}),
     message,
   };
 }

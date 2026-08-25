@@ -3,6 +3,7 @@ import { dirname, isAbsolute, join, normalize, relative, resolve } from 'node:pa
 import { assertSafeScanPrefix } from '../verify/excludes.js';
 import { parseDeprecations } from '../verify/deprecations.js';
 import { parseComponentApis } from '../verify/component-apis.js';
+import { parseRestyle } from '../verify/restyle.js';
 
 /**
  * @typedef {{
@@ -29,6 +30,7 @@ import { parseComponentApis } from '../verify/component-apis.js';
  *     tokens?: Record<string, DecreeDeprecationNotice>,
  *   },
  *   componentApis?: import('../verify/component-apis.js').ComponentApisMap,
+ *   restyle?: boolean | import('../verify/restyle.js').RestylePolicy,
  * }} DecreeSources
  */
 
@@ -56,6 +58,11 @@ export function sourcesScaffoldTemplate() {
       tokens: {},
     },
     componentApis: {},
+    restyle: {
+      style: false,
+      sx: false,
+      arbitraryClass: false,
+    },
   };
 }
 
@@ -210,6 +217,10 @@ export function validateSources(input, pathForErrors = 'decree.sources.json') {
       s.componentApis,
       `${pathForErrors}: componentApis`,
     );
+  }
+
+  if (s.restyle !== undefined) {
+    out.restyle = parseRestyle(s.restyle, `${pathForErrors}: restyle`);
   }
 
   return out;

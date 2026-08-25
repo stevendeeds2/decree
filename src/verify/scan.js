@@ -17,6 +17,7 @@ import {
   getComponentApi,
   isPassthroughProp,
 } from './component-apis.js';
+import { restyleFindings } from './restyle.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
@@ -157,6 +158,7 @@ export function scanSource(source, file, contract, options = {}) {
           findings.push(
             ...componentApiFindings(allowlisted, tag, contract, file),
           );
+          findings.push(...restyleFindings(allowlisted, tag, contract, file));
           continue;
         }
         if (localComponents.has(name)) continue;

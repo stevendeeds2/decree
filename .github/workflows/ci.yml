@@ -29,3 +29,9 @@ jobs:
 
       - name: Pack check
         run: npm run pack:check
+
+      - name: Pack smoke (install tarball + verify)
+        run: npm run pack:smoke
+
+      - name: Shadcn demo verify
+        run: npm run demo:verify
