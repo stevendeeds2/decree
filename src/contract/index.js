@@ -4,6 +4,10 @@ import {
   assertDeprecationsReferToAllowlist,
   parseDeprecations,
 } from '../verify/deprecations.js';
+import {
+  assertComponentApisReferToAllowlist,
+  parseComponentApis,
+} from '../verify/component-apis.js';
 
 /**
  * @typedef {{ name: string, value?: string }} DecreeToken
@@ -31,6 +35,7 @@ import {
  *   nativeElementMap: Record<string, string>,
  *   scan?: DecreeScanConfig,
  *   deprecations?: DecreeDeprecations,
+ *   componentApis?: import('../verify/component-apis.js').ComponentApisMap,
  * }} DecreeContract
  */
 
@@ -114,6 +119,13 @@ export function validateContract(input) {
       deprecations,
       /** @type {string[]} */ (c.components),
       tokenNames,
+    );
+  }
+  if (c.componentApis !== undefined) {
+    const apis = parseComponentApis(c.componentApis, 'componentApis');
+    assertComponentApisReferToAllowlist(
+      apis,
+      /** @type {string[]} */ (c.components),
     );
   }
 }

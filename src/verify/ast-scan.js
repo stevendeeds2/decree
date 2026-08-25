@@ -1,7 +1,18 @@
 import parser from '@babel/parser';
 
 /**
- * @typedef {{ name: string, line: number, native: boolean }} JsxTag
+ * @typedef {{
+ *   name: string,
+ *   literalValue?: string | boolean | number,
+ *   dynamic?: boolean,
+ * }} JsxAttr
+ * @typedef {{
+ *   name: string,
+ *   line: number,
+ *   native: boolean,
+ *   attrs: JsxAttr[],
+ *   spread: boolean,
+ * }} JsxTag
  */
 
 /**
@@ -35,7 +46,14 @@ export function extractJsxTags(source, file) {
       const info = jsxNameInfo(node.name);
       if (info) {
         const line = node.loc?.start?.line ?? 1;
-        tags.push({ name: info.name, line, native: info.native });
+        const { attrs, spread } = extractJsxAttrs(node);
+        tags.push({
+          name: info.name,
+          line,
+          native: info.native,
+          attrs,
+          spread,
+        });
       }
     }
 
@@ -75,4 +93,89 @@ function jsxNameInfo(nameNode) {
     }
   }
   return null;
+}
+
+/**
+ * @param {any} opening
+ * @returns {{ attrs: JsxAttr[], spread: boolean }}
+ */
+function extractJsxAttrs(opening) {
+  /** @type {JsxAttr[]} */
+  const attrs = [];
+  let spread = false;
+  const list = Array.isArray(opening.attributes) ? opening.attributes : [];
+  for (const attr of list) {
+    if (!attr) continue;
+    if (attr.type === 'JSXSpreadAttribute') {
+      spread = true;
+      continue;
+    }
+    if (attr.type !== 'JSXAttribute') continue;
+    const name = jsxAttrName(attr.name);
+    if (!name) continue;
+    if (attr.value == null) {
+      attrs.push({ name, literalValue: true });
+      continue;
+    }
+    const literal = literalFromJsxValue(attr.value);
+    if (literal.ok) {
+      attrs.push({ name, literalValue: literal.value });
+    } else {
+      attrs.push({ name, dynamic: true });
+    }
+  }
+  return { attrs, spread };
+}
+
+/**
+ * @param {any} nameNode
+ * @returns {string | null}
+ */
+function jsxAttrName(nameNode) {
+  if (!nameNode) return null;
+  if (nameNode.type === 'JSXIdentifier') return nameNode.name ?? null;
+  if (nameNode.type === 'JSXNamespacedName') {
+    const ns = nameNode.namespace?.name;
+    const name = nameNode.name?.name;
+    if (typeof ns === 'string' && typeof name === 'string') {
+      return `${ns}:${name}`;
+    }
+  }
+  return null;
+}
+
+/**
+ * @param {any} valueNode
+ * @returns {{ ok: true, value: string | boolean | number } | { ok: false }}
+ */
+function literalFromJsxValue(valueNode) {
+  if (!valueNode) return { ok: false };
+  if (valueNode.type === 'StringLiteral') {
+    return { ok: true, value: valueNode.value };
+  }
+  if (valueNode.type === 'JSXExpressionContainer') {
+    return literalFromExpression(valueNode.expression);
+  }
+  return { ok: false };
+}
+
+/**
+ * @param {any} expr
+ * @returns {{ ok: true, value: string | boolean | number } | { ok: false }}
+ */
+function literalFromExpression(expr) {
+  if (!expr) return { ok: false };
+  if (expr.type === 'StringLiteral' || expr.type === 'NumericLiteral') {
+    return { ok: true, value: expr.value };
+  }
+  if (expr.type === 'BooleanLiteral') {
+    return { ok: true, value: expr.value };
+  }
+  if (expr.type === 'UnaryExpression' && expr.operator === '-' && expr.argument) {
+    const inner = literalFromExpression(expr.argument);
+    if (inner.ok && typeof inner.value === 'number') {
+      return { ok: true, value: -inner.value };
+    }
+  }
+  return { ok: false };
 }

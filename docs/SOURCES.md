@@ -43,7 +43,8 @@ Writes every schema key so you fill a form instead of inventing a format:
   "deprecations": {
     "components": {},
     "tokens": {}
-  }
+  },
+  "componentApis": {}
 }
 ```
 
@@ -59,6 +60,7 @@ Writes every schema key so you fill a form instead of inventing a format:
 | `ignoreComponentNames` | Drop accidental exports (`App`, `ThemeProvider`, …) |
 | `nativeElementMap` | Map native tags → allowlisted components (`"a": "Button"`) |
 | `deprecations` | Notices for still-allowlisted components/tokens (`replacement`, `reason`, `since`, `removeAfter`) |
+| `componentApis` | Optional prop/enum map copied onto the contract (`props`, `forbiddenCombinations`). Missing key = no prop enforcement |
 
 ### Token modes
 
@@ -101,6 +103,15 @@ Writes every schema key so you fill a form instead of inventing a format:
         "replacement": "--primary",
         "reason": "Renamed to semantic token",
         "since": "2026-08-01"
+      }
+    }
+  },
+  "componentApis": {
+    "Button": {
+      "props": {
+        "variant": { "enum": ["primary", "secondary"] },
+        "size": { "enum": ["sm", "md", "lg"] },
+        "disabled": { "type": "boolean" }
       }
     }
   }

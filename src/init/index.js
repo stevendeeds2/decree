@@ -6,6 +6,10 @@ import {
   hasDeprecationEntries,
 } from '../verify/deprecations.js';
 import {
+  canonicalizeComponentApis,
+  hasComponentApiEntries,
+} from '../verify/component-apis.js';
+import {
   extractComponents,
   extractTokens,
   inferNativeElementMap,
@@ -120,6 +124,9 @@ export function buildContractFromPackage(packageRoot, options = {}) {
     }
     contract.deprecations = deprecations;
   }
+  if (sources?.componentApis && hasComponentApiEntries(sources.componentApis)) {
+    contract.componentApis = sources.componentApis;
+  }
   validateContract(contract);
   return { contract, legacy, sourcesPath };
 }
@@ -165,10 +172,12 @@ export function canonicalizeContract(contract) {
     ),
   };
   const deprecations = canonicalizeDeprecations(contract.deprecations);
-  if (deprecations) {
-    return { ...canonical, deprecations };
-  }
-  return canonical;
+  const componentApis = canonicalizeComponentApis(contract.componentApis);
+  return {
+    ...canonical,
+    ...(deprecations ? { deprecations } : {}),
+    ...(componentApis ? { componentApis } : {}),
+  };
 }
 
 /**

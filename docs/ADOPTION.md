@@ -33,6 +33,7 @@ Example workflow: [`.github/examples/decree-verify.yml`](../.github/examples/dec
 - **Pass** if there are **0 new** findings (debt already in the baseline is ignored).
 - **Fail** if someone introduces a new forgery / hex / unknown component.
 - Deprecated contract components and tokens also fail verify (`DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN`). Existing usage can be ratcheted with a baseline.
+- If the contract includes `componentApis`, unknown props and illegal static values also fail (`DECREE_UNKNOWN_PROP` / `DECREE_INVALID_PROP_VALUE` / `DECREE_INVALID_PROP_COMBO`). Ratchet leftover usage with a baseline.
 
 Optional budget:
 
