@@ -27,7 +27,11 @@ Responses include `"_mcp": "decree"` for attribution when multiple MCP servers a
 node bin/decree.js mcp path/to/decree.contract.json
 ```
 
-Paste the printed `mcpServers` block into your client config.
+Paste the printed `mcpServers` block into your client config:
+
+- Cursor: `.cursor/mcp.json` in the project (or `~/.cursor/mcp.json` globally)
+- Claude Desktop: `claude_desktop_config.json`
+- Claude Code: `claude mcp add decree -- node path/to/bin/decree-mcp.js path/to/decree.contract.json`
 
 Or run directly:
 

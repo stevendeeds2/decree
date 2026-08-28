@@ -92,7 +92,7 @@ That refusal is the product. The same command in CI is the whole enforcement sto
 node bin/decree.js mcp demos/together/out/harbor.contract.json
 ```
 
-Prints MCP client config for an allowlist server with four tools: `list_primitives`, `list_tokens`, `is_allowed_primitive`, `validate_snippet`. An agent wired to it learns `variant="ghost"` is refused *before* writing the code. Details: [docs/MCP.md](./docs/MCP.md).
+Prints MCP client config for an allowlist server with four tools: `list_primitives`, `list_tokens`, `is_allowed_primitive`, `validate_snippet`. Paste it into `.cursor/mcp.json` (Cursor) or `claude_desktop_config.json` (Claude Desktop) and the agent learns `variant="ghost"` is refused *before* writing the code. Details: [docs/MCP.md](./docs/MCP.md).
 
 ## Use it on your design system
 
