@@ -209,7 +209,3 @@ Plus a brownfield pilot on a real app: [demos/PILOT-taxonomy.md](./demos/PILOT-t
 | `docs/` | Install, adopt, init, sources, adapters, MCP |
 | `demos/` | Runnable case studies (not in the npm tarball) |
 | `tests/` | Unit tests |
-
----
-
-Ships as **`@stevendeeds/decree`** (unscoped `decree` is taken on npm) · `npm install -D github:stevendeeds2/decree` · MIT
