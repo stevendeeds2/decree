@@ -8,7 +8,7 @@ If it’s not in the system, it doesn’t ship.
 
 A design system can be perfectly documented and still drift in the shipped app: an invented `variant`, an inline `style=`, a hardcoded hex, a retired component that came back. Documentation persuades; review catches some of it. AI agents made the volume problem worse — they write plausible UI fast, and they invent just as fast.
 
-The tools that *define* systems are getting very good. [Specs 2](https://www.specsplugin.com) writes down what a component **is** — anatomy, props, variants, illegal combinations — with schema precision. DS Contracts make components machine-readable, with bindings to Figma and code. That work is excellent, and Decree is an independent companion to it — no affiliation, plenty of admiration. Definition is in great hands. Enforcement is the gap: someone still has to stand at the door.
+The tools that *define* systems are getting very good. [Specs 2](https://www.specsplugin.com) writes down what a component **is** — anatomy, props, variants, illegal combinations — with schema precision. [DS Contracts](https://github.com/southleft/ds-contracts-poc) make components machine-readable, with bindings to Figma and code. That work is excellent, and Decree is an independent companion to it — no affiliation, plenty of admiration. Definition is in great hands. Enforcement is the gap: someone still has to stand at the door.
 
 Decree is the door. It compiles those definitions into a **contract** — only the rules it can refuse — and then:
 
