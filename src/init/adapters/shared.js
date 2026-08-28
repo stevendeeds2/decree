@@ -230,14 +230,18 @@ export function mapJudgeProp(name, def) {
 /**
  * @param {Record<string, { enum?: string[], type?: 'boolean' | 'string' | 'number' }>} props
  * @param {unknown} combos
+ * @param {(reason: string) => void} [onSkip]
  */
-export function mapForbiddenCombinations(props, combos) {
+export function mapForbiddenCombinations(props, combos, onSkip) {
   if (!Array.isArray(combos)) return undefined;
   const propNames = new Set(Object.keys(props));
   /** @type {Record<string, string | boolean | number>[]} */
   const out = [];
   for (const item of combos) {
-    if (!item || typeof item !== 'object' || Array.isArray(item)) continue;
+    if (!item || typeof item !== 'object' || Array.isArray(item)) {
+      onSkip?.('entry is not an object of prop values');
+      continue;
+    }
     /** @type {Record<string, string | boolean | number>} */
     const combo = {};
     for (const [key, value] of Object.entries(
@@ -252,9 +256,33 @@ export function mapForbiddenCombinations(props, combos) {
         combo[key] = value;
       }
     }
-    if (Object.keys(combo).length > 0) out.push(combo);
+    if (Object.keys(combo).length > 0) {
+      out.push(combo);
+    } else {
+      onSkip?.('entry references only unmapped props');
+    }
   }
   return out.length > 0 ? out : undefined;
+}
+
+/**
+ * Readable file reference for compile notes: relative to the input root.
+ * @param {string} root
+ * @param {string} file
+ */
+export function noteRef(root, file) {
+  const rel = relative(root, file);
+  return rel && !rel.startsWith('..') ? rel : basename(file);
+}
+
+/**
+ * Format a few example entries for a note line.
+ * @param {string[]} items
+ * @param {number} [max]
+ */
+export function noteExamples(items, max = 3) {
+  const shown = items.slice(0, max).join(', ');
+  return items.length > max ? `${shown}, …` : shown;
 }
 
 /**

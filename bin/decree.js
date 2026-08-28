@@ -353,6 +353,16 @@ if (cmd === 'init') {
   }
 }
 
+/**
+ * Report everything an adapter compile left behind — never drop silently.
+ * @param {string[] | undefined} notes
+ */
+function printCompileNotes(notes) {
+  for (const note of notes ?? []) {
+    console.error(`decree prepare: left behind — ${note}`);
+  }
+}
+
 if (cmd === 'prepare') {
   const parsed = parsePrepareArgs(rest);
   const {
@@ -389,6 +399,7 @@ if (cmd === 'prepare') {
           restyle,
         },
       );
+      printCompileNotes(result.notes);
       if (check) {
         console.log(result.message);
         process.exit(result.ok ? 0 : 1);
@@ -422,6 +433,7 @@ if (cmd === 'prepare') {
         name,
         restyle,
       });
+      printCompileNotes(result.notes);
       if (check) {
         console.log(result.message);
         process.exit(result.ok ? 0 : 1);

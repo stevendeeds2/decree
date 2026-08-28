@@ -1,4 +1,5 @@
 import { basename, dirname } from 'node:path';
+import { isPassthroughProp } from '../../verify/component-apis.js';
 import {
   collectTokenEntries,
   contractIdentity,
@@ -8,6 +9,7 @@ import {
   mapForbiddenCombinations,
   mapJudgeProp,
   nativeMapFor,
+  noteRef,
   resolveInputRoot,
   stemName,
   toAllowlistName,
@@ -19,12 +21,14 @@ import {
  * Compile a Decree judge slice from a Specs 2 catalog or component tree.
  * Maps names, props/enums, invalidVariantCombinations, tokens, deprecations.
  * Leaves anatomy, layout, variants, and styles behind.
+ * Everything the adapter cannot read is reported on `opts.notes`, never dropped silently.
  *
  * @param {string} inputRoot
- * @param {{ name?: string }} [opts]
+ * @param {{ name?: string, notes?: string[] }} [opts]
  */
 export function buildContractFromSpecs(inputRoot, opts = {}) {
   const root = resolveInputRoot(inputRoot);
+  const notes = opts.notes;
   /** @type {Map<string, { api?: import('../../verify/component-apis.js').ComponentApi, deprecated?: import('../../verify/deprecations.js').DeprecationNotice }>} */
   const found = new Map();
   /** @type {unknown[]} */
@@ -36,14 +40,15 @@ export function buildContractFromSpecs(inputRoot, opts = {}) {
     if (isTokenFile(file)) continue;
     const base = basename(file).toLowerCase();
     if (base === 'package.json' || base.includes('schema')) continue;
+    if (base.startsWith('decree.')) continue;
     const doc = loadDocument(file);
-    ingestSpecsDocument(doc, file, found, inlineTokens);
+    ingestSpecsDocument(doc, noteRef(root, file), found, inlineTokens, notes);
   }
 
   const components = [...found.keys()].sort((a, b) => a.localeCompare(b));
   if (components.length === 0) {
     throw new Error(
-      `No Specs components found in ${root}. Expected a catalog with components, or api.yaml / *.yaml files with props.`,
+      `No Specs components found in ${root}. Expected a catalog with components, or api.yaml / *.yaml files with title/props.`,
     );
   }
 
@@ -88,17 +93,23 @@ export function buildContractFromSpecs(inputRoot, opts = {}) {
 
 /**
  * @param {unknown} doc
- * @param {string} file
+ * @param {string} ref
  * @param {Map<string, { api?: import('../../verify/component-apis.js').ComponentApi, deprecated?: import('../../verify/deprecations.js').DeprecationNotice }>} found
  * @param {unknown[]} inlineTokens
+ * @param {string[]} [notes]
  */
-function ingestSpecsDocument(doc, file, found, inlineTokens) {
-  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return;
+function ingestSpecsDocument(doc, ref, found, inlineTokens, notes) {
+  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) {
+    notes?.push(
+      `${ref}: no Specs component recognized (need title/props/anatomy, or a components map)`,
+    );
+    return;
+  }
   const raw = /** @type {Record<string, unknown>} */ (doc);
   if (raw.tokens !== undefined) inlineTokens.push(raw.tokens);
 
   if (isSpecsComponent(raw)) {
-    addSpecsComponent(raw, fallbackName(raw, file), found);
+    addSpecsComponent(raw, fallbackName(raw, ref), found, notes);
     return;
   }
 
@@ -108,13 +119,21 @@ function ingestSpecsDocument(doc, file, found, inlineTokens) {
       : looksLikeCatalog(raw)
         ? raw
         : null;
-  if (!catalog) return;
+  if (!catalog) {
+    if (raw.tokens === undefined) {
+      notes?.push(
+        `${ref}: no Specs component recognized (need title/props/anatomy, or a components map)`,
+      );
+    }
+    return;
+  }
   for (const [key, value] of Object.entries(catalog)) {
     if (!value || typeof value !== 'object' || Array.isArray(value)) continue;
     addSpecsComponent(
       /** @type {Record<string, unknown>} */ (value),
       key,
       found,
+      notes,
     );
   }
 }
@@ -154,12 +173,16 @@ function fallbackName(raw, fallback) {
   return stemName(fallback);
 }
 
+/** Prop kinds the Specs adapter leaves behind on purpose — no note needed. */
+const BY_DESIGN_PROP_KINDS = new Set(['slot', 'image', 'text']);
+
 /**
  * @param {Record<string, unknown>} raw
  * @param {string} hintedName
  * @param {Map<string, { api?: import('../../verify/component-apis.js').ComponentApi, deprecated?: import('../../verify/deprecations.js').DeprecationNotice }>} found
+ * @param {string[]} [notes]
  */
-function addSpecsComponent(raw, hintedName, found) {
+function addSpecsComponent(raw, hintedName, found, notes) {
   const name = toAllowlistName(
     typeof raw.title === 'string' ? raw.title : hintedName,
   );
@@ -172,12 +195,20 @@ function addSpecsComponent(raw, hintedName, found) {
       /** @type {Record<string, unknown>} */ (raw.props),
     )) {
       const mapped = mapJudgeProp(propName, def);
-      if (mapped) props[propName] = mapped;
+      if (mapped) {
+        props[propName] = mapped;
+      } else if (shouldNoteSkippedProp(propName, def)) {
+        notes?.push(
+          `${name}: prop "${propName}" left behind (unsupported shape — expected enum/values or a boolean/string/number type)`,
+        );
+      }
     }
   }
   const forbiddenCombinations = mapForbiddenCombinations(
     props,
     raw.invalidVariantCombinations,
+    (reason) =>
+      notes?.push(`${name}: invalidVariantCombinations ${reason}`),
   );
   /** @type {import('../../verify/component-apis.js').ComponentApi | undefined} */
   let api;
@@ -190,6 +221,20 @@ function addSpecsComponent(raw, hintedName, found) {
 
   const deprecated = specsDeprecation(raw);
   found.set(name, { api, deprecated });
+}
+
+/**
+ * Skips that deserve a note: not passthrough, not a by-design leave-behind.
+ * @param {string} name
+ * @param {unknown} def
+ */
+function shouldNoteSkippedProp(name, def) {
+  if (isPassthroughProp(name)) return false;
+  if (def && typeof def === 'object' && !Array.isArray(def)) {
+    const kind = /** @type {Record<string, unknown>} */ (def).type;
+    if (typeof kind === 'string' && BY_DESIGN_PROP_KINDS.has(kind)) return false;
+  }
+  return true;
 }
 
 /**

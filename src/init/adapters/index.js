@@ -8,7 +8,7 @@ export { buildContractFromSpecs } from './specs.js';
 /**
  * @param {'specs' | 'ds-contracts'} kind
  * @param {string} inputRoot
- * @param {{ name?: string }} [opts]
+ * @param {{ name?: string, notes?: string[] }} [opts]
  */
 export function buildContractFromExternal(kind, inputRoot, opts = {}) {
   const contract =

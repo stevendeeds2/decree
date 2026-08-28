@@ -4,9 +4,12 @@ import {
   collectTokenEntries,
   contractIdentity,
   isDocumentFile,
+  isTokenFile,
   loadDocument,
   mapJudgeProp,
   nativeMapFor,
+  noteExamples,
+  noteRef,
   resolveInputRoot,
   stemName,
   toAllowlistName,
@@ -26,26 +29,41 @@ const NATIVE_TAGS = new Set([
 /**
  * Compile a Decree judge slice from DS Contracts files.
  * Maps names, props/enums, tokens, deprecations. Leaves anatomy, layout, and styles behind.
+ * Everything the adapter cannot read is reported on `opts.notes`, never dropped silently.
  *
  * @param {string} inputRoot
- * @param {{ name?: string }} [opts]
+ * @param {{ name?: string, notes?: string[] }} [opts]
  */
 export function buildContractFromDsContracts(inputRoot, opts = {}) {
   const root = resolveInputRoot(inputRoot);
+  const notes = opts.notes;
   /** @type {Map<string, { api?: import('../../verify/component-apis.js').ComponentApi, deprecated?: import('../../verify/deprecations.js').DeprecationNotice, native?: string }>} */
   const found = new Map();
+  /** @type {string[]} */
+  const ignoredDocs = [];
 
   const files = isDocumentFile(root) ? [root] : walkFiles(root);
   for (const file of files) {
-    if (!isDsContractFile(file)) continue;
+    if (!isDsContractFile(file)) {
+      if (isIgnorableCandidate(file)) ignoredDocs.push(noteRef(root, file));
+      continue;
+    }
     const doc = loadDocument(file);
-    ingestDsContract(doc, file, found);
+    ingestDsContract(doc, noteRef(root, file), found, notes);
   }
 
   const components = [...found.keys()].sort((a, b) => a.localeCompare(b));
   if (components.length === 0) {
+    const seen = ignoredDocs.length
+      ? ` Saw ${ignoredDocs.length} document file(s) that do not match the naming convention: ${noteExamples(ignoredDocs)} — rename to *.contract.json or point at the directory that holds the exports.`
+      : '';
     throw new Error(
-      `No DS Contracts found in ${root}. Expected *.contract.json files with id/name and props.`,
+      `No DS Contracts found in ${root}. Expected *.contract.json (or .contract.yaml) files with id/name and props.${seen}`,
+    );
+  }
+  if (notes && ignoredDocs.length > 0) {
+    notes.push(
+      `${ignoredDocs.length} document file(s) ignored (not named *.contract.json): ${noteExamples(ignoredDocs)}`,
     );
   }
 
@@ -94,29 +112,62 @@ export function buildContractFromDsContracts(inputRoot, opts = {}) {
 function isDsContractFile(file) {
   const base = basename(file).toLowerCase();
   if (base.includes('schema')) return false;
+  if (base === 'decree.contract.json') return false;
   return base.endsWith('.contract.json') || base.endsWith('.contract.yaml') || base.endsWith('.contract.yml');
+}
+
+const IGNORE_AS_CANDIDATE = new Set([
+  'package.json',
+  'package-lock.json',
+  'decree.contract.json',
+  'decree.sources.json',
+  'decree.baseline.json',
+]);
+
+/**
+ * A document file worth mentioning when it does not match the naming convention.
+ * @param {string} file
+ */
+function isIgnorableCandidate(file) {
+  if (!isDocumentFile(file)) return false;
+  const base = basename(file).toLowerCase();
+  if (IGNORE_AS_CANDIDATE.has(base)) return false;
+  if (base.includes('schema') || base.startsWith('tsconfig')) return false;
+  return !isTokenFile(file);
 }
 
 /**
  * @param {unknown} doc
- * @param {string} file
+ * @param {string} ref
  * @param {Map<string, { api?: import('../../verify/component-apis.js').ComponentApi, deprecated?: import('../../verify/deprecations.js').DeprecationNotice, native?: string }>} found
+ * @param {string[]} [notes]
  */
-function ingestDsContract(doc, file, found) {
-  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) return;
+function ingestDsContract(doc, ref, found, notes) {
+  if (!doc || typeof doc !== 'object' || Array.isArray(doc)) {
+    notes?.push(
+      `${ref}: not a single contract object — arrays and multi-component files are not read`,
+    );
+    return;
+  }
   const raw = /** @type {Record<string, unknown>} */ (doc);
   const name = toAllowlistName(
     (typeof raw.name === 'string' && raw.name) ||
       (typeof raw.id === 'string' && raw.id) ||
-      stemName(file),
+      stemName(ref),
   );
-  if (!name || found.has(name)) return;
+  if (!name) {
+    notes?.push(`${ref}: no usable name or id`);
+    return;
+  }
+  if (found.has(name)) return;
 
   /** @type {Record<string, { enum?: string[], type?: 'boolean' | 'string' | 'number' }>} */
   const props = {};
   if (Array.isArray(raw.props)) {
     for (const item of raw.props) {
-      const mapped = mapDsProp(item);
+      const mapped = mapDsProp(item, (reason) =>
+        notes?.push(`${name}: ${reason}`),
+      );
       if (mapped) props[mapped.name] = mapped.def;
     }
   }
@@ -132,12 +183,19 @@ function ingestDsContract(doc, file, found) {
   found.set(name, { api, deprecated, native });
 }
 
+/** Prop kinds the adapter leaves behind on purpose — no note needed. */
+const BY_DESIGN_PROP_KINDS = new Set(['text', 'slot', 'image']);
+
 /**
  * @param {unknown} item
+ * @param {(reason: string) => void} [onSkip]
  * @returns {{ name: string, def: { enum?: string[], type?: 'boolean' | 'string' | 'number' } } | null}
  */
-function mapDsProp(item) {
-  if (!item || typeof item !== 'object' || Array.isArray(item)) return null;
+function mapDsProp(item, onSkip) {
+  if (!item || typeof item !== 'object' || Array.isArray(item)) {
+    onSkip?.('prop entry is not an object');
+    return null;
+  }
   const raw = /** @type {Record<string, unknown>} */ (item);
   const bindings =
     raw.bindings && typeof raw.bindings === 'object' && !Array.isArray(raw.bindings)
@@ -151,8 +209,14 @@ function mapDsProp(item) {
     (typeof code.prop === 'string' && code.prop) ||
     (typeof raw.name === 'string' && raw.name) ||
     '';
-  if (!jsxName || isPassthroughProp(jsxName)) return null;
-  if (raw.type === 'text') return null;
+  if (!jsxName) {
+    onSkip?.('prop without a name (expected name or bindings.code.prop)');
+    return null;
+  }
+  if (isPassthroughProp(jsxName)) return null;
+  if (typeof raw.type === 'string' && BY_DESIGN_PROP_KINDS.has(raw.type)) {
+    return null;
+  }
 
   let defInput = raw;
   if (raw.type && typeof raw.type === 'object' && !Array.isArray(raw.type)) {
@@ -163,7 +227,15 @@ function mapDsProp(item) {
   if (defInput.arrayOf !== undefined) return null;
 
   const def = mapJudgeProp(jsxName, defInput);
-  if (!def) return null;
+  if (!def) {
+    const kind = typeof defInput.type === 'string' ? defInput.type : undefined;
+    if (!kind || !BY_DESIGN_PROP_KINDS.has(kind)) {
+      onSkip?.(
+        `prop "${jsxName}" left behind (unsupported shape — expected enum/values or a boolean/string/number type)`,
+      );
+    }
+    return null;
+  }
   return { name: jsxName, def };
 }
 
