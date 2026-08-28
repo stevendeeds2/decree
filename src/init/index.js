@@ -281,8 +281,11 @@ export function preparePackage(packageRoot, opts = {}) {
  * }} [opts]
  */
 export function prepareFromExternal(kind, inputRoot, opts = {}) {
+  /** @type {string[]} */
+  const notes = [];
   const contract = buildContractFromExternal(kind, inputRoot, {
     name: opts.name,
+    notes,
   });
   if (opts.restyle) contract.restyle = true;
   const outPath = opts.outPath ?? join(inputRoot, 'decree.contract.json');
@@ -291,7 +294,7 @@ export function prepareFromExternal(kind, inputRoot, opts = {}) {
       ? 'decree prepare --from-specs'
       : 'decree prepare --from-ds-contracts';
 
-  return checkOrWriteExternal(contract, outPath, label, opts.check);
+  return { ...checkOrWriteExternal(contract, outPath, label, opts.check), notes };
 }
 
 /**
@@ -306,22 +309,29 @@ export function prepareFromExternal(kind, inputRoot, opts = {}) {
  * }} opts
  */
 export function prepareFromExternalPair(specsRoot, dsContractsRoot, opts) {
+  /** @type {string[]} */
+  const notes = [];
   const fromSpecs = buildContractFromExternal('specs', specsRoot, {
     name: opts.name,
+    notes,
   });
   const fromDs = buildContractFromExternal('ds-contracts', dsContractsRoot, {
     name: opts.name,
+    notes,
   });
   const contract = mergeExternalContracts(fromSpecs, fromDs, {
     name: opts.name,
   });
   if (opts.restyle) contract.restyle = true;
-  return checkOrWriteExternal(
-    contract,
-    opts.outPath,
-    'decree prepare --from-specs --from-ds-contracts',
-    opts.check,
-  );
+  return {
+    ...checkOrWriteExternal(
+      contract,
+      opts.outPath,
+      'decree prepare --from-specs --from-ds-contracts',
+      opts.check,
+    ),
+    notes,
+  };
 }
 
 /**

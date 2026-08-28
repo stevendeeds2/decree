@@ -37,6 +37,26 @@ When a team has a Specs catalog **and** DS contract files, pass both flags to co
 | Specs `deprecated` / DS `status: deprecated` | `deprecations.components` |
 | DS `semantics.element` | `nativeElementMap` when the tag is a host element |
 
+## Nothing is dropped silently
+
+Every compile prints what it could not read, on stderr:
+
+```
+decree prepare: left behind — Card: prop "elevation" left behind (unsupported shape — expected enum/values or a boolean/string/number type)
+decree prepare: left behind — 2 document file(s) ignored (not named *.contract.json): button.json, chip.json
+```
+
+If nothing matches at all, the error names the files it saw and what to rename:
+
+```
+No DS Contracts found in ./exports. Expected *.contract.json (or .contract.yaml) files
+with id/name and props. Saw 3 document file(s) that do not match the naming convention:
+button.json, chip.json, tag.json — rename to *.contract.json or point at the directory
+that holds the exports.
+```
+
+By-design leave-behinds (below) are not noted — only shapes the adapter wanted to read and couldn't.
+
 ## What is left behind
 
 Anatomy, default/variant styles, layout, Figma bindings, slot/image/`text` (children) props, `on*` handlers, `arrayOf` structured props, and any token reference that only lives inside a style tree.

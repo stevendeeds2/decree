@@ -665,3 +665,157 @@ invalidVariantCombinations:
     assert.match(result.stderr, /decree\.sources\.json/);
   });
 });
+
+describe('adapter compile notes', () => {
+  it('DS compile reports every leave-behind instead of dropping silently', () => {
+    const dir = tmpDir('decree-ds-notes-');
+    try {
+      // Right content, wrong filename — ignored, but named in the notes.
+      write(
+        dir,
+        'button.json',
+        JSON.stringify({
+          id: 'ds.button',
+          name: 'Button',
+          props: [{ name: 'variant', type: { enum: ['primary'] } }],
+        }),
+      );
+      write(
+        dir,
+        'card.contract.json',
+        JSON.stringify({
+          id: 'ds.card',
+          name: 'Card',
+          props: [
+            { name: 'elevation', type: { options: ['low', 'high'] } },
+            { type: { enum: ['x'] } },
+            { name: 'size', type: { enum: ['sm', 'md'] } },
+            { name: 'icon', type: 'slot' },
+          ],
+        }),
+      );
+      write(
+        dir,
+        'everything.contract.json',
+        JSON.stringify([{ name: 'Chip' }, { name: 'Tag' }]),
+      );
+      const result = prepareFromExternal('ds-contracts', dir, {
+        outPath: join(dir, 'decree.contract.json'),
+      });
+      assert.equal(result.ok, true);
+      validateContract(result.contract);
+      // Compiles what it can: Card with the readable prop.
+      assert.deepEqual(result.contract.components, ['Card']);
+      assert.deepEqual(result.contract.componentApis.Card.props.size.enum, [
+        'sm',
+        'md',
+      ]);
+      const notes = result.notes.join('\n');
+      assert.match(notes, /Card: prop "elevation" left behind \(unsupported shape/);
+      assert.match(notes, /Card: prop without a name/);
+      assert.match(notes, /everything\.contract\.json: not a single contract object/);
+      assert.match(notes, /1 document file\(s\) ignored \(not named \*\.contract\.json\): button\.json/);
+      // Slot props are by-design leave-behinds — never noted.
+      assert.doesNotMatch(notes, /icon/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('DS zero-match error names the files that missed the convention', () => {
+    const dir = tmpDir('decree-ds-miss-');
+    try {
+      write(
+        dir,
+        'button.json',
+        JSON.stringify({ name: 'Button', props: [] }),
+      );
+      assert.throws(
+        () => buildContractFromDsContracts(dir),
+        /do not match the naming convention: button\.json — rename to \*\.contract\.json/,
+      );
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('Specs compile notes unsupported props and dropped combos, not slots', () => {
+    const dir = tmpDir('decree-specs-notes-');
+    try {
+      write(
+        dir,
+        'Button.yaml',
+        `title: Button
+props:
+  variant:
+    type: string
+    enum: [primary, secondary]
+  emphasis: "low | high"
+  icon:
+    type: slot
+invalidVariantCombinations:
+  - tone: dark
+`,
+      );
+      const result = prepareFromExternal('specs', dir, {
+        outPath: join(dir, 'decree.contract.json'),
+      });
+      assert.equal(result.ok, true);
+      const notes = result.notes.join('\n');
+      assert.match(notes, /Button: prop "emphasis" left behind \(unsupported shape/);
+      assert.match(notes, /Button: invalidVariantCombinations entry references only unmapped props/);
+      assert.doesNotMatch(notes, /icon/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('CLI prints compile notes on stderr and still exits 0', () => {
+    const dir = tmpDir('decree-cli-notes-');
+    try {
+      write(
+        dir,
+        'card.contract.json',
+        JSON.stringify({
+          id: 'ds.card',
+          name: 'Card',
+          props: [
+            { name: 'elevation', type: { options: ['low', 'high'] } },
+            { name: 'size', type: { enum: ['sm', 'md'] } },
+          ],
+        }),
+      );
+      const result = spawnSync(
+        process.execPath,
+        [decreeBin, 'prepare', '--from-ds-contracts', dir],
+        { encoding: 'utf8' },
+      );
+      assert.equal(result.status, 0, result.stderr);
+      assert.match(
+        result.stderr,
+        /decree prepare: left behind — Card: prop "elevation" left behind/,
+      );
+      assert.match(result.stdout, /1 component APIs/);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('a clean compile produces zero notes', () => {
+    const specsDir = join(root, 'demos/together/specs');
+    const dsDir = join(root, 'demos/together/ds-contracts');
+    const outDir = tmpDir('decree-clean-notes-');
+    try {
+      const specs = prepareFromExternal('specs', specsDir, {
+        outPath: join(outDir, 'specs.contract.json'),
+      });
+      const ds = prepareFromExternal('ds-contracts', dsDir, {
+        outPath: join(outDir, 'ds.contract.json'),
+      });
+      assert.deepEqual(specs.notes, []);
+      assert.deepEqual(ds.notes, []);
+    } finally {
+      rmSync(outDir, { recursive: true, force: true });
+    }
+  });
+});
