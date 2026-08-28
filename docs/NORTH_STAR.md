@@ -8,7 +8,7 @@ Decree is the enforcement / refuse layer for design systems: contracts, CI verif
 
 If it's not in the system, it doesn't ship.
 
-Decree is complementary to Nathan Curtis (Specs 2) and TJ Pitre (Context-Based Design Systems, Figma Console MCP, Southleft DS Contracts). They author and project intent. Decree judges consumer apps and agents.
+Decree is complementary to component spec and contract tooling — Specs 2, DS Contracts, Figma Console MCP, and work like it. Those tools author and project intent. Decree judges consumer apps and agents. No affiliation with their creators; their work is the reason the authoring side is in good hands.
 
 The judge slice is not spec language. Do not grow an anatomy/layout schema, a Figma extract, or a code generator.
 

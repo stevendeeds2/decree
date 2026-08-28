@@ -62,25 +62,25 @@
       </p>
 
       <article class="card">
-        <h3>Nathan — Specs 2</h3>
+        <h3>Specs 2 — the spec</h3>
         <p>
           Defines the Harbor Button as a structured spec:
           <code>primary | secondary</code>, three sizes,
           <code>secondary + lg</code> is illegal, Ghost is retired. Anatomy
           and default styles stay in the spec — Decree never reads them.
         </p>
-        <p class="meta">demos/together/nathan/specs.yaml</p>
+        <p class="meta">demos/together/specs/specs.yaml</p>
       </article>
 
       <article class="card">
-        <h3>TJ — DS Contracts</h3>
+        <h3>DS Contracts — the machine-readable contract</h3>
         <p>
           Defines the same Button as a machine-readable contract: the same
           props plus Figma and code bindings, and the fact that it renders a
           real <code>&lt;button&gt;</code>. Bindings stay in the contract —
           Decree never reads them.
         </p>
-        <p class="meta">demos/together/tj/contracts/button.contract.json</p>
+        <p class="meta">demos/together/ds-contracts/contracts/button.contract.json</p>
       </article>
 
       <article class="card">
@@ -91,7 +91,7 @@
           tokens, retirements — and fails CI when a change breaks them. It is
           not a spec tool, a Figma tool, or a code generator.
         </p>
-        <p class="meta">decree prepare --from-specs nathan --from-ds-contracts tj</p>
+        <p class="meta">decree prepare --from-specs specs --from-ds-contracts ds-contracts</p>
       </article>
 
       <h2>The situation</h2>
@@ -114,9 +114,9 @@
         </li>
         <li>
           The Specs source follows the published Specs 2 schema
-          (specsplugin.com/schema); the DS contract is modeled on TJ's public
-          work. Point the adapters at real exports and they compile the same
-          slice.
+          (specsplugin.com/schema); the DS contract is modeled on the public
+          DS Contracts shape. Both were written for this demo. Point the
+          adapters at real exports and they compile the same slice.
         </li>
       </ol>
 

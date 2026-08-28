@@ -24,7 +24,7 @@ const NATIVE_TAGS = new Set([
 ]);
 
 /**
- * Compile a Decree judge slice from Southleft DS Contracts.
+ * Compile a Decree judge slice from DS Contracts files.
  * Maps names, props/enums, tokens, deprecations. Leaves anatomy, layout, and styles behind.
  *
  * @param {string} inputRoot

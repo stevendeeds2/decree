@@ -8,7 +8,7 @@ If it’s not in the system, it doesn’t ship.
 
 A design system can be perfectly documented and still drift in the shipped app: an invented `variant`, an inline `style=`, a hardcoded hex, a retired component that came back. Documentation persuades; review catches some of it. AI agents made the volume problem worse — they write plausible UI fast, and they invent just as fast.
 
-The tools that *define* systems are getting very good. [Specs 2](https://www.specsplugin.com) (Nathan Curtis / EightShapes) writes down what a component **is** — anatomy, props, variants, illegal combinations — with schema precision. DS Contracts (TJ Pitre / Southleft) make components machine-readable, with bindings to Figma and code. What neither does is stand at the door.
+The tools that *define* systems are getting very good. [Specs 2](https://www.specsplugin.com) writes down what a component **is** — anatomy, props, variants, illegal combinations — with schema precision. DS Contracts make components machine-readable, with bindings to Figma and code. That work is excellent, and Decree is an independent companion to it — no affiliation, plenty of admiration. Definition is in great hands. Enforcement is the gap: someone still has to stand at the door.
 
 Decree is the door. It compiles those definitions into a **contract** — only the rules it can refuse — and then:
 
@@ -71,8 +71,8 @@ Who owns what in that story:
 
 | File | Owner | Role |
 |------|-------|------|
-| [`demos/together/nathan/specs.yaml`](./demos/together/nathan/specs.yaml) | Specs 2 | What Button *is*: props, sizes, one illegal combination, Ghost retired |
-| [`demos/together/tj/`](./demos/together/tj/) | DS Contracts | Same Button as a contract: Figma/code bindings, renders native `<button>` |
+| [`demos/together/specs/specs.yaml`](./demos/together/specs/specs.yaml) | Specs 2 format | What Button *is*: props, sizes, one illegal combination, Ghost retired |
+| [`demos/together/ds-contracts/`](./demos/together/ds-contracts/) | DS Contracts format | Same Button as a contract: Figma/code bindings, renders native `<button>` |
 | [`demos/together/out/harbor.contract.json`](./demos/together/out/harbor.contract.json) | Decree | Only the enforceable slice — names, props, values, combos, tokens |
 | [`demos/together/apps/clean/`](./demos/together/apps/clean/) | app team | Uses only what the contract permits — verify passes |
 | [`demos/together/apps/dirty/`](./demos/together/apps/dirty/) | nobody, hopefully | Six kinds of drift — verify refuses each by name |
@@ -81,8 +81,8 @@ Who owns what in that story:
 
 ```bash
 node bin/decree.js prepare \
-  --from-specs demos/together/nathan \
-  --from-ds-contracts demos/together/tj \
+  --from-specs demos/together/specs \
+  --from-ds-contracts demos/together/ds-contracts \
   --name @demo/harbor-ui --restyle \
   --out /tmp/harbor.contract.json
 ```
