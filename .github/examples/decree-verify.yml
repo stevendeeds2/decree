@@ -1,5 +1,5 @@
 # Example: copy to .github/workflows/decree-verify.yml and adjust.
-# Installs Decree from git (registry publish is still blocked — see docs/PUBLISH.md).
+# Installs Decree from git.
 # Lives under .github/examples/ so GitHub Actions does not run it in this repo.
 name: decree-verify
 

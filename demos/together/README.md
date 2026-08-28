@@ -4,7 +4,7 @@ Two authoring formats — a [Specs 2](https://www.specsplugin.com) catalog and a
 
 `specs/specs.yaml` follows the published Specs 2 schema ([specsplugin.com/schema](https://www.specsplugin.com/schema/)) — anatomy, prop kinds with `$extensions`, default/variants deltas, `invalidVariantCombinations`, metadata. `ds-contracts/` is modeled on the public DS Contracts shape. Both sources were written for this demo — the formats' creators aren't involved and haven't endorsed it. Point either adapter at a real export and it compiles the same slice.
 
-Not Corvy. Not stevendeeds.com. Not SD33DS.
+Harbor is fictional — invented for this demo.
 
 ```bash
 # from the Decree repo root
@@ -29,4 +29,4 @@ node bin/decree.js prepare \
 
 A real refused pull request: [stevendeeds2/decree#22](https://github.com/stevendeeds2/decree/pull/22) — a "limited-offer promo button" forged onto the clean checkout; CI failed with `DECREE_INVALID_PROP_VALUE`, `DECREE_RESTYLE_STYLE`, `DECREE_HARDCODED_HEX`, and the PR was closed without merging.
 
-Landing: [index.html](./index.html). Adapters: [docs/ADAPTERS.md](../../docs/ADAPTERS.md). Board: DECREE #25.
+Landing: [index.html](./index.html). Adapters: [docs/ADAPTERS.md](../../docs/ADAPTERS.md).
