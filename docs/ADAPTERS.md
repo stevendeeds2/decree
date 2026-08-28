@@ -7,12 +7,13 @@ Do not expect anatomy, layout, styles, or generated code. That stays in Specs / 
 ## Commands
 
 ```bash
-decree prepare --from-specs path/to/specs [--out decree.contract.json] [--check]
-decree prepare --from-ds-contracts path/to/ds-contracts [--out decree.contract.json] [--check]
-decree prepare --from-specs specs/ --from-ds-contracts contracts/ [--out decree.contract.json] [--check]
+decree prepare --from-specs path/to/specs [--out decree.contract.json] [--check] [--restyle]
+decree prepare --from-ds-contracts path/to/ds-contracts [--out decree.contract.json] [--check] [--restyle]
+decree prepare --from-specs specs/ --from-ds-contracts contracts/ [--out decree.contract.json] [--check] [--restyle]
 ```
 
 `--check` fails if the committed contract drifted from a fresh compile.
+`--restyle` sets team policy on the compiled contract: also refuse `style=` / `sx=` / paint-and-size CSS classes on allowlisted components.
 
 ## Using both sources at once
 
@@ -23,7 +24,7 @@ When a team has a Specs catalog **and** DS contract files, pass both flags to co
 | `components`, `tokens` | Union of both sources |
 | `componentApis`, `deprecations` | Specs is the record when both define the same component (it carries forbidden combinations) |
 | `nativeElementMap` | DS Contracts is the record (`semantics.element`) |
-| `restyle` | Never set by the merge — turn it on in the contract as team policy |
+| `restyle` | Never set by the merge — pass `--restyle` to turn it on as team policy |
 
 ## What is mapped
 

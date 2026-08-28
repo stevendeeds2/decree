@@ -602,10 +602,66 @@ invalidVariantCombinations:
         { encoding: 'utf8' },
       );
       assert.equal(check.status, 0, check.stderr + check.stdout);
+
+      // --restyle sets team policy on the merged contract; --check agrees.
+      const restyled = spawnSync(
+        process.execPath,
+        [
+          decreeBin,
+          'prepare',
+          '--from-specs',
+          specsDir,
+          '--from-ds-contracts',
+          dsDir,
+          '--name',
+          '@demo/pair-ui',
+          '--restyle',
+          '--out',
+          outPath,
+        ],
+        { encoding: 'utf8' },
+      );
+      assert.equal(restyled.status, 0, restyled.stderr);
+      const restyledContract = JSON.parse(readFileSync(outPath, 'utf8'));
+      validateContract(restyledContract);
+      assert.equal(restyledContract.restyle, true);
+      const restyledCheck = spawnSync(
+        process.execPath,
+        [
+          decreeBin,
+          'prepare',
+          '--from-specs',
+          specsDir,
+          '--from-ds-contracts',
+          dsDir,
+          '--name',
+          '@demo/pair-ui',
+          '--restyle',
+          '--out',
+          outPath,
+          '--check',
+        ],
+        { encoding: 'utf8' },
+      );
+      assert.equal(
+        restyledCheck.status,
+        0,
+        restyledCheck.stderr + restyledCheck.stdout,
+      );
     } finally {
       rmSync(specsDir, { recursive: true, force: true });
       rmSync(dsDir, { recursive: true, force: true });
       rmSync(outDir, { recursive: true, force: true });
     }
+  });
+
+  it('refuses --restyle on source-based prepare', () => {
+    const result = spawnSync(
+      process.execPath,
+      [decreeBin, 'prepare', '.', '--restyle'],
+      { encoding: 'utf8' },
+    );
+    assert.equal(result.status, 2);
+    assert.match(result.stderr, /decree\.sources\.json/);
   });
 });

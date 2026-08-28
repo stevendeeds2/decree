@@ -14,7 +14,8 @@ node demos/together/prove.mjs
 node bin/decree.js prepare \
   --from-specs demos/together/nathan \
   --from-ds-contracts demos/together/tj \
-  --name @demo/harbor-ui --out /tmp/harbor.contract.json
+  --name @demo/harbor-ui --restyle \
+  --out /tmp/harbor.contract.json
 ```
 
 | Role | Path | What they own |
@@ -26,6 +27,6 @@ node bin/decree.js prepare \
 - `apps/clean` — legal `variant` / `size`. Verify **passes**. Visual: [preview](./apps/clean/preview.html).
 - `apps/dirty` — nonexistent ghost variant, illegal combo, inline `style=`, retired Ghost, invented `MagicButton`, raw `<button>`. Verify **fails** with a named error code for each. Visual: [preview](./apps/dirty/preview.html).
 
-A real refused pull request: [stevendeeds2/decree#22](https://github.com/stevendeeds2/decree/pull/22) — a "limited-offer promo button" forged onto the clean checkout; CI fails with `DECREE_INVALID_PROP_VALUE`, `DECREE_RESTYLE_STYLE`, `DECREE_HARDCODED_HEX`.
+A real refused pull request: [stevendeeds2/decree#22](https://github.com/stevendeeds2/decree/pull/22) — a "limited-offer promo button" forged onto the clean checkout; CI failed with `DECREE_INVALID_PROP_VALUE`, `DECREE_RESTYLE_STYLE`, `DECREE_HARDCODED_HEX`, and the PR was closed without merging.
 
 Landing: [index.html](./index.html). Adapters: [docs/ADAPTERS.md](../../docs/ADAPTERS.md). Board: DECREE #25.

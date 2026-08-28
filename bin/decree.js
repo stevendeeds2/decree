@@ -32,9 +32,10 @@ Sources / prepare:
   decree sources [package-root] [--out decree.sources.json] [--force]
   decree init <path-or-package-name> [--out decree.contract.json] [--force] [--sources file]
   decree prepare [package-root] [--out decree.contract.json] [--check] [--sources file]
-  decree prepare --from-specs <dir> [--out decree.contract.json] [--check]
-  decree prepare --from-ds-contracts <dir> [--out decree.contract.json] [--check]
-  decree prepare --from-specs <dir> --from-ds-contracts <dir> [--out decree.contract.json] [--check]
+  decree prepare --from-specs <dir> [--out decree.contract.json] [--check] [--restyle]
+  decree prepare --from-ds-contracts <dir> [--out decree.contract.json] [--check] [--restyle]
+  decree prepare --from-specs <dir> --from-ds-contracts <dir> [--out decree.contract.json] [--check] [--restyle]
+    --restyle also refuses style= / sx= / paint-and-size CSS on allowlisted components
   decree use <path-or-package-name> [--out decree.contract.json] [--force]
 
 Verify (brownfield ratchet):
@@ -156,6 +157,7 @@ function parsePrepareArgs(args) {
   let fromDsContracts;
   /** @type {string | undefined} */
   let name;
+  let restyle = false;
   /** @type {string[]} */
   const positional = [];
   for (let i = 0; i < args.length; i++) {
@@ -205,13 +207,26 @@ function parsePrepareArgs(args) {
       name = a.slice('--name='.length);
       continue;
     }
+    if (a === '--restyle') {
+      restyle = true;
+      continue;
+    }
     if (a.startsWith('-')) {
       console.error(`decree prepare: unknown flag ${a}`);
       process.exit(2);
     }
     positional.push(a);
   }
-  return { positional, out, check, sources, fromSpecs, fromDsContracts, name };
+  return {
+    positional,
+    out,
+    check,
+    sources,
+    fromSpecs,
+    fromDsContracts,
+    name,
+    restyle,
+  };
 }
 
 /**
@@ -340,8 +355,22 @@ if (cmd === 'init') {
 
 if (cmd === 'prepare') {
   const parsed = parsePrepareArgs(rest);
-  const { positional, out, check, sources, fromSpecs, fromDsContracts, name } =
-    parsed;
+  const {
+    positional,
+    out,
+    check,
+    sources,
+    fromSpecs,
+    fromDsContracts,
+    name,
+    restyle,
+  } = parsed;
+  if (restyle && fromSpecs === undefined && fromDsContracts === undefined) {
+    console.error(
+      'decree prepare: --restyle applies to --from-specs / --from-ds-contracts; for source-based prepare set "restyle" in decree.sources.json',
+    );
+    process.exit(2);
+  }
   if (fromSpecs !== undefined && fromDsContracts !== undefined) {
     if (!fromSpecs || !fromDsContracts) {
       console.error(
@@ -357,6 +386,7 @@ if (cmd === 'prepare') {
           outPath: resolve(out ?? 'decree.contract.json'),
           check,
           name,
+          restyle,
         },
       );
       if (check) {
@@ -390,6 +420,7 @@ if (cmd === 'prepare') {
         outPath: out ? resolve(out) : undefined,
         check,
         name,
+        restyle,
       });
       if (check) {
         console.log(result.message);
