@@ -36,11 +36,12 @@ Brownfield: [ADOPTION.md](./ADOPTION.md) (`--baseline` / `--max-new`).
 ## 4. Try a demo
 
 ```bash
-open demos/index.html
+npm run demo:together   # Specs 2 + DS Contracts + Decree, end to end
+open demos/index.html   # shadcn / Material UI / Ant Design case studies
 ```
 
-Pick shadcn, Material UI, or Ant Design. Each landing page explains how to start
-its apps and run Decree (pass on the system app, fail on the AI twin).
+Each demo landing page explains how to start its apps and run Decree
+(pass on the system app, fail on the AI twin).
 
 ## 5. MCP (optional)
 

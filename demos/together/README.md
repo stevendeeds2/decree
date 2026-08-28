@@ -14,7 +14,8 @@ node demos/together/prove.mjs
 node bin/decree.js prepare \
   --from-specs demos/together/nathan \
   --from-ds-contracts demos/together/tj \
-  --name @demo/harbor-ui --out /tmp/harbor.contract.json
+  --name @demo/harbor-ui --restyle \
+  --out /tmp/harbor.contract.json
 ```
 
 | Role | Path | What they own |
