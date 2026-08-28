@@ -277,12 +277,14 @@ export function preparePackage(packageRoot, opts = {}) {
  *   outPath?: string,
  *   check?: boolean,
  *   name?: string,
+ *   restyle?: boolean,
  * }} [opts]
  */
 export function prepareFromExternal(kind, inputRoot, opts = {}) {
   const contract = buildContractFromExternal(kind, inputRoot, {
     name: opts.name,
   });
+  if (opts.restyle) contract.restyle = true;
   const outPath = opts.outPath ?? join(inputRoot, 'decree.contract.json');
   const label =
     kind === 'specs'
@@ -300,6 +302,7 @@ export function prepareFromExternal(kind, inputRoot, opts = {}) {
  *   outPath: string,
  *   check?: boolean,
  *   name?: string,
+ *   restyle?: boolean,
  * }} opts
  */
 export function prepareFromExternalPair(specsRoot, dsContractsRoot, opts) {
@@ -312,6 +315,7 @@ export function prepareFromExternalPair(specsRoot, dsContractsRoot, opts) {
   const contract = mergeExternalContracts(fromSpecs, fromDs, {
     name: opts.name,
   });
+  if (opts.restyle) contract.restyle = true;
   return checkOrWriteExternal(
     contract,
     opts.outPath,
@@ -326,8 +330,8 @@ export function prepareFromExternalPair(specsRoot, dsContractsRoot, opts) {
  * Deterministic rules: components and tokens are unioned. When both sources
  * define the same component, Specs is the record for its API and deprecation
  * (it carries forbidden combinations); DS Contracts is the record for native
- * element semantics. Restyle is never added here — that is team policy set
- * on the merged contract.
+ * element semantics. Restyle is never added here — that is team policy,
+ * set with `decree prepare --restyle` (or opts.restyle upstream).
  * @param {DecreeContract} fromSpecs
  * @param {DecreeContract} fromDs
  * @param {{ name?: string }} [opts]

@@ -103,8 +103,8 @@ if (agent.ok || !agent.findings.some((f) => f.code === CODES.INVALID_PROP_VALUE)
   fail('MCP validate_snippet must refuse variant="ghost"');
 }
 
-// One product command replaces the hand merge:
-//   decree prepare --from-specs nathan --from-ds-contracts tj --out ...
+// One product command replaces the hand merge, restyle policy included:
+//   decree prepare --from-specs nathan --from-ds-contracts tj --restyle --out ...
 const cliOut = join(outDir, 'cli-together.contract.json');
 const cli = spawnSync(
   process.execPath,
@@ -117,6 +117,7 @@ const cli = spawnSync(
     join(root, 'tj'),
     '--name',
     '@demo/harbor-ui',
+    '--restyle',
     '--out',
     cliOut,
   ],
@@ -124,8 +125,8 @@ const cli = spawnSync(
 );
 if (cli.status !== 0) fail(`combined CLI prepare failed: ${cli.stderr}`);
 const cliContract = JSON.parse(readFileSync(cliOut, 'utf8'));
-if (!contractsEqual(cliContract, merged)) {
-  fail('combined CLI contract must equal the product merge');
+if (!contractsEqual(cliContract, contract)) {
+  fail('combined CLI contract must equal the checked-in Harbor contract');
 }
 
 console.log('together: PASS');
