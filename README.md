@@ -17,7 +17,23 @@ Decree is the door. It compiles those definitions into a **contract** — only t
 
 Decree doesn’t generate code, doesn’t restyle, doesn’t hold style opinions. It refuses. That’s the whole product, and it’s why it composes with Specs 2 and DS Contracts instead of competing with them: they stay the source of truth; Decree makes the truth binding.
 
-North Star — what Decree will and will not become: [docs/NORTH_STAR.md](./docs/NORTH_STAR.md).
+## How it works
+
+**One contract, two doors.** The design system compiles `decree.contract.json` from its existing truth and ships it in the package. Apps copy it in with `decree use`. From there, the same contract is enforced at both places UI gets written:
+
+- **The merge door** — `decree verify` in CI. Any finding is exit 1 with a stable `DECREE_*` code. Humans get refused at review.
+- **The generation door** — `decree mcp`. Agents get the allowlist as MCP tools, write only from what’s permitted, and validate their snippet with the same scanners CI runs. Forgery stops at generation, not just merge.
+
+**You choose how deep the contract goes.** Names first. Then, if you ask, how each name may be used. Then, if you ask, whether it may be repainted:
+
+| Layer | Contract field | On | Refuses |
+|-------|----------------|----|---------|
+| Names + tokens | `components`, `tokens` | always | Unknown components, hardcoded hex/rgb, invented token names |
+| Component APIs | `componentApis` | opt-in | Unknown props, illegal values, forbidden combinations |
+| Restyle | `restyle` | opt-in | `style=` / `sx=` / paint-and-size classes on system components |
+| Native elements | `nativeElementMap` | opt-in | Raw `<button>` where the system has `Button` |
+
+Depth is optional. Failure isn’t. There is no warn mode — a layer that’s on refuses, and a layer that’s off isn’t being asked. You don’t get a softer Decree; you get a thinner or thicker contract.
 
 ## The first ten minutes
 
@@ -140,6 +156,38 @@ Every finding has a stable code — greppable, baselineable, never renamed witho
 | `DECREE_HARDCODED_HEX` / `DECREE_HARDCODED_COLOR` / `DECREE_ARBITRARY_VALUE` | Colors and values outside the token set |
 | `DECREE_UNKNOWN_TOKEN` | Token names the system never published |
 
+## FAQ
+
+**Isn’t this just a linter?**
+A linter yells after someone wrote the wrong Button — and yells softly. Decree refuses: verify exits nonzero with a stable code per finding, and the same contract is what agents see over MCP, so off-contract UI never gets suggested in the first place. A linter acts at review. Decree acts at generation *and* merge.
+
+**Our product has components the system doesn’t cover. Do we get exceptions?**
+There is no exception contract — that would undo the product. Product-local components are handled by scan settings (`scan.profile: "app"`, `localComponentPrefixes`), so your own wrappers are recognized rather than treated as forgeries. Existing debt is handled by the baseline. Neither is a side door for inventing new UI outside the system.
+
+**We have 400 violations today. We can’t turn this on.**
+You don’t have to go green on day one. `decree verify . --write-baseline decree.baseline.json` snapshots today’s findings; from then on CI fails only on *new* ones. Debt can stay; debt cannot grow. Fix a batch, rewrite the baseline, repeat, then go absolute. It’s an on-ramp, not a waiver.
+
+**Why didn’t Decree catch a weird prop, or an `sx` restyle?**
+That layer isn’t on. No `componentApis` means props aren’t judged; `restyle` off means paint isn’t judged. That’s not a silent pass — that question isn’t being asked yet. Turn a layer on when you mean it; once on, it refuses. There is no warn mode.
+
+**Can we still write plain HTML?**
+Yes. `nativeElementMap` is not a ban on HTML — it’s a replacement map. Map `button` → `Button` and a raw `<button>` fails as a forgery of the system Button. Tags not in the map are never native-element findings; `<div>` and `<span>` are fine as HTML.
+
+**Then why did my raw `<button style={{background:'#3b82f6'}}>` fail with restyle off?**
+The hex. Color checks are the token layer, always on — `DECREE_HARDCODED_HEX`. Invented paint fails even on a raw tag.
+
+**What happens when we deprecate a component?**
+It stays on the allowlist — it’s still in the system — but any use fails with `DECREE_DEPRECATED_COMPONENT` and the replacement in the message. Existing use can sit on a baseline; new use blocks. Removing the name entirely is a different story: then it’s an unknown component.
+
+**Does Decree replace our spec, read Figma, or generate the Button?**
+No, no, and no. Specs 2, DS Contracts, and Figma author the system. Decree compiles only the slice it can refuse and judges apps and agents against it. They stay the authors; Decree stays the judge.
+
+**Who owns the contract?**
+The design system team. They compile it from truth they already maintain (`decree prepare`) and ship `decree.contract.json` in the package like any other artifact. Product teams consume it (`decree use`), run verify in CI, and wire MCP. They don’t author a second system — they get judged against the one that shipped.
+
+**Does it check CSS?**
+As the token layer: hardcoded hex, `rgb()`/`hsl()`, arbitrary values like `[32px]`, and `var(--names)` the system never published — in `.css` and in JS/TSX. It’s a token check that happens to run on CSS files, not a style-matching engine.
+
 ## Demos
 
 Same product under established systems — start at [`demos/index.html`](./demos/index.html).
@@ -162,6 +210,6 @@ Plus a brownfield pilot on a real app: [demos/PILOT-taxonomy.md](./demos/PILOT-t
 | `demos/` | Runnable case studies (not in the npm tarball) |
 | `tests/` | Unit tests |
 
-## Package name
+---
 
-npm unscoped `decree` is taken. This project ships as **`@stevendeeds/decree`**. Registry publish is blocked until a `stevendeeds` org owns the scope — [docs/PUBLISH.md](./docs/PUBLISH.md); git install is the supported channel.
+Ships as **`@stevendeeds/decree`** (unscoped `decree` is taken on npm) · `npm install -D github:stevendeeds2/decree` · MIT
