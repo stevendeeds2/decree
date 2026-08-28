@@ -84,7 +84,7 @@ node bin/decree.js verify demos/together/apps/clean
 git checkout -- demos/together/apps/clean/App.tsx
 ```
 
-That refusal is the product. The same command in CI is the whole enforcement story — a real pull request refused this way: [#22](https://github.com/stevendeeds2/decree/pull/22).
+That refusal is the product. The same command in CI is the whole enforcement story — a real pull request refused this way and closed without merging: [#22](https://github.com/stevendeeds2/decree/pull/22).
 
 **5. Let an agent ask first**
 
