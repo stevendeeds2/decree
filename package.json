@@ -18,8 +18,7 @@
     "docs/INIT.md",
     "docs/SOURCES.md",
     "docs/ADAPTERS.md",
-    "docs/MCP.md",
-    "docs/PUBLISH.md"
+    "docs/MCP.md"
   ],
   "scripts": {
     "test": "node --test tests/*.test.js",

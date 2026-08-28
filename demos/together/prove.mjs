@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Together prototype: Nathan Specs 2 + TJ DS Contracts → Decree judge.
+ * Together prototype: Specs 2 + DS Contracts → Decree judge.
  * Run from repo root: node demos/together/prove.mjs
  */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -24,10 +24,10 @@ const repo = join(root, '../..');
 const outDir = join(root, 'out');
 mkdirSync(outDir, { recursive: true });
 
-const fromSpecs = buildContractFromSpecs(join(root, 'nathan'), {
+const fromSpecs = buildContractFromSpecs(join(root, 'specs'), {
   name: '@demo/harbor-ui',
 });
-const fromDs = buildContractFromDsContracts(join(root, 'tj'), {
+const fromDs = buildContractFromDsContracts(join(root, 'ds-contracts'), {
   name: '@demo/harbor-ui',
 });
 
@@ -104,7 +104,7 @@ if (agent.ok || !agent.findings.some((f) => f.code === CODES.INVALID_PROP_VALUE)
 }
 
 // One product command replaces the hand merge, restyle policy included:
-//   decree prepare --from-specs nathan --from-ds-contracts tj --restyle --out ...
+//   decree prepare --from-specs specs --from-ds-contracts ds-contracts --restyle --out ...
 const cliOut = join(outDir, 'cli-together.contract.json');
 const cli = spawnSync(
   process.execPath,
@@ -112,9 +112,9 @@ const cli = spawnSync(
     join(repo, 'bin/decree.js'),
     'prepare',
     '--from-specs',
-    join(root, 'nathan'),
+    join(root, 'specs'),
     '--from-ds-contracts',
-    join(root, 'tj'),
+    join(root, 'ds-contracts'),
     '--name',
     '@demo/harbor-ui',
     '--restyle',

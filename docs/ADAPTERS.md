@@ -75,6 +75,4 @@ decree verify .
 decree mcp decree.contract.json
 ```
 
-See [NORTH_STAR.md](./NORTH_STAR.md) and [PLAN.md](./PLAN.md). Board: DECREE #23.
-
 A runnable situation (Harbor checkout) lives in [`demos/together/`](../demos/together/): Specs 2 and DS Contracts author the Button; Decree judges a clean app and a dirty one. `node demos/together/prove.mjs`.

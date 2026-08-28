@@ -20,7 +20,7 @@ node bin/decree.js use <path-or-package-name> [--out decree.contract.json] [--fo
 |-------|----------|
 | `sources` | Scaffold `decree.sources.json` with every option key (empty values) |
 | Directory with `package.json` | Used as package root |
-| npm name (e.g. `@stevendeeds/sd33ds`) | Resolved from `node_modules` walking up from cwd |
+| npm name (e.g. `@acme/design-system`) | Resolved from `node_modules` walking up from cwd |
 | `--out` | Output path (default `./decree.contract.json` or `./decree.sources.json`) |
 | `--force` | Overwrite existing contract / sources |
 | `--sources` | Path to `decree.sources.json` (default: `<pkg>/decree.sources.json`) |

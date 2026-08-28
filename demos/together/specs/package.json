@@ -1,0 +1,6 @@
+{
+  "name": "@demo/harbor-specs",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Harbor Button authored as a Specs 2 catalog (demo fixture)"
+}

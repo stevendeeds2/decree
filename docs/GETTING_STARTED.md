@@ -9,7 +9,7 @@ npm install
 node bin/decree.js --help
 ```
 
-Install from git today: [INSTALL.md](./INSTALL.md). Registry publish notes: [PUBLISH.md](./PUBLISH.md).
+Install from git today: [INSTALL.md](./INSTALL.md).
 
 ## 2. Contract from your design system
 
