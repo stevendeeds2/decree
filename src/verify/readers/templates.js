@@ -68,6 +68,12 @@ function boundAttr(name, code) {
 
 // --- Vue ---------------------------------------------------------------
 
+/** Components Vue itself provides, never design-system stand-ins. */
+const VUE_BUILTINS = new Set([
+  'Transition', 'TransitionGroup', 'KeepAlive', 'Teleport', 'Suspense', 'Component',
+  'transition', 'transition-group', 'keep-alive', 'teleport', 'suspense', 'component',
+]);
+
 /** @type {import('./index.js').MarkupReader} */
 export function readVue(source, file) {
   let descriptor;
@@ -84,7 +90,7 @@ export function readVue(source, file) {
   /** @param {any} node */
   function walk(node) {
     // NodeTypes.ELEMENT === 1; ElementTypes.TEMPLATE === 3 (slots, v-if wrappers)
-    if (node.type === 1 && node.tagType !== 3) {
+    if (node.type === 1 && node.tagType !== 3 && !VUE_BUILTINS.has(node.tag)) {
       const attrs = [];
       let spread = false;
       for (const prop of node.props || []) {

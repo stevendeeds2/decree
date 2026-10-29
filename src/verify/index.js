@@ -230,11 +230,13 @@ export function verifyPath(targetPath, options = {}) {
   let newFindings = findings;
   /** @type {import('./scan.js').Finding[]} */
   let baselinedFindings = [];
+  let resolvedCount = 0;
 
   if (useBaseline) {
     try {
       const baseline = loadBaseline(resolve(options.baselinePath));
       const diff = diffAgainstBaseline(findings, baseline);
+      resolvedCount = Math.max(0, baseline.findings.length - diff.baselinedFindings.length);
       newFindings = /** @type {import('./scan.js').Finding[]} */ (
         diff.newFindings
       );
@@ -287,6 +289,7 @@ export function verifyPath(targetPath, options = {}) {
         baselinedFindings,
         newCount: newFindings.length,
         baselinedCount: baselinedFindings.length,
+        resolvedCount,
       };
     }
     maxNew = options.maxNew;
@@ -307,6 +310,7 @@ export function verifyPath(targetPath, options = {}) {
     baselinedFindings,
     newCount: newFindings.length,
     baselinedCount: baselinedFindings.length,
+    resolvedCount,
   };
 }
 

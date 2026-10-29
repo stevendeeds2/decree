@@ -25,6 +25,25 @@ export const PASSTHROUGH_EXACT = Object.freeze(
 /**
  * @param {string} name
  */
+/**
+ * Standard HTML attributes a component usually forwards to its element.
+ * Listing some props in `componentApis` doesn't make these unknown; list one
+ * to restrict its values.
+ */
+const HTML_ATTRIBUTES = new Set([
+  'type', 'disabled', 'name', 'value', 'defaultValue', 'checked', 'defaultChecked',
+  'placeholder', 'title', 'role', 'tabIndex', 'tabindex', 'href', 'target', 'rel',
+  'htmlFor', 'for', 'form', 'autoFocus', 'autofocus', 'autoComplete', 'autocomplete',
+  'required', 'readOnly', 'readonly', 'hidden', 'lang', 'dir', 'slot', 'part',
+  'min', 'max', 'step', 'pattern', 'maxLength', 'minLength', 'multiple', 'src', 'alt',
+  'width', 'height', 'download', 'accept',
+]);
+
+/** @param {string} name */
+export function isHtmlAttribute(name) {
+  return HTML_ATTRIBUTES.has(name);
+}
+
 export function isPassthroughProp(name) {
   if (PASSTHROUGH_EXACT.has(name)) return true;
   if (name.startsWith('data-') || name.startsWith('aria-')) return true;

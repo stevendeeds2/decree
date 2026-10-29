@@ -1,52 +1,39 @@
 # Getting started
 
-Decree enforces a design-system **contract** against an app: verify in CI, allowlist for agents.
+Decree checks apps and AI agents against a design system's published list of components, props, and tokens.
 
-## 1. Install
-
-```bash
-npm install
-node bin/decree.js --help
-```
-
-Install from git today: [INSTALL.md](./INSTALL.md).
-
-## 2. Contract from your design system
-
-Preferred (source-bound, no prune):
+## In an app
 
 ```bash
-node bin/decree.js sources path/to/your-ds-package
-# fill components.include + tokens in decree.sources.json
-node bin/decree.js prepare path/to/your-ds-package
-node bin/decree.js use path/to/your-ds-package --out ./decree.contract.json
+npm install -D @stevendeeds/decree
+npx decree setup
+npm run decree
 ```
 
-See [SOURCES.md](./SOURCES.md) and [INIT.md](./INIT.md). To compile a judge slice from Specs 2 or DS Contracts, see [ADAPTERS.md](./ADAPTERS.md).
+`decree setup` needs a design system in your dependencies that ships `decree.contract.json`. If yours doesn't yet, ask the design system team to follow the next section, or point setup at a path: `npx decree setup ../my-design-system`.
 
-## 3. Verify your app
+## In a design system package
 
 ```bash
-node bin/decree.js verify .
-# exit 0 = ok; non-zero = findings on stderr
+npm install -D @stevendeeds/decree
+npx decree sources     # writes decree.sources.json, pre-filled where it can tell
+npx decree prepare     # writes decree.contract.json
 ```
 
-Brownfield: [ADOPTION.md](./ADOPTION.md) (`--baseline` / `--max-new`).
+Decree finds components in `components.include`: PascalCase files (`Button.jsx`, `Button.tsx`, `Button.vue`, `Button.svelte`), kebab-case files in a `components/` folder, and custom elements registered with `customElements.define` or `@customElement`. Tokens come from your DTCG `tokens.json`.
 
-## 4. Try a demo
+Then ship the contract: add `decree.contract.json` to `files` in `package.json`, and add `"decree": "./decree.contract.json"`. Details and every option: [SOURCES.md](./SOURCES.md).
+
+If you already describe components in Specs 2 or DS Contracts files, Decree can build the contract from those: [ADAPTERS.md](./ADAPTERS.md).
+
+## Apps that already have problems
+
+`decree setup` records today's problems in `decree.baseline.json`, so only new ones fail. More: [ADOPTION.md](./ADOPTION.md).
+
+## AI agents
 
 ```bash
-npm run demo:together   # Specs 2 + DS Contracts + Decree, end to end
-open demos/index.html   # shadcn / Material UI / Ant Design case studies
+npx decree mcp decree.contract.json
 ```
 
-Each demo landing page explains how to start its apps and run Decree
-(pass on the system app, fail on the AI twin).
-
-## 5. MCP (optional)
-
-```bash
-node bin/decree.js mcp demos/shadcn/packages/ui/decree.contract.json
-```
-
-Details: [MCP.md](./MCP.md).
+Prints the setup for an MCP server that tells agents what they may use and checks their code. More: [MCP.md](./MCP.md).

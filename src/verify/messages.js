@@ -22,7 +22,10 @@ export const message = Object.freeze({
   unknownToken: (name) =>
     `${name} isn't a design-system token. Use one the design system publishes instead.`,
 
-  unknownProp: (component, prop) => `<${component}> has no ${prop} prop.`,
+  unknownProp: (component, prop, allowed = []) =>
+    allowed.length > 0
+      ? `<${component}> has no ${prop} prop. Its props are: ${allowed.join(', ')}.`
+      : `<${component}> has no ${prop} prop.`,
 
   invalidPropValue: (component, prop, value, allowed) =>
     `<${component}> doesn't accept ${prop}="${value}". Use one of: ${allowed.join(', ')}.`,

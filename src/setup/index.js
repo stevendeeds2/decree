@@ -156,6 +156,8 @@ export function setupApp(appRoot, opts = {}) {
 
   // Re-running setup must not quietly absorb new problems into an existing baseline.
   let findings = null;
+  /** @type {Record<string, number>} */
+  let byCode = {};
   const keptBaseline = existsSync(baselinePath);
   if (opts.baseline !== false && !keptBaseline) {
     const result = verifyPath(appRoot, { writeBaselinePath: baselinePath });
@@ -164,6 +166,7 @@ export function setupApp(appRoot, opts = {}) {
       throw new Error(`Couldn't write the baseline: ${reason}`);
     }
     findings = result.findings.length;
+    byCode = countByCode(result.findings);
   }
 
   let script = null;
@@ -188,10 +191,36 @@ export function setupApp(appRoot, opts = {}) {
     baselinePath: opts.baseline === false ? null : baselinePath,
     keptBaseline: opts.baseline !== false && keptBaseline,
     findings,
+    byCode,
     script,
     decreeInstalled: deps.includes('@stevendeeds/decree'),
   };
 }
+
+/** @param {{ code: string }[]} findings */
+function countByCode(findings) {
+  /** @type {Record<string, number>} */
+  const out = {};
+  for (const f of findings) out[f.code] = (out[f.code] ?? 0) + 1;
+  return out;
+}
+
+const CODE_LABELS = {
+  DECREE_UNKNOWN_COMPONENT: 'components that aren\u2019t in the design system',
+  DECREE_UNKNOWN_PROP: 'props a component doesn\u2019t have',
+  DECREE_INVALID_PROP_VALUE: 'prop values a component doesn\u2019t accept',
+  DECREE_INVALID_PROP_COMBO: 'prop combinations that aren\u2019t allowed',
+  DECREE_DEPRECATED_COMPONENT: 'retired components',
+  DECREE_DEPRECATED_TOKEN: 'retired tokens',
+  DECREE_NATIVE_ELEMENT: 'plain HTML where the design system has a component',
+  DECREE_RESTYLE_STYLE: 'inline styles on design-system components',
+  DECREE_RESTYLE_SX: 'sx= on design-system components',
+  DECREE_RESTYLE_ARBITRARY_CLASS: 'one-off classes on design-system components',
+  DECREE_HARDCODED_HEX: 'hardcoded colors',
+  DECREE_HARDCODED_COLOR: 'hardcoded colors (rgb, hsl)',
+  DECREE_ARBITRARY_VALUE: 'one-off sizes',
+  DECREE_UNKNOWN_TOKEN: 'CSS variables that aren\u2019t design-system tokens',
+};
 
 /**
  * Plain-language summary for the CLI.
@@ -216,6 +245,10 @@ export function describeSetup(r) {
         ? '  No problems found today. decree.baseline.json is empty.'
         : `  Recorded ${r.findings} problem(s) that exist today in decree.baseline.json. Only new ones will fail.`,
     );
+    for (const [code, count] of Object.entries(r.byCode ?? {}).sort((x, y) => y[1] - x[1])) {
+      lines.push(`    ${String(count).padStart(4)}  ${CODE_LABELS[code] ?? code}`);
+    }
+    if (r.findings > 0) lines.push('  See each one: decree verify .');
   }
   if (r.script) lines.push(`  Added the npm script: "decree": "${r.script}"`);
   lines.push('');

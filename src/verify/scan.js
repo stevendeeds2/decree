@@ -16,10 +16,12 @@ import {
 } from './deprecations.js';
 import {
   getComponentApi,
+  isHtmlAttribute,
   isPassthroughProp,
 } from './component-apis.js';
 import { restyleFindings } from './restyle.js';
 import { message } from './messages.js';
+import { namedColorsInLine } from './named-colors.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
@@ -88,9 +90,9 @@ export function scanSource(source, file, contract, options = {}) {
   const allow = new Set(contract.components || []);
   const elementPrefixes = ownedElementPrefixes(contract);
   const localComponents = options.localComponents || new Set();
-  const { aliases, hosts } = isScript || isTemplate
+  const { aliases, hosts, namespaces } = isScript || isTemplate
     ? collectImportBindings(source, contract.scan?.hostPackages ?? [])
-    : { aliases: new Map(), hosts: new Set() };
+    : { aliases: new Map(), hosts: new Set(), namespaces: new Set() };
 
   // --- Colors / arbitrary (string-aware-ish regex; URL fragment skips) ---
   for (let i = 0; i < lines.length; i++) {
@@ -120,6 +122,16 @@ export function scanSource(source, file, contract, options = {}) {
         code: CODES.HARDCODED_COLOR,
         message: message.hardcodedColor(match[0]),
         subject: match[0],
+        file,
+        line: lineNo,
+      });
+    }
+
+    for (const name of namedColorsInLine(line)) {
+      findings.push({
+        code: CODES.HARDCODED_COLOR,
+        message: message.hardcodedColor(name),
+        subject: name,
         file,
         line: lineNo,
       });
@@ -186,7 +198,7 @@ export function scanSource(source, file, contract, options = {}) {
           }
           continue;
         }
-        const name = tag.name;
+        const name = tag.member && namespaces.has(tag.name) ? tag.member : tag.name;
         if (REACT_RUNTIME_COMPONENTS.has(name)) continue;
         const allowlisted = resolveAllowlistedName(name, allow, aliases);
         if (allowlisted) {
@@ -391,19 +403,33 @@ function componentApiFindings(resolvedName, tag, contract, file) {
   const attrs = tag.attrs || [];
 
   for (const attr of attrs) {
-    if (isPassthroughProp(attr.name)) continue;
     if (!allowedProps.has(attr.name)) {
+      if (isPassthroughProp(attr.name) || isHtmlAttribute(attr.name)) continue;
       findings.push({
         code: CODES.UNKNOWN_PROP,
-        message: message.unknownProp(resolvedName, attr.name),
+        message: message.unknownProp(resolvedName, attr.name, [...allowedProps]),
         subject: `${resolvedName}.${attr.name}`,
         file,
         line: tag.line,
       });
       continue;
     }
-    if (attr.dynamic || attr.literalValue === undefined) continue;
     const def = api.props[attr.name];
+    // `variant={busy ? 'ghost' : 'primary'}`: every literal branch must be legal.
+    if (attr.dynamic && def.enum && Array.isArray(attr.candidates)) {
+      for (const value of attr.candidates) {
+        if (def.enum.includes(String(value))) continue;
+        findings.push({
+          code: CODES.INVALID_PROP_VALUE,
+          message: message.invalidPropValue(resolvedName, attr.name, String(value), def.enum),
+          subject: `${resolvedName}.${attr.name}=${String(value)}`,
+          file,
+          line: tag.line,
+        });
+      }
+      continue;
+    }
+    if (attr.dynamic || attr.literalValue === undefined) continue;
     if (def.enum && !def.enum.includes(String(attr.literalValue))) {
       findings.push({
         code: CODES.INVALID_PROP_VALUE,

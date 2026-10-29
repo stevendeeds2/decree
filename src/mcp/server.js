@@ -8,7 +8,12 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
+import { readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
+
+const DECREE_VERSION = JSON.parse(
+  readFileSync(new URL('../../package.json', import.meta.url), 'utf8'),
+).version;
 import { loadContract } from '../contract/index.js';
 import { collectLocalComponents } from '../verify/local-components.js';
 import { resolveExcludePrefixes } from '../verify/excludes.js';
@@ -50,7 +55,7 @@ export function createDecreeMcpServer(contractPath) {
     loadMcpContext(contractPath);
   const server = new McpServer({
     name: 'decree',
-    version: '0.0.0',
+    version: DECREE_VERSION,
   });
 
   server.tool(
@@ -132,11 +137,11 @@ export function createDecreeMcpServer(contractPath) {
     'validate_snippet',
     'Run Decree scanners on a UI code snippet (same rules as CI verify, including app-local components when configured).',
     {
-      source: z.string().describe('TSX/JSX/CSS source to validate'),
+      source: z.string().describe('UI code to check: JSX/TSX, htm or Lit templates, Vue, Svelte, Angular template, or CSS'),
       file: z
         .string()
         .optional()
-        .describe('Optional filename for findings (default snippet.tsx)'),
+        .describe('Optional filename; its extension picks the reader, e.g. Card.vue or card.component.html (default snippet.tsx)'),
     },
     async ({ source, file }) => {
       const result = validateSnippet(

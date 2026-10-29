@@ -33,7 +33,7 @@ npm run decree
 
 If your design system doesn't ship a contract yet, see [Set up your design system](#set-up-your-design-system).
 
-## The first ten minutes
+## Try the demo (from a clone of this repo)
 
 Every command below can be copied and pasted as written. You need Node 20 or later.
 
@@ -118,7 +118,7 @@ Names and tokens are always checked. Props, restyling, and native HTML are optio
 | Retired components and tokens, with the replacement named in the message | `DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN` | always |
 | Raw HTML where the system has a component, such as `<button>` when there's a `Button` | `DECREE_NATIVE_ELEMENT` | optional (`nativeElementMap`) |
 | Paint over system components: `style=`, `sx=`, arbitrary classes | `DECREE_RESTYLE_STYLE` / `DECREE_RESTYLE_SX` / `DECREE_RESTYLE_ARBITRARY_CLASS` | optional (`restyle`) |
-| Hardcoded colors and sizes | `DECREE_HARDCODED_HEX` / `DECREE_HARDCODED_COLOR` / `DECREE_ARBITRARY_VALUE` | always |
+| Hardcoded colors (hex, `rgb()`, `hsl()`, and named colors like `white`) and one-off Tailwind sizes like `w-[13px]` | `DECREE_HARDCODED_HEX` / `DECREE_HARDCODED_COLOR` / `DECREE_ARBITRARY_VALUE` | always |
 | CSS variables the system never published | `DECREE_UNKNOWN_TOKEN` | always |
 
 Codes don't change, so you can search for them, filter on them, and record them in a baseline.
@@ -146,14 +146,29 @@ Existing problems can stay for now, and new ones can't be added. Fix a batch, wr
 From your design system package's folder:
 
 ```bash
-npx decree sources    # writes decree.sources.json with every option, empty
-# fill in components.include (your components folder) and tokens (your tokens.json)
+npm install -D @stevendeeds/decree
+npx decree sources    # writes decree.sources.json, pre-filled with your components folder and tokens.json if it finds them
 npx decree prepare    # writes decree.contract.json from those sources
+```
+
+Decree finds PascalCase component files (`.jsx`, `.tsx`, `.vue`, `.svelte`), kebab-case files in a `components/` folder, and custom elements registered with `customElements.define` or `@customElement`.
+
+To also check props, list them under `componentApis` in `decree.sources.json`. Only the props you list are checked; standard HTML attributes like `type` and `disabled` pass through:
+
+```json
+"componentApis": {
+  "Button": {
+    "props": {
+      "variant": { "enum": ["primary", "secondary"] },
+      "size": { "enum": ["sm", "md", "lg"] }
+    }
+  }
+}
 ```
 
 Then add `decree.contract.json` to the `files` list in your `package.json` and add `"decree": "./decree.contract.json"`, so the contract ships with every release. Run `decree prepare` again whenever components or tokens change; `decree prepare --check` fails if you forgot. Details: [docs/SOURCES.md](./docs/SOURCES.md).
 
-Install: `npm install -D github:stevendeeds2/decree` ([docs/INSTALL.md](./docs/INSTALL.md)). CI template: [`.github/examples/decree-verify.yml`](./.github/examples/decree-verify.yml). Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md).
+Install: [docs/INSTALL.md](./docs/INSTALL.md). CI template: [`.github/examples/decree-verify.yml`](https://github.com/stevendeeds2/decree/blob/main/.github/examples/decree-verify.yml). Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md).
 
 ## FAQ
 

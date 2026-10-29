@@ -71,6 +71,23 @@ describe('baseline fingerprints', () => {
   });
 });
 
+describe('diffAgainstBaseline counts', () => {
+  it('fails a second identical problem in the same file', () => {
+    const ghost = (line) => ({
+      code: 'DECREE_INVALID_PROP_VALUE',
+      file: 'src/Dashboard.jsx',
+      line,
+      message: 'x',
+      subject: 'Button.variant=ghost',
+    });
+    const baseline = findingsToBaseline([ghost(4)]);
+    const { newFindings, baselinedFindings } = diffAgainstBaseline([ghost(9), ghost(4)], baseline);
+    assert.equal(baselinedFindings.length, 1);
+    assert.equal(newFindings.length, 1);
+    assert.equal(newFindings[0].line, 9);
+  });
+});
+
 describe('diffAgainstBaseline', () => {
   it('marks only unseen findings as new', () => {
     const f1 = {

@@ -96,7 +96,7 @@ export function collectImportAliases(source) {
 /**
  * @param {string} source
  * @param {string[]} [extraHosts] packages whose components the app may use freely (routers, drag-and-drop)
- * @returns {{ aliases: Map<string, string>, hosts: Set<string> }}
+ * @returns {{ aliases: Map<string, string>, hosts: Set<string>, namespaces: Set<string> }}
  */
 export function collectImportBindings(source, extraHosts = []) {
   /** @type {Map<string, string>} */
@@ -168,5 +168,15 @@ export function collectImportBindings(source, extraHosts = []) {
     recordNamed(clause, spec);
   }
 
-  return { aliases, hosts };
+  // import * as UI from '…' → <UI.Button> means Button
+  /** @type {Set<string>} */
+  const namespaces = new Set();
+  const namespaceRe = /^\s*import\s+\*\s+as\s+([A-Za-z_$][\w$]*)\s+from\s+['"]([^'"]+)['"]/gm;
+  for (const m of source.matchAll(namespaceRe)) {
+    if (!isPackageSpecifier(m[2])) continue;
+    if (isHostPackageSpecifier(m[2], extraHosts)) hosts.add(m[1]);
+    else namespaces.add(m[1]);
+  }
+
+  return { aliases, hosts, namespaces };
 }

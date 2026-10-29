@@ -9,7 +9,7 @@ Absolute `decree verify` is correct for greenfield and for the MUI flagship demo
 npx decree use @your/ds --force
 
 # Or bootstrap (DS authors): decree prepare with decree.sources.json — see SOURCES.md
-# Or compile a judge slice: decree prepare --from-specs / --from-ds-contracts — see ADAPTERS.md
+# Or build it from Specs 2 / DS Contracts files: decree prepare --from-specs / --from-ds-contracts (ADAPTERS.md)
 # Legacy: npx decree init ./node_modules/@your/ds --force   # noisy without sources
 
 # 2) Tune scan (typical consumer app)
@@ -32,7 +32,7 @@ npx decree verify . --baseline decree.baseline.json
 Example workflow: [`.github/examples/decree-verify.yml`](../.github/examples/decree-verify.yml). Install notes: [INSTALL.md](./INSTALL.md).
 
 - **Pass** if there are **0 new** findings (debt already in the baseline is ignored).
-- **Fail** if someone introduces a new forgery / hex / unknown component.
+- **Fail** if someone introduces a new invented component, hardcoded color, or unknown token.
 - Deprecated contract components and tokens also fail verify (`DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN`). Existing usage can be ratcheted with a baseline.
 - If the contract includes `componentApis`, unknown props and illegal static values also fail (`DECREE_UNKNOWN_PROP` / `DECREE_INVALID_PROP_VALUE` / `DECREE_INVALID_PROP_COMBO`). Ratchet leftover usage with a baseline.
 - If the contract includes `restyle`, `style=` / `sx=` / paint-or-size arbitrary class on system primitives also fail (`DECREE_RESTYLE_STYLE` / `DECREE_RESTYLE_SX` / `DECREE_RESTYLE_ARBITRARY_CLASS`). Layout utilities are allowed. Leave `restyle` off for MUI-style `sx` codebases until you are ready.
