@@ -2,9 +2,14 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { basename, isAbsolute, join, relative, resolve } from 'node:path';
 
 const COMPONENT_FILE =
-  /^[A-Z][A-Za-z0-9]*\.(jsx?|tsx?|mjs|cjs)$/;
+  /^[A-Z][A-Za-z0-9]*\.(jsx?|tsx?|mjs|cjs|vue|svelte)$/;
 /** Radix-style: button.tsx / icon-button.tsx that export PascalCase symbols. */
-const COMPONENTISH_FILE = /^[a-z][a-z0-9-]*\.(jsx?|tsx?|mjs|cjs)$/;
+const COMPONENTISH_FILE = /^[a-z][a-z0-9-]*\.(jsx?|tsx?|mjs|cjs|vue|svelte)$/;
+/** Single-file components are named by their file: `acme-card.vue` is `AcmeCard`. */
+const SFC_FILE = /\.(vue|svelte)$/;
+/** Lit and plain web components: `customElements.define('acme-button', …)` or `@customElement('acme-button')`. */
+const CUSTOM_ELEMENT_RE =
+  /(?:customElements\.define|@customElement)\(\s*['"`]([a-z][a-z0-9]*-[a-z0-9-]*)['"`]/g;
 
 const NATIVE_MAP = {
   Button: 'button',
@@ -74,15 +79,25 @@ export function extractComponents(packageRoot, options = {}) {
     for (const name of parseExportedComponents(source)) {
       if (!ignore.has(name)) names.add(name);
     }
+    for (const m of source.matchAll(CUSTOM_ELEMENT_RE)) {
+      if (!ignore.has(m[1])) names.add(m[1]);
+    }
     // Filename itself is a strong signal when exports are re-export only
     if (pascalFile) {
-      const fromFile = base.replace(/\.(jsx?|tsx?|mjs|cjs)$/, '');
+      const fromFile = base.replace(/\.(jsx?|tsx?|mjs|cjs|vue|svelte)$/, '');
+      if (!ignore.has(fromFile)) names.add(fromFile);
+    } else if (SFC_FILE.test(base)) {
+      const fromFile = base
+        .replace(SFC_FILE, '')
+        .split('-')
+        .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join('');
       if (!ignore.has(fromFile)) names.add(fromFile);
     }
   }
 
-  // Drop accidental lowercase helpers if somehow added
-  return [...names].filter((n) => /^[A-Z]/.test(n)).sort();
+  // Components are PascalCase; custom elements are lowercase with a hyphen.
+  return [...names].filter((n) => /^[A-Z]/.test(n) || /^[a-z][a-z0-9]*-/.test(n)).sort();
 }
 
 /**
@@ -157,10 +172,23 @@ export function inferNativeElementMap(components) {
   const map = {};
   const set = new Set(components);
   for (const [component, native] of Object.entries(NATIVE_MAP)) {
-    if (set.has(component)) map[native] = component;
+    if (set.has(component) && !map[native]) map[native] = component;
+  }
+  // Prefixed systems: AcmeButton or acme-button stands in for <button> when it's the only one.
+  for (const [component, native] of Object.entries(NATIVE_MAP)) {
+    if (map[native] || !PREFIXED_NATIVE.has(component)) continue;
+    const kebab = component.toLowerCase();
+    const matches = components.filter(
+      (name) =>
+        (name !== component && /^[A-Z]/.test(name) && name.endsWith(component)) ||
+        name.endsWith(`-${kebab}`),
+    );
+    if (matches.length === 1) map[native] = matches[0];
   }
   return map;
 }
+
+const PREFIXED_NATIVE = new Set(['Button', 'Input', 'Textarea', 'Select', 'Link']);
 
 /**
  * @param {string} source
