@@ -1,7 +1,7 @@
 {
   "name": "@stevendeeds/decree",
-  "version": "0.1.0",
-  "description": "Decree — design system enforcement layer",
+  "version": "0.2.0",
+  "description": "Check apps and AI agents against your design system: components, props, and tokens.",
   "type": "module",
   "bin": {
     "decree": "./bin/decree.js",
@@ -11,6 +11,7 @@
     "bin",
     "src",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE",
     "docs/INSTALL.md",
     "docs/ADOPTION.md",
@@ -42,8 +43,8 @@
   },
   "homepage": "https://github.com/stevendeeds2/decree#readme",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com",
-    "access": "restricted"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "license": "MIT",
   "dependencies": {
@@ -54,5 +55,18 @@
     "svelte": "^5.57.3",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
-  }
+  },
+  "keywords": [
+    "design-system",
+    "design-tokens",
+    "lint",
+    "ci",
+    "mcp",
+    "components",
+    "jsx",
+    "vue",
+    "svelte",
+    "angular",
+    "lit"
+  ]
 }

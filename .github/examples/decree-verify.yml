@@ -1,5 +1,5 @@
 # Example: copy to .github/workflows/decree-verify.yml and adjust.
-# Installs Decree from git.
+# Assumes `npx decree setup` has added @stevendeeds/decree and `npm run decree` to the app.
 # Lives under .github/examples/ so GitHub Actions does not run it in this repo.
 name: decree-verify
 
@@ -22,11 +22,10 @@ jobs:
           node-version: '20'
           cache: npm
 
-      - name: Install app deps
-        run: npm ci
+      - run: npm ci
 
-      - name: Install Decree from git
-        run: npm install -D github:stevendeeds2/decree
+      - name: Check against the design system (fails only on new problems)
+        run: npm run decree
 
-      - name: Decree verify (ratchet)
-        run: npx decree verify . --baseline decree.baseline.json
+      # Optional: fail when the design system ships a newer contract than this app has.
+      # - run: npx decree use @your/design-system --check
