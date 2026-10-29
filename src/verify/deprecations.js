@@ -188,9 +188,10 @@ export function formatDeprecatedTokenMessage(name, notice) {
  * @param {DeprecationNotice} notice
  */
 function formatDeprecatedMessage(kind, name, notice) {
-  let msg = `Deprecated ${kind} <${name}>`;
+  const show = (n) => (kind === 'component' ? `<${n}>` : n);
+  let msg = `${show(name)} is being retired.`;
   if (notice.replacement) {
-    msg += ` — use <${notice.replacement}> instead`;
+    msg += ` Use ${show(notice.replacement)} instead.`;
   }
   /** @type {string[]} */
   const extras = [];

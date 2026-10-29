@@ -3,7 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 
 /**
- * @typedef {{ code: string, file: string, line?: number, message: string }} FindingLike
+ * @typedef {{ code: string, file: string, line?: number, message: string, subject?: string }} FindingLike
  * @typedef {{
  *   version: 1,
  *   findings: Array<{
@@ -25,15 +25,16 @@ export function normalizeMessage(message) {
 }
 
 /**
- * Stable identity for a finding (line excluded).
+ * Stable identity for a finding (line excluded). Uses the finding's subject
+ * when it has one, so rewording a message doesn't invalidate a baseline.
  * @param {FindingLike} finding
  */
 export function fingerprintFinding(finding) {
-  const payload = [
-    finding.code ?? '',
-    finding.file ?? '',
-    normalizeMessage(finding.message ?? ''),
-  ].join('|');
+  const identity =
+    typeof finding.subject === 'string' && finding.subject
+      ? `subject:${finding.subject}`
+      : normalizeMessage(finding.message ?? '');
+  const payload = [finding.code ?? '', finding.file ?? '', identity].join('|');
   return createHash('sha256').update(payload).digest('hex');
 }
 

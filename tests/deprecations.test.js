@@ -178,7 +178,7 @@ describe('deprecation scan', () => {
     assert.equal(deprecated.length, 1, JSON.stringify(findings));
     assert.equal(
       deprecated[0].message,
-      'Deprecated component <LegacyButton> — use <Button> instead (Merged into Button; since 2026-08-01; remove after 2026-12-01)',
+      '<LegacyButton> is being retired. Use <Button> instead. (Merged into Button; since 2026-08-01; remove after 2026-12-01)',
     );
     assert.equal(
       findings.filter((f) => f.code === CODES.UNKNOWN_COMPONENT).length,
@@ -274,7 +274,7 @@ describe('deprecation scan', () => {
         (f) =>
           f.code === CODES.DEPRECATED_TOKEN &&
           f.message ===
-            'Deprecated token <--brand-blue> — use <--primary> instead (Renamed to semantic token; since 2026-08-01)',
+            '--brand-blue is being retired. Use --primary instead. (Renamed to semantic token; since 2026-08-01)',
       ),
       JSON.stringify(js),
     );
@@ -325,7 +325,7 @@ describe('deprecation MCP surface', () => {
     assert.equal(info.allowed, true);
     assert.equal(info.deprecated, true);
     assert.equal(info.deprecation?.replacement, 'Button');
-    assert.match(info.message, /deprecated/i);
+    assert.match(info.message, /retired/i);
     assert.match(info.message, /LegacyButton/);
   });
 

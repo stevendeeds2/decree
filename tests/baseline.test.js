@@ -18,6 +18,26 @@ describe('baseline fingerprints', () => {
     assert.equal(normalizeMessage('  Hardcoded   color  #fff  '), 'Hardcoded color #fff');
   });
 
+  it('matches on subject so rewording a message keeps the baseline', () => {
+    const before = fingerprintFinding({
+      code: 'DECREE_HARDCODED_HEX',
+      file: 'src/a.css',
+      message: 'Hardcoded color #fff — use a contract token instead',
+      subject: '#fff',
+    });
+    const after = fingerprintFinding({
+      code: 'DECREE_HARDCODED_HEX',
+      file: 'src/a.css',
+      message: '#fff is a hardcoded color. Use a color token from the design system instead.',
+      subject: '#fff',
+    });
+    assert.equal(before, after);
+    assert.notEqual(
+      before,
+      fingerprintFinding({ code: 'DECREE_HARDCODED_HEX', file: 'src/a.css', message: 'x', subject: '#000' }),
+    );
+  });
+
   it('same code+file+message → same fingerprint ignoring line', () => {
     const a = fingerprintFinding({
       code: 'DECREE_HARDCODED_HEX',

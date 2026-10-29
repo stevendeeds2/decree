@@ -1,6 +1,7 @@
 /** Restyle refusal on allowlisted primitives (style / sx / arbitrary class). */
 
 import { CODES } from './codes.js';
+import { message } from './messages.js';
 
 export const RESTYLE_KEYS = Object.freeze(['style', 'sx', 'arbitraryClass']);
 
@@ -120,7 +121,8 @@ export function restyleFindings(resolvedName, tag, contract, file) {
   if (policy.style && attrs.some((attr) => attr.name === 'style')) {
     findings.push({
       code: CODES.RESTYLE_STYLE,
-      message: `Restyle of <${resolvedName}> via style= — use a contract variant or token instead`,
+      message: message.restyle(resolvedName, 'Inline style='),
+      subject: `${resolvedName}:style`,
       file,
       line: tag.line,
     });
@@ -128,7 +130,8 @@ export function restyleFindings(resolvedName, tag, contract, file) {
   if (policy.sx && attrs.some((attr) => attr.name === 'sx')) {
     findings.push({
       code: CODES.RESTYLE_SX,
-      message: `Restyle of <${resolvedName}> via sx= — use a contract variant or token instead`,
+      message: message.restyle(resolvedName, 'sx='),
+      subject: `${resolvedName}:sx`,
       file,
       line: tag.line,
     });
@@ -140,7 +143,8 @@ export function restyleFindings(resolvedName, tag, contract, file) {
         if (!classHasArbitraryPaint(value)) continue;
         findings.push({
           code: CODES.RESTYLE_ARBITRARY_CLASS,
-          message: `Restyle of <${resolvedName}> via arbitrary class ${firstArbitrary(value)} — use a contract variant or token instead`,
+          message: message.restyle(resolvedName, `The class ${firstArbitrary(value)}`),
+          subject: `${resolvedName}:${firstArbitrary(value)}`,
           file,
           line: tag.line,
         });
