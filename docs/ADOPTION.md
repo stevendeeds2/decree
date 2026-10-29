@@ -43,6 +43,17 @@ Optional budget:
 npx decree verify . --baseline decree.baseline.json --max-new 5
 ```
 
+## Picking up a new design-system release
+
+```bash
+npx decree use @your/ds --check   # fails if this app's copy is behind the package
+npx decree use @your/ds           # updates the copy and keeps this app's scan settings
+```
+
+The app owns `scan` (`profile`, `localComponentPrefixes`, `hostPackages`, `excludePrefixes`). Everything else in the contract comes from the design system.
+
+Baselines match findings by code, file, and the thing found (a color, a name, a prop value), not by message wording. Baselines written before that change need one `--write-baseline` run after upgrading.
+
 ## Burning down debt
 
 1. Fix a batch of issues in the app.  
