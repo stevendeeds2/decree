@@ -12,7 +12,7 @@ import {
 } from './baseline.js';
 import { CODES } from './codes.js';
 
-const SOURCE_RE = /\.(tsx|jsx|ts|js|css)$/;
+const SOURCE_RE = /\.(tsx|jsx|ts|js|css|vue|svelte)$|\.component\.html$/;
 const TEST_FILE_RE = /\.(?:test|spec)\.(?:tsx|jsx|ts|js)$/;
 const SKIP_DIRS = new Set([
   'node_modules',

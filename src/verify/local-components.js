@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { basename, join, relative } from 'node:path';
 
-const SOURCE_RE = /\.(tsx|jsx|ts|js)$/;
+const SOURCE_RE = /\.(tsx|jsx|ts|js|vue|svelte)$/;
 const TEST_FILE_RE = /\.(?:test|spec)\.(?:tsx|jsx|ts|js)$/;
 const PASCAL = /^[A-Z][A-Za-z0-9]*$/;
 const SKIP_DIRS = new Set([
@@ -77,7 +77,7 @@ export function collectLocalComponents(
     const dir = join(root, prefix);
     const files = walk(dir, root, excludePrefixes);
     for (const file of files) {
-      const base = basename(file).replace(/\.(tsx|jsx|ts|js)$/, '');
+      const base = basename(file).replace(/\.(tsx|jsx|ts|js|vue|svelte)$/, '');
       if (PASCAL.test(base)) names.add(base);
       const source = readFileSync(file, 'utf8');
       addDeclarations(source, names);
