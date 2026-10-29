@@ -418,10 +418,22 @@ function checkOrWriteExternal(contract, outPath, label, check) {
 }
 
 /**
+ * The design system owns everything in the contract except `scan`, which says
+ * how to read this app (its own components, host packages, excludes).
+ * @param {Record<string, unknown>} contract
+ */
+function withoutAppSettings(contract) {
+  const { scan, ...rest } = contract;
+  return rest;
+}
+
+/**
  * Copy published contract from a DS package into the consumer cwd.
+ * Updating an existing copy keeps the app's own `scan` settings.
+ * `check` reports whether the app's copy matches the design system's.
  * @param {string} packageSpec path or package name
  * @param {string} fromCwd
- * @param {{ outPath?: string, force?: boolean }} [opts]
+ * @param {{ outPath?: string, force?: boolean, check?: boolean }} [opts]
  */
 export function usePackageContract(packageSpec, fromCwd, opts = {}) {
   const packageRoot = resolvePackageRoot(packageSpec, fromCwd);
@@ -439,6 +451,26 @@ export function usePackageContract(packageSpec, fromCwd, opts = {}) {
   const contract = JSON.parse(readFileSync(sourceContract, 'utf8'));
   validateContract(contract);
   const outPath = opts.outPath ?? join(fromCwd, 'decree.contract.json');
-  const result = writeContract(contract, outPath, { force: opts.force });
-  return { ...result, from: sourceContract, packageRoot };
+  const existing = existsSync(outPath) ? JSON.parse(readFileSync(outPath, 'utf8')) : null;
+
+  if (opts.check) {
+    const current =
+      existing !== null &&
+      JSON.stringify(canonicalizeContract(withoutAppSettings(existing))) ===
+        JSON.stringify(canonicalizeContract(withoutAppSettings(contract)));
+    return { written: false, current, path: outPath, from: sourceContract, packageRoot };
+  }
+
+  const appScan = existing?.scan;
+  const merged = appScan
+    ? { ...contract, scan: { ...(contract.scan ?? {}), ...appScan } }
+    : contract;
+  const result = writeContract(merged, outPath, { force: true });
+  return {
+    ...result,
+    updated: existing !== null,
+    keptAppSettings: Boolean(appScan),
+    from: sourceContract,
+    packageRoot,
+  };
 }

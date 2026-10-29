@@ -192,4 +192,39 @@ describe('source-bound contracts', () => {
       rmSync(app, { recursive: true, force: true });
     }
   });
+
+  it('updating keeps the app\u2019s scan settings and --check spots a stale copy', () => {
+    spawnSync(process.execPath, [decreeBin, 'prepare', sourcesPkg], { encoding: 'utf8' });
+    const app = mkdtempSync(join(tmpdir(), 'decree-use-update-'));
+    const out = join(app, 'decree.contract.json');
+    const run = (...args) =>
+      spawnSync(process.execPath, [decreeBin, 'use', sourcesPkg, '--out', out, ...args], {
+        encoding: 'utf8',
+        cwd: app,
+      });
+    try {
+      assert.equal(run().status, 0);
+      const appScan = { profile: 'app', localComponentPrefixes: ['src/ui'], hostPackages: ['wouter'] };
+      const mine = JSON.parse(readFileSync(out, 'utf8'));
+      writeFileSync(out, JSON.stringify({ ...mine, scan: appScan }, null, 2));
+
+      assert.equal(run('--check').status, 0, 'app scan settings alone are not drift');
+
+      const stale = JSON.parse(readFileSync(out, 'utf8'));
+      stale.components = stale.components.filter((c) => c !== 'Button');
+      writeFileSync(out, JSON.stringify(stale, null, 2));
+      const check = run('--check');
+      assert.equal(check.status, 1, check.stdout + check.stderr);
+      assert.match(check.stderr, /out of date/);
+
+      const update = run();
+      assert.equal(update.status, 0, update.stderr);
+      assert.match(update.stdout, /kept this app/);
+      const updated = JSON.parse(readFileSync(out, 'utf8'));
+      assert.ok(updated.components.includes('Button'));
+      assert.deepEqual(updated.scan, appScan);
+    } finally {
+      rmSync(app, { recursive: true, force: true });
+    }
+  });
 });

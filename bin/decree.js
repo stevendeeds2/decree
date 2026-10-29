@@ -36,7 +36,8 @@ Sources / prepare:
   decree prepare --from-ds-contracts <dir> [--out decree.contract.json] [--check] [--restyle]
   decree prepare --from-specs <dir> --from-ds-contracts <dir> [--out decree.contract.json] [--check] [--restyle]
     --restyle also refuses style= / sx= / paint-and-size CSS on allowlisted components
-  decree use <path-or-package-name> [--out decree.contract.json] [--force]
+  decree use <path-or-package-name> [--out decree.contract.json] [--check]
+    updates keep the app's own scan settings; --check fails if the app's copy is out of date
 
 Verify (brownfield ratchet):
   decree verify [path] [--baseline file] [--write-baseline file] [--max-new N]
@@ -235,12 +236,17 @@ function parsePrepareArgs(args) {
 function parseUseArgs(args) {
   let out = 'decree.contract.json';
   let force = false;
+  let check = false;
   /** @type {string[]} */
   const positional = [];
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
     if (a === '--force') {
       force = true;
+      continue;
+    }
+    if (a === '--check') {
+      check = true;
       continue;
     }
     if (a === '--out') {
@@ -257,7 +263,7 @@ function parseUseArgs(args) {
     }
     positional.push(a);
   }
-  return { positional, out, force };
+  return { positional, out, force, check };
 }
 
 /**
@@ -476,7 +482,7 @@ if (cmd === 'prepare') {
 }
 
 if (cmd === 'use') {
-  const { positional, out, force } = parseUseArgs(rest);
+  const { positional, out, force, check } = parseUseArgs(rest);
   const spec = positional[0];
   if (!spec) {
     console.error('decree use: missing <path-or-package-name>');
@@ -487,9 +493,21 @@ if (cmd === 'use') {
     const result = usePackageContract(spec, process.cwd(), {
       outPath: resolve(out),
       force,
+      check,
     });
+    if (check) {
+      if (result.current) {
+        console.log(`decree use --check: ${result.path} matches the design system's contract.`);
+        process.exit(0);
+      }
+      console.error(
+        `decree use --check: ${result.path} is out of date with ${result.from}. Run \`decree use ${spec}\` to update it.`,
+      );
+      process.exit(1);
+    }
+    const kept = result.keptAppSettings ? ' (kept this app\u2019s scan settings)' : '';
     console.log(
-      `decree use: copied ${result.from} → ${result.path}`,
+      `decree use: ${result.updated ? 'updated' : 'copied'} ${result.from} → ${result.path}${kept}`,
     );
     process.exit(0);
   } catch (err) {
