@@ -19,6 +19,20 @@ The contract belongs to the design system, except for its `scan` section, which 
 
 `decree mcp` starts an MCP server. MCP is the protocol tools like Cursor and Claude use to give an AI agent extra information. Through it, an agent can look up what is allowed before writing code, then check its own snippet the same way CI will.
 
+## Set up your app
+
+If your design system already ships a contract, setup is one command in your app's folder:
+
+```bash
+npm install -D @stevendeeds/decree
+npx decree setup
+npm run decree
+```
+
+`decree setup` finds the design system in your dependencies, copies its contract, notes where your app's own components live and which libraries it relies on (such as a router), records today's problems in `decree.baseline.json`, and adds `npm run decree`. Commit the two `decree.*.json` files. Running it again is safe: it keeps your settings and your baseline.
+
+If your design system doesn't ship a contract yet, see [Set up your design system](#set-up-your-design-system).
+
 ## The first ten minutes
 
 Every command below can be copied and pasted as written. You need Node 20 or later.
@@ -127,14 +141,17 @@ npx decree verify . --baseline decree.baseline.json   # fails only on new findin
 
 Existing problems can stay for now, and new ones can't be added. Fix a batch, write the baseline again, and repeat until it's empty. We ran this on a real open-source app: [demos/PILOT-taxonomy.md](./demos/PILOT-taxonomy.md).
 
-To set Decree up on your own design system package:
+## Set up your design system
+
+From your design system package's folder:
 
 ```bash
-npx decree sources ./packages/ui   # scaffold decree.sources.json — fill include + tokens
-npx decree prepare ./packages/ui   # writes decree.contract.json next to the package
-npx decree use ./packages/ui       # copies the contract into the consuming app
-npx decree verify .
+npx decree sources    # writes decree.sources.json with every option, empty
+# fill in components.include (your components folder) and tokens (your tokens.json)
+npx decree prepare    # writes decree.contract.json from those sources
 ```
+
+Then add `decree.contract.json` to the `files` list in your `package.json` and add `"decree": "./decree.contract.json"`, so the contract ships with every release. Run `decree prepare` again whenever components or tokens change; `decree prepare --check` fails if you forgot. Details: [docs/SOURCES.md](./docs/SOURCES.md).
 
 Install: `npm install -D github:stevendeeds2/decree` ([docs/INSTALL.md](./docs/INSTALL.md)). CI template: [`.github/examples/decree-verify.yml`](./.github/examples/decree-verify.yml). Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md).
 
