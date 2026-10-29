@@ -11,10 +11,31 @@ import parser from '@babel/parser';
  *   name: string,
  *   line: number,
  *   native: boolean,
+ *   kind?: 'component' | 'native' | 'element',
  *   attrs: JsxAttr[],
  *   spread: boolean,
  * }} JsxTag
+ *
+ * `kind` separates design-system components (`Button`), plain HTML (`button`),
+ * and custom elements (`sl-button`). Readers that omit it fall back to `native`.
  */
+
+/**
+ * @param {string} source
+ * @returns {any | null}
+ */
+export function parseScript(source) {
+  try {
+    return parser.parse(source, {
+      sourceType: 'module',
+      plugins: ['jsx', 'typescript'],
+      errorRecovery: true,
+      allowReturnOutsideFunction: true,
+    });
+  } catch {
+    return null;
+  }
+}
 
 /**
  * @param {string} source
@@ -22,18 +43,16 @@ import parser from '@babel/parser';
  * @returns {{ tags: JsxTag[], ok: boolean }}
  */
 export function extractJsxTags(source, file) {
-  let ast;
-  try {
-    ast = parser.parse(source, {
-      sourceType: 'module',
-      plugins: ['jsx', 'typescript'],
-      errorRecovery: true,
-      allowReturnOutsideFunction: true,
-    });
-  } catch {
-    return { tags: [], ok: false };
-  }
+  const ast = parseScript(source);
+  if (!ast) return { tags: [], ok: false };
+  return { tags: extractJsxTagsFromAst(ast), ok: true };
+}
 
+/**
+ * @param {any} ast
+ * @returns {JsxTag[]}
+ */
+export function extractJsxTagsFromAst(ast) {
   /** @type {JsxTag[]} */
   const tags = [];
 
@@ -52,6 +71,7 @@ export function extractJsxTags(source, file) {
           name: info.name,
           line,
           native: info.native,
+          kind: info.kind,
           attrs,
           spread,
         });
@@ -69,28 +89,28 @@ export function extractJsxTags(source, file) {
   }
 
   walk(ast);
-  return { tags, ok: true };
+  return tags;
 }
 
 /**
  * @param {any} nameNode
- * @returns {{ name: string, native: boolean } | null}
+ * @returns {{ name: string, native: boolean, kind: 'component' | 'native' | 'element' } | null}
  */
 function jsxNameInfo(nameNode) {
   if (!nameNode) return null;
   if (nameNode.type === 'JSXIdentifier') {
     const name = nameNode.name;
     if (!name) return null;
-    // lowercase → intrinsic / native candidate; PascalCase → component
-    const native = /^[a-z]/.test(name);
-    return { name, native };
+    if (/^[A-Z]/.test(name)) return { name, native: false, kind: 'component' };
+    if (name.includes('-')) return { name, native: false, kind: 'element' };
+    return { name, native: true, kind: 'native' };
   }
   if (nameNode.type === 'JSXMemberExpression') {
     // <Foo.Bar> → enforce root Foo (same as legacy scanner)
     let root = nameNode;
     while (root && root.type === 'JSXMemberExpression') root = root.object;
     if (root?.type === 'JSXIdentifier' && /^[A-Z]/.test(root.name)) {
-      return { name: root.name, native: false };
+      return { name: root.name, native: false, kind: 'component' };
     }
   }
   return null;
