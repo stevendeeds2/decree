@@ -80,7 +80,7 @@ describe('decree sources scaffold', () => {
     });
     assert.equal(first.status, 0, first.stderr);
     assert.match(first.stdout, /decree sources: wrote/);
-    assert.match(first.stderr, /Fill components\.include/);
+    assert.match(first.stderr, /Check components\.include/);
     assert.ok(existsSync(join(dir, 'decree.sources.json')));
 
     const blocked = spawnSync(process.execPath, [decreeBin, 'sources', dir], {
