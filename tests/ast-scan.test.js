@@ -42,6 +42,20 @@ export function App() {
     );
   });
 
+  it('lets the contract name host packages like routers and drag-and-drop', () => {
+    const source = `
+import { Router, Route } from 'wouter';
+import { DndContext } from '@dnd-kit/core';
+export function App() {
+  return <Router><Route path="/"><DndContext><Button /></DndContext></Route></Router>;
+}
+`;
+    const strict = scanSource(source, 'src/App.tsx', contract);
+    assert.equal(strict.filter((f) => f.code === CODES.UNKNOWN_COMPONENT).length, 3);
+    const withHosts = { ...contract, scan: { hostPackages: ['wouter', '@dnd-kit/'] } };
+    assert.deepEqual(scanSource(source, 'src/App.tsx', withHosts), []);
+  });
+
   it('treats context providers and consumers as plumbing, not components', () => {
     const source = `
 import { ThemeContext } from '@acme/ds/context';

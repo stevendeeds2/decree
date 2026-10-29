@@ -89,7 +89,7 @@ export function scanSource(source, file, contract, options = {}) {
   const elementPrefixes = ownedElementPrefixes(contract);
   const localComponents = options.localComponents || new Set();
   const { aliases, hosts } = isScript || isTemplate
-    ? collectImportBindings(source)
+    ? collectImportBindings(source, contract.scan?.hostPackages ?? [])
     : { aliases: new Map(), hosts: new Set() };
 
   // --- Colors / arbitrary (string-aware-ish regex; URL fragment skips) ---
