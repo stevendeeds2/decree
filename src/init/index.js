@@ -96,6 +96,7 @@ export function buildContractFromPackage(packageRoot, options = {}) {
     mode: sources?.tokens?.mode ?? 'legacy-scan',
     tokenFiles: sources?.tokens?.files,
     cssAllowlist: sources?.tokens?.cssAllowlist,
+    modes: sources?.tokens?.modes,
   });
 
   const nativeElementMap =

@@ -29,7 +29,12 @@ const NATIVE_MAP = {
  *   mode?: 'dtcg-only' | 'css-allowlist' | 'legacy-scan',
  *   tokenFiles?: string[],
  *   cssAllowlist?: string[],
+ *   modes?: string[],
  * }} ExtractTokenOptions
+ *
+ * `modes` names DTCG path segments that are theme modes (`light`, `dark`).
+ * `theme.light.surface.color` then also allows `--theme-surface-color`, the
+ * name apps use when the mode is switched by a selector.
  */
 
 /**
@@ -89,6 +94,7 @@ export function extractTokens(packageRoot, options = {}) {
   /** @type {Set<string>} */
   const names = new Set();
   const mode = options.mode ?? 'legacy-scan';
+  const themeModes = new Set(options.modes ?? []);
 
   const addCssFile = (file) => {
     if (!existsSync(file)) return;
@@ -104,6 +110,10 @@ export function extractTokens(packageRoot, options = {}) {
       const tree = JSON.parse(readFileSync(file, 'utf8'));
       for (const path of flattenDtcgPaths(tree)) {
         names.add(`--${path.replaceAll('.', '-')}`);
+        if (themeModes.size === 0) continue;
+        const segments = path.split('.');
+        const modeless = segments.filter((s) => !themeModes.has(s));
+        if (modeless.length < segments.length) names.add(`--${modeless.join('-')}`);
       }
     } catch {
       // ignore invalid tokens.json

@@ -107,6 +107,10 @@ function jsxNameInfo(nameNode) {
     return { name, native: true, kind: 'native' };
   }
   if (nameNode.type === 'JSXMemberExpression') {
+    // <ThemeContext.Provider> is context plumbing, not a component.
+    if (nameNode.property?.name === 'Provider' || nameNode.property?.name === 'Consumer') {
+      return null;
+    }
     // <Foo.Bar> → enforce root Foo (same as legacy scanner)
     let root = nameNode;
     while (root && root.type === 'JSXMemberExpression') root = root.object;

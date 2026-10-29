@@ -42,6 +42,17 @@ export function App() {
     );
   });
 
+  it('treats context providers and consumers as plumbing, not components', () => {
+    const source = `
+import { ThemeContext } from '@acme/ds/context';
+export function App() {
+  return <ThemeContext.Provider value={x}><ThemeContext.Consumer>{() => <Button />}</ThemeContext.Consumer></ThemeContext.Provider>;
+}
+`;
+    const findings = scanSource(source, 'src/App.tsx', contract);
+    assert.deepEqual(findings, []);
+  });
+
   it('flags native elements from the AST', () => {
     const source = `
 export function App() {
