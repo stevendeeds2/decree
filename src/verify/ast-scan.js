@@ -12,6 +12,7 @@ import parser from '@babel/parser';
  *   line: number,
  *   native: boolean,
  *   kind?: 'component' | 'native' | 'element',
+ *   pascalName?: string,
  *   attrs: JsxAttr[],
  *   spread: boolean,
  * }} JsxTag

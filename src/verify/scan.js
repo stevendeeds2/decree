@@ -2,6 +2,7 @@ import parser from '@babel/parser';
 import { CODES } from './codes.js';
 import { collectImportBindings } from './imports.js';
 import { isTemplateFile, readMarkup } from './readers/index.js';
+import './readers/templates.js';
 import {
   extractCssVars,
   extractCssVarsFromJs,
@@ -137,6 +138,19 @@ export function scanSource(source, file, contract, options = {}) {
     });
     if (ok) {
       for (const tag of tags) {
+        if (tag.kind === 'element' && tag.pascalName) {
+          // Vue writes `DsButton` as `<ds-button>`; judge it as the component when the contract has it.
+          const pascal = resolveAllowlistedName(tag.pascalName, allow, aliases);
+          if (pascal || localComponents.has(tag.pascalName) || hosts.has(tag.pascalName)) {
+            if (pascal) {
+              const finding = deprecatedComponentFinding(pascal, contract, file, tag.line);
+              if (finding) findings.push(finding);
+              findings.push(...componentApiFindings(pascal, tag, contract, file));
+              findings.push(...restyleFindings(pascal, tag, contract, file));
+            }
+            continue;
+          }
+        }
         if (tag.kind === 'element') {
           if (allow.has(tag.name)) {
             const finding = deprecatedComponentFinding(tag.name, contract, file, tag.line);

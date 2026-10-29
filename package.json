@@ -47,8 +47,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@angular/compiler": "^21.2.25",
     "@babel/parser": "^7.29.8",
     "@modelcontextprotocol/sdk": "^1.30.0",
+    "@vue/compiler-sfc": "^3.5.44",
+    "svelte": "^5.57.3",
     "yaml": "^2.9.0",
     "zod": "^4.4.3"
   }
