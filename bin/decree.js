@@ -324,8 +324,8 @@ if (cmd === 'sources') {
     });
     console.log(`decree sources: wrote ${result.path}`);
     console.error(
-      'Fill components.include and tokens (cssAllowlist or files), then: decree prepare\n' +
-        'tokens.mode: dtcg-only | css-allowlist | legacy-scan — see docs/SOURCES.md',
+      'Check components.include and tokens (filled in where Decree could tell), then run: decree prepare\n' +
+        'To check props too, add them under componentApis. Every option: docs/SOURCES.md',
     );
     process.exit(0);
   } catch (err) {
