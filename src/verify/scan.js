@@ -19,6 +19,7 @@ import {
   isPassthroughProp,
 } from './component-apis.js';
 import { restyleFindings } from './restyle.js';
+import { message } from './messages.js';
 
 const HEX_RE = /#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const ARBITRARY_RE = /\[[\d.]+(?:px|rem|em|%)\]/g;
@@ -42,7 +43,8 @@ const REACT_RUNTIME_COMPONENTS = new Set([
 ]);
 
 /**
- * @typedef {{ code: string, message: string, file: string, line: number }} Finding
+ * @typedef {{ code: string, message: string, file: string, line: number, subject?: string }} Finding
+ * `subject` is the specific thing found (a color, a name, prop=value). Baselines match on it, not on wording.
  */
 
 /**
@@ -106,7 +108,8 @@ export function scanSource(source, file, contract, options = {}) {
       if (/url\(\s*$/i.test(line.slice(0, idx))) continue;
       findings.push({
         code: CODES.HARDCODED_HEX,
-        message: `Hardcoded color ${match[0]} — use a contract token instead`,
+        message: message.hardcodedColor(match[0]),
+        subject: match[0],
         file,
         line: lineNo,
       });
@@ -115,7 +118,8 @@ export function scanSource(source, file, contract, options = {}) {
     for (const match of line.matchAll(RGB_HSL_RE)) {
       findings.push({
         code: CODES.HARDCODED_COLOR,
-        message: `Hardcoded color ${match[0]} — use a contract token instead`,
+        message: message.hardcodedColor(match[0]),
+        subject: match[0],
         file,
         line: lineNo,
       });
@@ -124,7 +128,8 @@ export function scanSource(source, file, contract, options = {}) {
     for (const match of line.matchAll(ARBITRARY_RE)) {
       findings.push({
         code: CODES.ARBITRARY_VALUE,
-        message: `Arbitrary value ${match[0]} — use a spacing/size token from the contract`,
+        message: message.arbitraryValue(match[0]),
+        subject: match[0],
         file,
         line: lineNo,
       });
@@ -160,7 +165,8 @@ export function scanSource(source, file, contract, options = {}) {
           } else if (elementPrefixes.some((p) => tag.name.startsWith(p))) {
             findings.push({
               code: CODES.UNKNOWN_COMPONENT,
-              message: `Unknown component <${tag.name}> — not in the Decree contract allowlist`,
+              message: message.unknownElement(tag.name),
+              subject: tag.name,
               file,
               line: tag.line,
             });
@@ -172,7 +178,8 @@ export function scanSource(source, file, contract, options = {}) {
           if (component && allow.has(component)) {
             findings.push({
               code: CODES.NATIVE_ELEMENT,
-              message: `Native <${tag.name}> used — use allowlisted <${component}> instead`,
+              message: message.nativeElement(tag.name, component),
+              subject: tag.name,
               file,
               line: tag.line,
             });
@@ -200,7 +207,8 @@ export function scanSource(source, file, contract, options = {}) {
         if (hosts.has(name)) continue;
         findings.push({
           code: CODES.UNKNOWN_COMPONENT,
-          message: `Unknown component <${name}> — not in the Decree contract allowlist`,
+          message: message.unknownComponent(name),
+          subject: name,
           file,
           line: tag.line,
         });
@@ -229,7 +237,8 @@ export function scanSource(source, file, contract, options = {}) {
           if (hosts.has(name)) continue;
           findings.push({
             code: CODES.UNKNOWN_COMPONENT,
-            message: `Unknown component <${name}> — not in the Decree contract allowlist`,
+            message: message.unknownComponent(name),
+            subject: name,
             file,
             line: lineNo,
           });
@@ -242,7 +251,8 @@ export function scanSource(source, file, contract, options = {}) {
           if (re.test(line)) {
             findings.push({
               code: CODES.NATIVE_ELEMENT,
-              message: `Native <${native}> used — use allowlisted <${component}> instead`,
+              message: message.nativeElement(native, component),
+              subject: native,
               file,
               line: lineNo,
             });
@@ -261,7 +271,8 @@ export function scanSource(source, file, contract, options = {}) {
           if (!knownTokens.has(name)) {
             findings.push({
               code: CODES.UNKNOWN_TOKEN,
-              message: `Unknown token ${name} — not in the Decree contract token list`,
+              message: message.unknownToken(name),
+            subject: name,
               file,
               line: i + 1,
             });
@@ -276,7 +287,8 @@ export function scanSource(source, file, contract, options = {}) {
         if (!knownTokens.has(name)) {
           findings.push({
             code: CODES.UNKNOWN_TOKEN,
-            message: `Unknown token ${name} — not in the Decree contract token list`,
+            message: message.unknownToken(name),
+            subject: name,
             file,
             line,
           });
@@ -336,6 +348,7 @@ function deprecatedComponentFinding(resolvedName, contract, file, line) {
   return {
     code: CODES.DEPRECATED_COMPONENT,
     message: formatDeprecatedComponentMessage(resolvedName, notice),
+    subject: resolvedName,
     file,
     line,
   };
@@ -354,6 +367,7 @@ function deprecatedTokenFinding(name, contract, file, line) {
   return {
     code: CODES.DEPRECATED_TOKEN,
     message: formatDeprecatedTokenMessage(name, notice),
+    subject: name,
     file,
     line,
   };
@@ -381,7 +395,8 @@ function componentApiFindings(resolvedName, tag, contract, file) {
     if (!allowedProps.has(attr.name)) {
       findings.push({
         code: CODES.UNKNOWN_PROP,
-        message: `Unknown prop ${attr.name} on <${resolvedName}> — not in the Decree component API`,
+        message: message.unknownProp(resolvedName, attr.name),
+        subject: `${resolvedName}.${attr.name}`,
         file,
         line: tag.line,
       });
@@ -392,7 +407,8 @@ function componentApiFindings(resolvedName, tag, contract, file) {
     if (def.enum && !def.enum.includes(String(attr.literalValue))) {
       findings.push({
         code: CODES.INVALID_PROP_VALUE,
-        message: `Invalid prop ${attr.name}="${String(attr.literalValue)}" on <${resolvedName}> — allowed: ${def.enum.join(', ')}`,
+        message: message.invalidPropValue(resolvedName, attr.name, String(attr.literalValue), def.enum),
+        subject: `${resolvedName}.${attr.name}=${String(attr.literalValue)}`,
         file,
         line: tag.line,
       });
@@ -401,7 +417,8 @@ function componentApiFindings(resolvedName, tag, contract, file) {
     if (def.type && !literalMatchesType(attr.literalValue, def.type)) {
       findings.push({
         code: CODES.INVALID_PROP_VALUE,
-        message: `Invalid prop ${attr.name} on <${resolvedName}> — expected ${def.type}`,
+        message: message.invalidPropType(resolvedName, attr.name, def.type),
+        subject: `${resolvedName}.${attr.name}:${def.type}`,
         file,
         line: tag.line,
       });
@@ -425,10 +442,11 @@ function componentApiFindings(resolvedName, tag, contract, file) {
     if (matches) {
       const shown = keys
         .map((k) => `${k}=${JSON.stringify(combo[k])}`)
-        .join(', ');
+        .join(' and ');
       findings.push({
         code: CODES.INVALID_PROP_COMBO,
-        message: `Forbidden prop combination on <${resolvedName}> — ${shown}`,
+        message: message.invalidPropCombo(resolvedName, shown),
+        subject: `${resolvedName}:${shown}`,
         file,
         line: tag.line,
       });

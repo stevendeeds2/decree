@@ -125,12 +125,12 @@
         Real output from <code>decree verify</code> on the dirty app — a named,
         stable error code per violation, with file and line:
       </p>
-      <pre><code>DECREE_INVALID_PROP_VALUE    App.tsx:5   Invalid prop variant="ghost" on &lt;Button&gt; — allowed: primary, secondary
-DECREE_INVALID_PROP_COMBO    App.tsx:6   Forbidden prop combination on &lt;Button&gt; — variant="secondary", size="lg"
-DECREE_RESTYLE_STYLE         App.tsx:9   Restyle of &lt;Button&gt; via style= — use a contract variant or token instead
-DECREE_DEPRECATED_COMPONENT  App.tsx:12  Deprecated component &lt;Ghost&gt; — use &lt;Button&gt; instead (Deprecated in Specs)
-DECREE_UNKNOWN_COMPONENT     App.tsx:13  Unknown component &lt;MagicButton&gt; — not in the Decree contract allowlist
-DECREE_NATIVE_ELEMENT        App.tsx:14  Native &lt;button&gt; used — use allowlisted &lt;Button&gt; instead</code></pre>
+      <pre><code>DECREE_INVALID_PROP_VALUE    App.tsx:5   &lt;Button&gt; doesn't accept variant="ghost". Use one of: primary, secondary.
+DECREE_INVALID_PROP_COMBO    App.tsx:6   &lt;Button&gt; can't use variant="secondary" and size="lg" together.
+DECREE_RESTYLE_STYLE         App.tsx:9   Inline style= on &lt;Button&gt; paints over a design-system component. Use one of its props or a token instead.
+DECREE_DEPRECATED_COMPONENT  App.tsx:12  &lt;Ghost&gt; is being retired. Use &lt;Button&gt; instead. (Deprecated in Specs)
+DECREE_UNKNOWN_COMPONENT     App.tsx:13  &lt;MagicButton&gt; isn't part of the design system. Use a design-system component instead.
+DECREE_NATIVE_ELEMENT        App.tsx:14  Plain &lt;button&gt; where the design system has &lt;Button&gt;. Use &lt;Button&gt; instead.</code></pre>
 
       <h2>Agents ask first</h2>
       <p class="lede">

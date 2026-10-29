@@ -105,11 +105,11 @@ export function describeAllowedPrimitive(contract, name, options = {}) {
   /** @type {string} */
   let message;
   if (!allowed) {
-    message = `${name} is NOT allowlisted. Do not invent it — use list_primitives.`;
+    message = `${name} isn't in the design system. Don't create it; pick one from list_primitives instead.`;
   } else if (notice) {
-    message = `${name} is allowlisted but deprecated. ${formatDeprecatedComponentMessage(name, notice)} Do not use for new UI.`;
+    message = `${formatDeprecatedComponentMessage(name, notice)} Don't use it for new UI.`;
   } else {
-    message = `${name} is allowlisted.`;
+    message = `${name} is in the design system.`;
   }
   const api = getComponentApi(contract, name);
   const props = api ? publicComponentApi(api) : undefined;
@@ -143,7 +143,7 @@ export function validateSnippet(
       findings: [
         {
           code: CODES.SNIPPET_TOO_LARGE,
-          message: `Snippet exceeds ${MAX_SNIPPET_CHARS} characters — refuse to scan`,
+          message: `This snippet is longer than ${MAX_SNIPPET_CHARS} characters, so Decree didn't check it. Send a smaller piece.`,
           file,
           line: 0,
         },
