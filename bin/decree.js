@@ -12,12 +12,17 @@ import {
   writeSourcesScaffold,
 } from '../src/init/index.js';
 import { verifyPath } from '../src/verify/index.js';
+import { describeSetup, setupApp } from '../src/setup/index.js';
 
 const argv = process.argv.slice(2);
 const [cmd = 'help', ...rest] = argv;
 
 function printHelp() {
   console.log(`decree — design system enforcement
+
+Start here (in your app):
+  setup [design-system]  Copy the design system's contract, detect your app's settings,
+                         record today's problems as a baseline, and add "npm run decree"
 
 Commands:
   sources [path]  Scaffold decree.sources.json (all options, empty values)
@@ -44,9 +49,12 @@ Verify (brownfield ratchet):
 
 MCP server binary: decree-mcp [path/to/decree.contract.json]
 
+Setup:
+  decree setup [package-or-path] [--no-baseline] [--no-script]
+
 Recommended DS flow:
   decree sources  →  fill include/tokens  →  decree prepare  →  publish contract
-  app: decree use @acme/ds  →  decree verify .
+  app: decree setup @acme/ds  →  npm run decree
 
 Docs: docs/SOURCES.md · docs/INIT.md · docs/ADAPTERS.md · docs/ADOPTION.md · docs/GETTING_STARTED.md
 `);
@@ -477,6 +485,29 @@ if (cmd === 'prepare') {
     console.error(
       `decree prepare: ${err instanceof Error ? err.message : err}`,
     );
+    process.exit(1);
+  }
+}
+
+if (cmd === 'setup') {
+  const flags = new Set(rest.filter((a) => a.startsWith('-')));
+  for (const flag of flags) {
+    if (flag !== '--no-baseline' && flag !== '--no-script') {
+      console.error(`decree setup: unknown flag ${flag}`);
+      process.exit(2);
+    }
+  }
+  const [designSystem] = rest.filter((a) => !a.startsWith('-'));
+  try {
+    const result = setupApp(process.cwd(), {
+      designSystem,
+      baseline: !flags.has('--no-baseline'),
+      script: !flags.has('--no-script'),
+    });
+    console.log(describeSetup(result));
+    process.exit(0);
+  } catch (err) {
+    console.error(`decree setup: ${err instanceof Error ? err.message : err}`);
     process.exit(1);
   }
 }
