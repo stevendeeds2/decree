@@ -1,13 +1,38 @@
 # Install Decree (`@stevendeeds/decree`)
 
-Node ≥ 20. Install from git — no registry account required:
+Node 20 or later.
 
 ```bash
-npm install -D github:stevendeeds2/decree
+npm install -D @stevendeeds/decree
 npx decree --help
 ```
 
-From a cloned repo:
+## In an app
+
+```bash
+npx decree setup      # finds your design system and sets everything up
+npm run decree        # run before you merge
+```
+
+## In a design system package
+
+```bash
+npx decree sources    # then fill in components.include and tokens
+npx decree prepare    # writes decree.contract.json; ship it in your package
+```
+
+See [SOURCES.md](./SOURCES.md). To build a contract from Specs 2 or DS Contracts files instead: [ADAPTERS.md](./ADAPTERS.md).
+
+## CI
+
+```bash
+npm run decree
+npx decree use <your-design-system> --check
+```
+
+Template: [`.github/examples/decree-verify.yml`](../.github/examples/decree-verify.yml). Apps that already have problems: [ADOPTION.md](./ADOPTION.md).
+
+## From source
 
 ```bash
 git clone https://github.com/stevendeeds2/decree.git
@@ -15,21 +40,3 @@ cd decree
 npm install
 node bin/decree.js --help
 ```
-
-## First commands
-
-```bash
-npx decree sources ./packages/ui
-# fill decree.sources.json — see SOURCES.md
-npx decree prepare ./packages/ui
-npx decree use ./packages/ui --force
-npx decree verify .
-```
-
-Or compile a judge slice from Specs 2 / DS Contracts: [ADAPTERS.md](./ADAPTERS.md).
-
-Brownfield ratchet: [ADOPTION.md](./ADOPTION.md). Walkthrough: [GETTING_STARTED.md](./GETTING_STARTED.md).
-
-## CI
-
-Template: [`.github/examples/decree-verify.yml`](../.github/examples/decree-verify.yml) — installs from git.
