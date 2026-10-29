@@ -4,8 +4,8 @@
   "description": "Check apps and AI agents against your design system: components, props, and tokens.",
   "type": "module",
   "bin": {
-    "decree": "./bin/decree.js",
-    "decree-mcp": "./bin/decree-mcp.js"
+    "decree": "bin/decree.js",
+    "decree-mcp": "bin/decree-mcp.js"
   },
   "files": [
     "bin",
