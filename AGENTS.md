@@ -22,10 +22,10 @@ Spec and contract tools write what a Button **is**. Decree refuses any Button an
 ## Rules
 
 1. Prefer the smallest correct change; don’t revive deleted fixtures/examples/trials.
-2. Proof for demos = third-party-shaped systems under `demos/` — not production consumers.
+2. Public proof stays third-party-shaped systems under `demos/`.
 3. Package name: `@stevendeeds/decree`.
 4. Stable error codes on verify failures — never silent pass on dirty UI.
 
-## Hard rule — production off-limits
+## Running on the maintainer’s own apps
 
-Do **not** run Decree against the maintainer’s production apps or consumers; demos and test fixtures are the only proving ground in this repo.
+Allowed as of 2026-10-29 (DECREE-27, reversing DECREE-9). Decree should work on SD33DS, stevendeeds.com, Corvy, and future apps as well as third-party systems. Changes to those apps still follow their own board, branch, and approval rules.
