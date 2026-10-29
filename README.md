@@ -1,27 +1,51 @@
 # Decree
 
-Decree checks that apps use the design system as it was published.
+Decree checks that apps use the design system as it was published. Install it from npm. You do not clone this repository to use it.
 
-The design system team publishes a list of what is allowed: components, tokens, and, if they want, the props each component accepts. Decree checks app code and AI coding agents against that list and reports anything that isn't on it. If it's not in the system, it doesn't ship.
+The design system team publishes a list of what is allowed: components, tokens, and, if they want, the props each component accepts. Decree builds that list from the design system, then checks app code and AI coding agents against it. If it's not in the system, it doesn't ship.
 
-Decree works alongside the tools teams already use to describe their components. [Specs 2](https://www.specsplugin.com) records each component's props, variants, and forbidden combinations. [DS Contracts](https://github.com/southleft/ds-contracts-poc) describe components in a machine-readable format, with links to Figma and code. Decree reads both and turns them into one list it can check against. It is an independent project with no affiliation to either.
+Node 20 or later.
 
-## Who does what
+## Create the contract (design system)
 
-| Team | What they do |
-|------|--------------|
-| **Design system team** | Writes and publishes `decree.contract.json` inside the design system package, built from the specs they already keep (`decree prepare`). |
-| **App team** | Copies the contract into the app with `decree use`. Runs `decree verify` before merging. Can give AI agents the same list through `decree mcp`. |
+From your design system package:
 
-The contract belongs to the design system, except for its `scan` section, which belongs to the app. `scan` tells Decree how to read this app: where its own components live (`localComponentPrefixes`) and which packages it may use freely, such as a router (`hostPackages`). When the design system ships a new version, run `decree use` again; it updates the copy and keeps the app's `scan` settings. `decree use <package> --check` fails when the app's copy is out of date, which makes a good CI step.
+```bash
+npm install -D @stevendeeds/decree
+npx decree sources
+npx decree prepare
+```
 
-`decree verify` is built to run in CI, the automated checks that run on every pull request. Each problem it finds has a stable `DECREE_*` code, and any finding fails the check.
+`decree sources` writes `decree.sources.json` and fills in what it can already see: a components folder (`src/components`, `components`, or similar), story and test files to skip, and `tokens.json` if one is there. Open that file and check `components.include`. That list is the only code Decree treats as public components.
 
-`decree mcp` starts an MCP server. MCP is the protocol tools like Cursor and Claude use to give an AI agent extra information. Through it, an agent can look up what is allowed before writing code, then check its own snippet the same way CI will.
+`decree prepare` reads those sources and writes `decree.contract.json`. It picks up PascalCase component files (`.jsx`, `.tsx`, `.vue`, `.svelte`), kebab-case files in a components folder, and custom elements registered with `customElements.define` or `@customElement`.
 
-## Set up your app
+Ship the contract with the package. In `package.json`, add:
 
-If your design system already ships a contract, setup is one command in your app's folder:
+```json
+"decree": "./decree.contract.json"
+```
+
+and add `"decree.contract.json"` to the `files` list you already have. Publish the package the way you usually do. Apps can then install that version and run setup. Run `npx decree prepare` again whenever components or tokens change, and `npx decree prepare --check` in CI so a stale contract fails the build.
+
+Props are optional. List only the ones you want checked, under `componentApis` in `decree.sources.json`, then run `decree prepare` again. Standard HTML attributes such as `type` and `disabled` pass through:
+
+```json
+"componentApis": {
+  "Button": {
+    "props": {
+      "variant": { "enum": ["primary", "secondary"] },
+      "size": { "enum": ["sm", "md", "lg"] }
+    }
+  }
+}
+```
+
+Every option: [docs/SOURCES.md](./docs/SOURCES.md). If you already keep [Specs 2](https://www.specsplugin.com) or [DS Contracts](https://github.com/southleft/ds-contracts-poc) files, Decree can build the contract from those instead. It is an independent project with no affiliation to either. Details: [docs/ADAPTERS.md](./docs/ADAPTERS.md).
+
+## Set up an app
+
+After the design system package ships a contract, in the app:
 
 ```bash
 npm install -D @stevendeeds/decree
@@ -29,82 +53,26 @@ npx decree setup
 npm run decree
 ```
 
-`decree setup` finds the design system in your dependencies, copies its contract, notes where your app's own components live and which libraries it relies on (such as a router), records today's problems in `decree.baseline.json`, and adds `npm run decree`. Commit the two `decree.*.json` files. Running it again is safe: it keeps your settings and your baseline.
+`decree setup` finds the design system in the app's dependencies, copies its contract, notes where the app's own components live and which libraries it may use freely (such as a router), records today's problems in `decree.baseline.json`, and adds `npm run decree`. Commit `decree.contract.json` and `decree.baseline.json`. Running setup again is safe: it keeps your settings and your baseline.
 
-If your design system doesn't ship a contract yet, see [Set up your design system](#set-up-your-design-system).
+If setup says it couldn't find a design system that ships a contract, the package you depend on doesn't have the `"decree"` field yet. Create the contract in that package (above) and publish it. Pointing setup at a folder works before the publish: `npx decree setup ../your-design-system`.
 
-## Try the demo (from a clone of this repo)
-
-Every command below can be copied and pasted as written. You need Node 20 or later.
-
-**1. Install**
+When the design system ships a new contract, update the copy and keep this app's scan settings:
 
 ```bash
-git clone https://github.com/stevendeeds2/decree.git
-cd decree
-npm install
-node bin/decree.js --help
+npx decree use @your/design-system
+npx decree use @your/design-system --check
 ```
 
-**2. Run the full demo**
+`--check` fails when this app's copy is behind the package, which makes a good CI step.
 
-Harbor is a made-up design system, described the way a real team would: a Specs 2 catalog and a set of DS Contracts files, both describing the same Button.
+`scan` belongs to the app. It says where the app's own components live (`localComponentPrefixes`) and which packages it may use freely (`hostPackages`). Everything else in the contract belongs to the design system.
 
-```bash
-npm run demo:together
-```
+`npm run decree` runs `decree verify`. Put it in CI on every pull request. Each problem has a stable `DECREE_*` code, and any new finding fails the check.
 
-The demo builds a contract from both sources, checks a clean app (it passes), and checks an app with problems (it fails with six findings):
+`npx decree mcp decree.contract.json` prints the setup for an MCP server, so an agent in Cursor or Claude can look up what is allowed before it writes code. Details: [docs/MCP.md](./docs/MCP.md).
 
-```
-DECREE_INVALID_PROP_VALUE    App.tsx:5   <Button> doesn't accept variant="ghost". Use one of: primary, secondary.
-DECREE_INVALID_PROP_COMBO    App.tsx:6   <Button> can't use variant="secondary" and size="lg" together.
-DECREE_RESTYLE_STYLE         App.tsx:9   Inline style= on <Button> paints over a design-system component. Use one of its props or a token instead.
-DECREE_DEPRECATED_COMPONENT  App.tsx:12  <Ghost> is being retired. Use <Button> instead. (Deprecated in Specs)
-DECREE_UNKNOWN_COMPONENT     App.tsx:13  <MagicButton> isn't part of the design system. Use a design-system component instead.
-DECREE_NATIVE_ELEMENT        App.tsx:14  Plain <button> where the design system has <Button>. Use <Button> instead.
-```
-
-| File | What it is |
-|------|------------|
-| [`demos/together/specs/specs.yaml`](./demos/together/specs/specs.yaml) | Specs 2: Button's props and sizes, one forbidden combination, and the retired Ghost component |
-| [`demos/together/ds-contracts/`](./demos/together/ds-contracts/) | DS Contracts: the same Button, with Figma and code links; it renders a native `<button>` |
-| [`demos/together/out/harbor.contract.json`](./demos/together/out/harbor.contract.json) | The contract Decree builds: the parts of both sources it can check |
-| [`demos/together/apps/clean/`](./demos/together/apps/clean/) | An app that uses only what the contract allows |
-| [`demos/together/apps/dirty/`](./demos/together/apps/dirty/) | An app with six kinds of problems |
-
-**3. Build the contract yourself**
-
-```bash
-node bin/decree.js prepare \
-  --from-specs demos/together/specs \
-  --from-ds-contracts demos/together/ds-contracts \
-  --name @demo/harbor-ui --restyle \
-  --out /tmp/harbor.contract.json
-```
-
-When the two sources overlap, Specs 2 decides component props, DS Contracts decides which native HTML element a component replaces, and tokens from both are combined. `--restyle` turns on the check for `style=`, `sx=`, and paint or size classes on system components. Details: [docs/ADAPTERS.md](./docs/ADAPTERS.md).
-
-**4. Break it and watch it fail**
-
-Open [`demos/together/apps/clean/App.tsx`](./demos/together/apps/clean/App.tsx) and change `variant="primary"` to `variant="promo"`. Then:
-
-```bash
-node bin/decree.js verify demos/together/apps/clean
-# DECREE_INVALID_PROP_VALUE  App.tsx:5  <Button> doesn't accept variant="promo". Use one of: primary, secondary.
-# exit 1
-git checkout -- demos/together/apps/clean/App.tsx
-```
-
-Run the same command in CI and the pull request fails. Here is a real one that failed this way and was closed without merging: [#22](https://github.com/stevendeeds2/decree/pull/22).
-
-**5. Give an agent the list**
-
-```bash
-node bin/decree.js mcp demos/together/out/harbor.contract.json
-```
-
-This prints the setup for an MCP server with four tools: `list_primitives`, `list_tokens`, `is_allowed_primitive`, and `validate_snippet`. Paste it into `.cursor/mcp.json` (Cursor) or `claude_desktop_config.json` (Claude Desktop). The agent can now see that `variant="ghost"` isn't allowed before it writes the code. Details: [docs/MCP.md](./docs/MCP.md).
+Install notes: [docs/INSTALL.md](./docs/INSTALL.md). CI template: [`.github/examples/decree-verify.yml`](https://github.com/stevendeeds2/decree/blob/main/.github/examples/decree-verify.yml).
 
 ## What it checks
 
@@ -141,35 +109,6 @@ npx decree verify . --baseline decree.baseline.json   # fails only on new findin
 
 Existing problems can stay for now, and new ones can't be added. Fix a batch, write the baseline again, and repeat until it's empty. We ran this on a real open-source app: [demos/PILOT-taxonomy.md](./demos/PILOT-taxonomy.md).
 
-## Set up your design system
-
-From your design system package's folder:
-
-```bash
-npm install -D @stevendeeds/decree
-npx decree sources    # writes decree.sources.json, pre-filled with your components folder and tokens.json if it finds them
-npx decree prepare    # writes decree.contract.json from those sources
-```
-
-Decree finds PascalCase component files (`.jsx`, `.tsx`, `.vue`, `.svelte`), kebab-case files in a `components/` folder, and custom elements registered with `customElements.define` or `@customElement`.
-
-To also check props, list them under `componentApis` in `decree.sources.json`. Only the props you list are checked; standard HTML attributes like `type` and `disabled` pass through:
-
-```json
-"componentApis": {
-  "Button": {
-    "props": {
-      "variant": { "enum": ["primary", "secondary"] },
-      "size": { "enum": ["sm", "md", "lg"] }
-    }
-  }
-}
-```
-
-Then add `decree.contract.json` to the `files` list in your `package.json` and add `"decree": "./decree.contract.json"`, so the contract ships with every release. Run `decree prepare` again whenever components or tokens change; `decree prepare --check` fails if you forgot. Details: [docs/SOURCES.md](./docs/SOURCES.md).
-
-Install: [docs/INSTALL.md](./docs/INSTALL.md). CI template: [`.github/examples/decree-verify.yml`](https://github.com/stevendeeds2/decree/blob/main/.github/examples/decree-verify.yml). Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md).
-
 ## FAQ
 
 **Is this just a linter?**
@@ -195,6 +134,20 @@ No. Your specs, DS Contracts files, and Figma stay where they are. Decree reads 
 
 **Who owns the contract?**
 The design system team. They build it with `decree prepare` and publish `decree.contract.json` in their package like any other file. App teams copy it in with `decree use`, run `decree verify` in CI, and set up MCP for their agents.
+
+
+## Try the sample in this repository
+
+The sample is not part of the npm package. Clone only if you want to run it:
+
+```bash
+git clone https://github.com/stevendeeds2/decree.git
+cd decree
+npm install
+npm run demo:together
+```
+
+Harbor is a made-up design system. The demo builds a contract from a Specs 2 catalog and a set of DS Contracts files, checks an app that follows the contract (it passes), and checks an app with six problems (it fails). The pieces are under [`demos/together/`](./demos/together/).
 
 ## Demos
 

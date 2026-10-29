@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.1
+
+### Changed
+
+- The README starts with installing from npm and creating a contract (`decree sources`, then `decree prepare`). Cloning this repository is only for running the sample.
+
 ## 0.2.0
 
 ### New

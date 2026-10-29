@@ -1,6 +1,6 @@
 {
   "name": "@stevendeeds/decree",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Check apps and AI agents against your design system: components, props, and tokens.",
   "type": "module",
   "bin": {
