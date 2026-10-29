@@ -36,10 +36,11 @@ export function isPackageSpecifier(spec) {
 
 /**
  * @param {string} spec
+ * @param {string[]} [extraHosts] `scan.hostPackages` from the contract
  */
-export function isHostPackageSpecifier(spec) {
+export function isHostPackageSpecifier(spec, extraHosts = []) {
   if (!isPackageSpecifier(spec)) return false;
-  return HOST_PACKAGE_PREFIXES.some((p) => {
+  return [...HOST_PACKAGE_PREFIXES, ...extraHosts].some((p) => {
     if (spec === p) return true;
     const prefix = p.endsWith('/') ? p : `${p}/`;
     return spec.startsWith(prefix);
@@ -94,9 +95,10 @@ export function collectImportAliases(source) {
 
 /**
  * @param {string} source
+ * @param {string[]} [extraHosts] packages whose components the app may use freely (routers, drag-and-drop)
  * @returns {{ aliases: Map<string, string>, hosts: Set<string> }}
  */
-export function collectImportBindings(source) {
+export function collectImportBindings(source, extraHosts = []) {
   /** @type {Map<string, string>} */
   const aliases = new Map();
   /** @type {Set<string>} */
@@ -108,7 +110,7 @@ export function collectImportBindings(source) {
    * @param {string | null} exported
    */
   function recordDefault(local, spec, exported) {
-    if (isHostPackageSpecifier(spec)) {
+    if (isHostPackageSpecifier(spec, extraHosts)) {
       if (PASCAL.test(local)) hosts.add(local);
       return;
     }
@@ -120,7 +122,7 @@ export function collectImportBindings(source) {
    * @param {string} spec
    */
   function recordNamed(clause, spec) {
-    if (isHostPackageSpecifier(spec)) {
+    if (isHostPackageSpecifier(spec, extraHosts)) {
       /** @type {Map<string, string>} */
       const tmp = new Map();
       parseNamedClause(clause, tmp);
