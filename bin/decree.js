@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-import { resolve } from 'node:path';
+import { existsSync } from 'node:fs';
+import { relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
   buildContractFromPackage,
@@ -596,6 +597,12 @@ if (cmd === 'verify') {
     `decree verify: ${newCount} new, ${baselinedCount} baselined, ${total} total`,
   );
 
+  if (result.resolvedCount > 0) {
+    console.error(
+      `decree verify: ${result.resolvedCount} recorded problem(s) are fixed or gone. Run \`decree verify . --write-baseline ${parsed.baselinePath}\` to drop them from the baseline.`,
+    );
+  }
+
   if (result.wroteBaseline) {
     console.log(`decree verify: wrote baseline ${result.wroteBaseline}`);
   } else if (result.ok) {
@@ -620,17 +627,26 @@ if (cmd === 'mcp') {
   const mcpBin = resolve(
     fileURLToPath(new URL('./decree-mcp.js', import.meta.url)),
   );
+  // Installed in this project: print paths a teammate can use too.
+  const local = existsSync(resolve('node_modules', '.bin', 'decree-mcp'));
+  const contractArg = local ? relative(process.cwd(), contract) || 'decree.contract.json' : contract;
   const config = {
     mcpServers: {
-      decree: {
-        command: 'node',
-        args: [mcpBin, contract],
-      },
+      decree: local
+        ? { command: 'npx', args: ['decree-mcp', contractArg] }
+        : { command: 'node', args: [mcpBin, contract] },
     },
   };
   console.log(JSON.stringify(config, null, 2));
   console.error(
-    `\n# Add the above to your MCP client config.\n# Contract: ${contract}\n# Tools: list_primitives, list_tokens, is_allowed_primitive, validate_snippet`,
+    [
+      '',
+      '# Add the above to your MCP client config (Cursor: .cursor/mcp.json).',
+      local
+        ? '# Paths are relative to this folder, so the MCP client should start it here.'
+        : '# Paths are absolute to this machine. Install @stevendeeds/decree in the project for shareable paths.',
+      '# Tools: list_primitives, list_tokens, is_allowed_primitive({ name }), validate_snippet({ source, file? })',
+    ].join('\n'),
   );
   process.exit(0);
 }

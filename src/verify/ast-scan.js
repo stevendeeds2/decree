@@ -13,6 +13,7 @@ import parser from '@babel/parser';
  *   native: boolean,
  *   kind?: 'component' | 'native' | 'element',
  *   pascalName?: string,
+ *   member?: string,
  *   attrs: JsxAttr[],
  *   spread: boolean,
  * }} JsxTag
@@ -73,6 +74,7 @@ export function extractJsxTagsFromAst(ast) {
           line,
           native: info.native,
           kind: info.kind,
+          ...(info.member ? { member: info.member } : {}),
           attrs,
           spread,
         });
@@ -111,11 +113,15 @@ function jsxNameInfo(nameNode) {
     if (nameNode.property?.name === 'Provider' || nameNode.property?.name === 'Consumer') {
       return null;
     }
-    // <Foo.Bar> → enforce root Foo (same as legacy scanner)
+    // <Foo.Bar> → enforce root Foo; `member` lets `import * as UI` resolve <UI.Button> to Button.
     let root = nameNode;
-    while (root && root.type === 'JSXMemberExpression') root = root.object;
+    let member = null;
+    while (root && root.type === 'JSXMemberExpression') {
+      member = root.property?.name ?? member;
+      root = root.object;
+    }
     if (root?.type === 'JSXIdentifier' && /^[A-Z]/.test(root.name)) {
-      return { name: root.name, native: false, kind: 'component' };
+      return { name: root.name, native: false, kind: 'component', ...(member ? { member } : {}) };
     }
   }
   return null;
@@ -148,10 +154,13 @@ function extractJsxAttrs(opening) {
       attrs.push({ name, literalValue: literal.value });
     } else {
       const stringLiterals = collectStringLiterals(attr.value);
+      const candidates =
+        attr.value?.type === 'JSXExpressionContainer' ? branchLiterals(attr.value.expression) : [];
       attrs.push({
         name,
         dynamic: true,
         ...(stringLiterals.length > 0 ? { stringLiterals } : {}),
+        ...(candidates.length > 0 ? { candidates } : {}),
       });
     }
   }
@@ -188,6 +197,31 @@ function literalFromJsxValue(valueNode) {
     return literalFromExpression(valueNode.expression);
   }
   return { ok: false };
+}
+
+/**
+ * Literal values an expression can take: `busy ? 'ghost' : 'primary'`,
+ * `big && 'lg'`. Non-literal branches are skipped, not guessed.
+ * @param {any} expr
+ * @returns {(string | number | boolean)[]}
+ */
+function branchLiterals(expr) {
+  if (!expr) return [];
+  if (expr.type === 'ConditionalExpression') {
+    return [...leaf(expr.consequent), ...leaf(expr.alternate)];
+  }
+  if (expr.type === 'LogicalExpression' && expr.operator !== '??') {
+    return leaf(expr.right);
+  }
+  if (expr.type === 'LogicalExpression') return [...leaf(expr.left), ...leaf(expr.right)];
+  return [];
+
+  /** @param {any} node */
+  function leaf(node) {
+    const literal = literalFromExpression(node);
+    if (literal.ok) return [literal.value];
+    return branchLiterals(node);
+  }
 }
 
 /**

@@ -25,8 +25,8 @@ node bin/decree.js use <path-or-package-name> [--out decree.contract.json] [--fo
 | `--force` | Overwrite existing contract / sources |
 | `--sources` | Path to `decree.sources.json` (default: `<pkg>/decree.sources.json`) |
 | `prepare --check` | Exit 1 if sources regenerate a different contract than on disk |
-| `prepare --from-specs` | Compile a judge slice from Specs 2 (names, props, combos, tokens, deprecations) |
-| `prepare --from-ds-contracts` | Compile a judge slice from DS Contracts |
+| `prepare --from-specs` | Build the contract from Specs 2 files (names, props, combinations, tokens, deprecations) |
+| `prepare --from-ds-contracts` | Build the contract from DS Contracts files |
 
 
 ## What it extracts

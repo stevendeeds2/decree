@@ -82,6 +82,19 @@ export function writeSourcesScaffold(packageRoot, opts = {}) {
     );
   }
   const template = sourcesScaffoldTemplate();
+  // Fill in what's obvious so the first `decree prepare` usually just works.
+  const componentDir = ['src/components', 'components', 'src/lib/components', 'lib/components', 'src'].find(
+    (d) => existsSync(join(packageRoot, d)),
+  );
+  if (componentDir) template.components.include = [componentDir];
+  template.components.exclude = ['**/*.stories.*', '**/*.test.*', '**/*.spec.*'];
+  const tokenFile = ['tokens.json', 'src/tokens.json', 'tokens/tokens.json'].find((f) =>
+    existsSync(join(packageRoot, f)),
+  );
+  if (tokenFile) {
+    template.tokens.mode = 'dtcg-only';
+    template.tokens.files = [tokenFile];
+  }
   validateSources(template, outPath);
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, `${JSON.stringify(template, null, 2)}\n`, 'utf8');

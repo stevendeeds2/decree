@@ -88,7 +88,10 @@ export function buildContractFromPackage(packageRoot, options = {}) {
   });
   if (components.length === 0) {
     throw new Error(
-      `No components found in ${packageRoot}. Expected PascalCase exports (e.g. Button.js).`,
+      `No components found in ${packageRoot}. Decree looks in components.include for PascalCase files ` +
+        `(Button.jsx, Button.tsx, Button.vue, Button.svelte), kebab-case files in a components/ folder, ` +
+        `and custom elements registered with customElements.define or @customElement. ` +
+        `Check components.include in decree.sources.json.`,
     );
   }
 

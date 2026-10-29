@@ -1,4 +1,4 @@
-# Adapters: Specs 2 / DS Contracts → Decree judge slice
+# Build a contract from Specs 2 or DS Contracts files
 
 They write what a Button **is**. Decree compiles only the slice it can refuse: names, props, values, combinations, tokens, and deprecations.
 

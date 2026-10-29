@@ -1,46 +1,40 @@
-# Decree MCP
+# Decree for AI agents (MCP)
 
-Anti-forgery allowlist for agents. Same contract as `decree verify`.
+MCP is how tools like Cursor and Claude give an AI agent extra abilities. Decree's MCP server gives an agent the same list your CI checks against, so it can ask what's allowed before it writes UI, and check its code before it calls the work done.
+
+## Set it up
+
+From the app's folder, with `@stevendeeds/decree` installed:
+
+```bash
+npx decree mcp decree.contract.json
+```
+
+It prints a block like this. Paste it into `.cursor/mcp.json` (Cursor) or `claude_desktop_config.json` (Claude Desktop):
+
+```json
+{
+  "mcpServers": {
+    "decree": { "command": "npx", "args": ["decree-mcp", "decree.contract.json"] }
+  }
+}
+```
+
+The paths are relative to the app's folder, so the block works for teammates too. Claude Code: `claude mcp add decree -- npx decree-mcp decree.contract.json`.
 
 ## Tools
 
-| Tool | Job |
-|------|-----|
-| `list_primitives` | Components the agent may use — never invent outside this list. Includes `api` (props / enums) when `componentApis` is set |
-| `list_tokens` | Tokens the agent may use — no hex / invented names |
-| `is_allowed_primitive` | Boolean check for a component name |
-| `validate_snippet` | Same scanners as CI on a code string (includes `scan.profile: "app"` locals when the contract sits in a project root) |
+| Tool | Arguments | What it returns |
+|------|-----------|-----------------|
+| `list_primitives` | none | The design system's components, with allowed props when the contract lists them. Includes the app's own components when the contract's `scan.profile` is `app`. |
+| `list_tokens` | none | The design system's tokens. |
+| `is_allowed_primitive` | `name` | Whether a component is in the design system, and its allowed props. |
+| `validate_snippet` | `source`, optional `file` | The same findings `decree verify` would report. `file` picks the reader by extension, for example `Card.vue` or `card.component.html`; the default is `snippet.tsx`. Snippets over 256 KB aren't checked. |
 
-When `scan.profile` is `app`, `list_primitives` also returns discovered `localComponents` from the project (directory containing the contract). Snippets larger than 256KB are rejected (`DECREE_SNIPPET_TOO_LARGE`).
+Retired components and tokens are still listed, marked `deprecated` with the replacement, so agents know not to use them for new UI.
 
-Deprecated contract names stay listed (`deprecated: true` plus a `deprecation` notice with replacement / reason / dates). They are still in the system, so `is_allowed_primitive` remains true and includes the same notice — but do not use them for new UI; use the replacement. `validate_snippet` fails on deprecated usage with the same codes as CI (`DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN`).
+## What to tell the agent
 
-When `componentApis` is set, `list_primitives` / `is_allowed_primitive` include the legal `api` for that name. `validate_snippet` fails invented props and illegal static values (`DECREE_UNKNOWN_PROP` / `DECREE_INVALID_PROP_VALUE` / `DECREE_INVALID_PROP_COMBO`).
-
-When `restyle` is on, those tools include the restyle policy. `validate_snippet` fails `style=` / `sx=` / paint-or-size arbitrary class on allowlisted primitives (`DECREE_RESTYLE_STYLE` / `DECREE_RESTYLE_SX` / `DECREE_RESTYLE_ARBITRARY_CLASS`).
-
-Responses include `"_mcp": "decree"` for attribution when multiple MCP servers are connected.
-
-## Configure (Cursor / Claude)
-
-```bash
-node bin/decree.js mcp path/to/decree.contract.json
-```
-
-Paste the printed `mcpServers` block into your client config:
-
-- Cursor: `.cursor/mcp.json` in the project (or `~/.cursor/mcp.json` globally)
-- Claude Desktop: `claude_desktop_config.json`
-- Claude Code: `claude mcp add decree -- node path/to/bin/decree-mcp.js path/to/decree.contract.json`
-
-Or run directly:
-
-```bash
-node bin/decree-mcp.js path/to/decree.contract.json
-```
-
-## Rule for agents
-
-1. Call `list_primitives` / `list_tokens` before writing UI.  
-2. Call `validate_snippet` before considering the work done.  
-3. If CI `decree verify` would fail, the snippet is not done.
+1. Call `list_primitives` and `list_tokens` before writing UI.
+2. Call `validate_snippet` before saying the work is done.
+3. If `validate_snippet` reports a problem, fix it; CI will report the same one.

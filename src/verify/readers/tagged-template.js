@@ -17,6 +17,15 @@ const TAG_NAME_RE = /^[A-Za-z][\w:.-]*/;
  */
 export function extractTaggedTemplateTags(ast, options = {}) {
   const names = new Set(options.templateTags ?? DEFAULT_TEMPLATE_TAGS);
+  // `import { html as h } from 'lit'` → read h`…` too.
+  for (const node of ast?.program?.body ?? []) {
+    if (node.type !== 'ImportDeclaration') continue;
+    for (const spec of node.specifiers ?? []) {
+      if (spec.type !== 'ImportSpecifier') continue;
+      const imported = spec.imported?.name ?? spec.imported?.value;
+      if (names.has(imported) && spec.local?.name) names.add(spec.local.name);
+    }
+  }
   /** @type {import('../ast-scan.js').JsxTag[]} */
   const tags = [];
 

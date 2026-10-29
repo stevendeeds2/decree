@@ -99,21 +99,32 @@ export function writeBaseline(path, baseline) {
 }
 
 /**
+ * Each baseline entry covers one finding. A second identical problem in the
+ * same file is new, so recorded debt can't quietly grow.
  * @param {FindingLike[]} findings
  * @param {BaselineFile} baseline
  */
 export function diffAgainstBaseline(findings, baseline) {
-  const known = new Set(
-    baseline.findings.map((f) => f.messageFingerprint).filter(Boolean),
-  );
+  /** @type {Map<string, number>} */
+  const remaining = new Map();
+  for (const entry of baseline.findings) {
+    if (!entry.messageFingerprint) continue;
+    remaining.set(entry.messageFingerprint, (remaining.get(entry.messageFingerprint) ?? 0) + 1);
+  }
+  const ordered = [...findings].sort((a, b) => (a.line ?? 0) - (b.line ?? 0));
   /** @type {FindingLike[]} */
   const newFindings = [];
   /** @type {FindingLike[]} */
   const baselinedFindings = [];
-  for (const f of findings) {
+  for (const f of ordered) {
     const fp = fingerprintFinding(f);
-    if (known.has(fp)) baselinedFindings.push(f);
-    else newFindings.push(f);
+    const left = remaining.get(fp) ?? 0;
+    if (left > 0) {
+      remaining.set(fp, left - 1);
+      baselinedFindings.push(f);
+    } else {
+      newFindings.push(f);
+    }
   }
   return { newFindings, baselinedFindings };
 }

@@ -1,10 +1,10 @@
 # Decree sources (`decree.sources.json`)
 
-Declare **where truth lives** so `init` / `prepare` emit a clean contract — no hand-pruning of `--tw-*` noise or accidental `App` exports.
+`decree.sources.json` tells `decree prepare` where your components and tokens live, so the contract lists only what you meant to publish.
 
 ## Why
 
-`decree init` without sources walks the whole package (legacy). That dump is a starting point, not publishable law.
+Without it, Decree walks the whole package and picks up everything that looks like a component or a CSS variable, including helpers you never meant to publish.
 
 Design-system teams should:
 
@@ -132,8 +132,8 @@ Writes every schema key so you fill a form instead of inventing a format:
 decree sources                 # scaffold sources (once)
 decree prepare                 # write decree.contract.json from sources
 decree prepare --check         # fail if committed contract drifted
-decree prepare --from-specs <dir>            # Specs 2 → judge slice
-decree prepare --from-ds-contracts <dir>     # DS Contracts → judge slice
+decree prepare --from-specs <dir>            # build the contract from Specs 2 files
+decree prepare --from-ds-contracts <dir>     # build the contract from DS Contracts files
 
 # still supported
 decree init ./packages/ds --force
