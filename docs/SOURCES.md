@@ -62,6 +62,7 @@ Writes every schema key so you fill a form instead of inventing a format:
 | `tokens.mode` | `dtcg-only` \| `css-allowlist` \| `legacy-scan` |
 | `tokens.files` | DTCG / JSON token files (with `dtcg-only` or alongside CSS) |
 | `tokens.cssAllowlist` | CSS files whose `--*` vars become contract tokens |
+| `tokens.modes` | Theme mode names in your DTCG paths, e.g. `["light", "dark"]`. `theme.light.surface.fill` then also allows `--theme-surface-fill`, the name apps use when a selector switches modes |
 | `ignoreComponentNames` | Drop accidental exports (`App`, `ThemeProvider`, …) |
 | `nativeElementMap` | Map native tags → allowlisted components (`"a": "Button"`) |
 | `deprecations` | Notices for still-allowlisted components/tokens (`replacement`, `reason`, `since`, `removeAfter`) |

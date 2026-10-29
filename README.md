@@ -1,43 +1,27 @@
 # Decree
 
-**Your design system, enforced.**
+Decree checks that apps use the design system as it was published.
 
-If it’s not in the system, it doesn’t ship.
+The design system team publishes a list of what is allowed: components, tokens, and, if they want, the props each component accepts. Decree checks app code and AI coding agents against that list and reports anything that isn't on it. If it's not in the system, it doesn't ship.
 
-## Why this exists
+Decree works alongside the tools teams already use to describe their components. [Specs 2](https://www.specsplugin.com) records each component's props, variants, and forbidden combinations. [DS Contracts](https://github.com/southleft/ds-contracts-poc) describe components in a machine-readable format, with links to Figma and code. Decree reads both and turns them into one list it can check against. It is an independent project with no affiliation to either.
 
-A design system can be perfectly documented and still drift in the shipped app: an invented `variant`, an inline `style=`, a hardcoded hex, a retired component that came back. Documentation persuades; review catches some of it. AI agents made the volume problem worse — they write plausible UI fast, and they invent just as fast.
+## Who does what
 
-The tools that *define* systems are getting very good. [Specs 2](https://www.specsplugin.com) writes down what a component **is** — anatomy, props, variants, illegal combinations — with schema precision. [DS Contracts](https://github.com/southleft/ds-contracts-poc) make components machine-readable, with bindings to Figma and code. That work is excellent, and Decree is an independent companion to it — no affiliation, plenty of admiration. Definition is in great hands. Enforcement is the gap: someone still has to stand at the door.
+| Team | What they do |
+|------|--------------|
+| **Design system team** | Writes and publishes `decree.contract.json` inside the design system package, built from the specs they already keep (`decree prepare`). |
+| **App team** | Copies the contract into the app with `decree use`. Runs `decree verify` before merging. Can give AI agents the same list through `decree mcp`. |
 
-Decree is the door. It compiles those definitions into a **contract** — only the rules it can refuse — and then:
+The contract belongs to the design system, except for its `scan` section, which belongs to the app. `scan` tells Decree how to read this app: where its own components live (`localComponentPrefixes`) and which packages it may use freely, such as a router (`hostPackages`). When the design system ships a new version, run `decree use` again; it updates the copy and keeps the app's `scan` settings. `decree use <package> --check` fails when the app's copy is out of date, which makes a good CI step.
 
-- **`decree verify`** fails CI on any UI the contract doesn’t permit, one stable error code per violation.
-- **`decree mcp`** hands agents an allowlist, so they ask what’s permitted *before* writing code instead of getting caught after.
+`decree verify` is built to run in CI, the automated checks that run on every pull request. Each problem it finds has a stable `DECREE_*` code, and any finding fails the check.
 
-Decree doesn’t generate code, doesn’t restyle, doesn’t hold style opinions. It refuses. That’s the whole product, and it’s why it composes with Specs 2 and DS Contracts instead of competing with them: they stay the source of truth; Decree makes the truth binding.
-
-## How it works
-
-**One contract, two doors.** The design system compiles `decree.contract.json` from its existing truth and ships it in the package. Apps copy it in with `decree use`. From there, the same contract is enforced at both places UI gets written:
-
-- **The merge door** — `decree verify` in CI. Any finding is exit 1 with a stable `DECREE_*` code. Humans get refused at review.
-- **The generation door** — `decree mcp`. Agents get the allowlist as MCP tools, write only from what’s permitted, and validate their snippet with the same scanners CI runs. Forgery stops at generation, not just merge.
-
-**You choose how deep the contract goes.** Names first. Then, if you ask, how each name may be used. Then, if you ask, whether it may be repainted:
-
-| Layer | Contract field | On | Refuses |
-|-------|----------------|----|---------|
-| Names + tokens | `components`, `tokens` | always | Unknown components, hardcoded hex/rgb, invented token names |
-| Component APIs | `componentApis` | opt-in | Unknown props, illegal values, forbidden combinations |
-| Restyle | `restyle` | opt-in | `style=` / `sx=` / paint-and-size classes on system components |
-| Native elements | `nativeElementMap` | opt-in | Raw `<button>` where the system has `Button` |
-
-Depth is optional. Failure isn’t. There is no warn mode — a layer that’s on refuses, and a layer that’s off isn’t being asked. You don’t get a softer Decree; you get a thinner or thicker contract.
+`decree mcp` starts an MCP server. MCP is the protocol tools like Cursor and Claude use to give an AI agent extra information. Through it, an agent can look up what is allowed before writing code, then check its own snippet the same way CI will.
 
 ## The first ten minutes
 
-Every command below is copy-paste and was run verbatim before commit. Node ≥ 20.
+Every command below can be copied and pasted as written. You need Node 20 or later.
 
 **1. Install**
 
@@ -48,36 +32,34 @@ npm install
 node bin/decree.js --help
 ```
 
-**2. Run the whole story**
+**2. Run the full demo**
 
-A fictional design system, Harbor, defined the way real teams would: a Specs 2 catalog and DS Contracts files, both defining the same Button.
+Harbor is a made-up design system, described the way a real team would: a Specs 2 catalog and a set of DS Contracts files, both describing the same Button.
 
 ```bash
 npm run demo:together
 ```
 
-That compiles both sources, merges them into one contract, passes a clean checkout, and refuses a drifted one with six named findings:
+The demo builds a contract from both sources, checks a clean app (it passes), and checks an app with problems (it fails with six findings):
 
 ```
-DECREE_INVALID_PROP_VALUE    App.tsx:5   Invalid prop variant="ghost" on <Button> — allowed: primary, secondary
-DECREE_INVALID_PROP_COMBO    App.tsx:6   Forbidden prop combination on <Button> — variant="secondary", size="lg"
-DECREE_RESTYLE_STYLE         App.tsx:9   Restyle of <Button> via style= — use a contract variant or token instead
-DECREE_DEPRECATED_COMPONENT  App.tsx:12  Deprecated component <Ghost> — use <Button> instead (Deprecated in Specs)
-DECREE_UNKNOWN_COMPONENT     App.tsx:13  Unknown component <MagicButton> — not in the Decree contract allowlist
-DECREE_NATIVE_ELEMENT        App.tsx:14  Native <button> used — use allowlisted <Button> instead
+DECREE_INVALID_PROP_VALUE    App.tsx:5   <Button> doesn't accept variant="ghost". Use one of: primary, secondary.
+DECREE_INVALID_PROP_COMBO    App.tsx:6   <Button> can't use variant="secondary" and size="lg" together.
+DECREE_RESTYLE_STYLE         App.tsx:9   Inline style= on <Button> paints over a design-system component. Use one of its props or a token instead.
+DECREE_DEPRECATED_COMPONENT  App.tsx:12  <Ghost> is being retired. Use <Button> instead. (Deprecated in Specs)
+DECREE_UNKNOWN_COMPONENT     App.tsx:13  <MagicButton> isn't part of the design system. Use a design-system component instead.
+DECREE_NATIVE_ELEMENT        App.tsx:14  Plain <button> where the design system has <Button>. Use <Button> instead.
 ```
 
-Who owns what in that story:
+| File | What it is |
+|------|------------|
+| [`demos/together/specs/specs.yaml`](./demos/together/specs/specs.yaml) | Specs 2: Button's props and sizes, one forbidden combination, and the retired Ghost component |
+| [`demos/together/ds-contracts/`](./demos/together/ds-contracts/) | DS Contracts: the same Button, with Figma and code links; it renders a native `<button>` |
+| [`demos/together/out/harbor.contract.json`](./demos/together/out/harbor.contract.json) | The contract Decree builds: the parts of both sources it can check |
+| [`demos/together/apps/clean/`](./demos/together/apps/clean/) | An app that uses only what the contract allows |
+| [`demos/together/apps/dirty/`](./demos/together/apps/dirty/) | An app with six kinds of problems |
 
-| File | Owner | Role |
-|------|-------|------|
-| [`demos/together/specs/specs.yaml`](./demos/together/specs/specs.yaml) | Specs 2 format | What Button *is*: props, sizes, one illegal combination, Ghost retired |
-| [`demos/together/ds-contracts/`](./demos/together/ds-contracts/) | DS Contracts format | Same Button as a contract: Figma/code bindings, renders native `<button>` |
-| [`demos/together/out/harbor.contract.json`](./demos/together/out/harbor.contract.json) | Decree | Only the enforceable slice — names, props, values, combos, tokens |
-| [`demos/together/apps/clean/`](./demos/together/apps/clean/) | app team | Uses only what the contract permits — verify passes |
-| [`demos/together/apps/dirty/`](./demos/together/apps/dirty/) | nobody, hopefully | Six kinds of drift — verify refuses each by name |
-
-**3. Compile the contract yourself — one product command**
+**3. Build the contract yourself**
 
 ```bash
 node bin/decree.js prepare \
@@ -87,41 +69,65 @@ node bin/decree.js prepare \
   --out /tmp/harbor.contract.json
 ```
 
-Merge rules are deterministic — Specs is the record for component APIs, DS Contracts for native-element semantics, tokens are unioned. `--restyle` is team policy: also refuse `style=` / `sx=` / paint-and-size classes on allowlisted components. Details: [docs/ADAPTERS.md](./docs/ADAPTERS.md).
+When the two sources overlap, Specs 2 decides component props, DS Contracts decides which native HTML element a component replaces, and tokens from both are combined. `--restyle` turns on the check for `style=`, `sx=`, and paint or size classes on system components. Details: [docs/ADAPTERS.md](./docs/ADAPTERS.md).
 
-**4. Break it, watch it refuse**
+**4. Break it and watch it fail**
 
 Open [`demos/together/apps/clean/App.tsx`](./demos/together/apps/clean/App.tsx) and change `variant="primary"` to `variant="promo"`. Then:
 
 ```bash
 node bin/decree.js verify demos/together/apps/clean
-# DECREE_INVALID_PROP_VALUE  App.tsx:5  Invalid prop variant="promo" on <Button> — allowed: primary, secondary
+# DECREE_INVALID_PROP_VALUE  App.tsx:5  <Button> doesn't accept variant="promo". Use one of: primary, secondary.
 # exit 1
 git checkout -- demos/together/apps/clean/App.tsx
 ```
 
-That refusal is the product. The same command in CI is the whole enforcement story — a real pull request refused this way and closed without merging: [#22](https://github.com/stevendeeds2/decree/pull/22).
+Run the same command in CI and the pull request fails. Here is a real one that failed this way and was closed without merging: [#22](https://github.com/stevendeeds2/decree/pull/22).
 
-**5. Let an agent ask first**
+**5. Give an agent the list**
 
 ```bash
 node bin/decree.js mcp demos/together/out/harbor.contract.json
 ```
 
-Prints MCP client config for an allowlist server with four tools: `list_primitives`, `list_tokens`, `is_allowed_primitive`, `validate_snippet`. Paste it into `.cursor/mcp.json` (Cursor) or `claude_desktop_config.json` (Claude Desktop) and the agent learns `variant="ghost"` is refused *before* writing the code. Details: [docs/MCP.md](./docs/MCP.md).
+This prints the setup for an MCP server with four tools: `list_primitives`, `list_tokens`, `is_allowed_primitive`, and `validate_snippet`. Paste it into `.cursor/mcp.json` (Cursor) or `claude_desktop_config.json` (Claude Desktop). The agent can now see that `variant="ghost"` isn't allowed before it writes the code. Details: [docs/MCP.md](./docs/MCP.md).
 
-## Use it on your design system
+## What it checks
 
-Three entry points, depending on what you already have:
+Names and tokens are always checked. Props, restyling, and native HTML are optional; the design system team turns each on in the contract. A check that is on fails on every problem it finds. A check that is off doesn't run.
 
-**You have Specs 2 or DS Contracts files** — point the adapters at them (either flag alone works too):
+| What it catches | Code | Check |
+|-----------------|------|-------|
+| Components that aren't on the list | `DECREE_UNKNOWN_COMPONENT` | always |
+| Props and values the component doesn't accept | `DECREE_UNKNOWN_PROP` / `DECREE_INVALID_PROP_VALUE` | optional (`componentApis`) |
+| Prop combinations a spec forbids | `DECREE_INVALID_PROP_COMBO` | optional (`componentApis`) |
+| Retired components and tokens, with the replacement named in the message | `DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN` | always |
+| Raw HTML where the system has a component, such as `<button>` when there's a `Button` | `DECREE_NATIVE_ELEMENT` | optional (`nativeElementMap`) |
+| Paint over system components: `style=`, `sx=`, arbitrary classes | `DECREE_RESTYLE_STYLE` / `DECREE_RESTYLE_SX` / `DECREE_RESTYLE_ARBITRARY_CLASS` | optional (`restyle`) |
+| Hardcoded colors and sizes | `DECREE_HARDCODED_HEX` / `DECREE_HARDCODED_COLOR` / `DECREE_ARBITRARY_VALUE` | always |
+| CSS variables the system never published | `DECREE_UNKNOWN_TOKEN` | always |
+
+Codes don't change, so you can search for them, filter on them, and record them in a baseline.
+
+## Which markup it reads
+
+- **JSX and TSX.**
+- **Tagged templates**, such as htm (`` html`<${Button}>` ``) and Lit (`` html`<sl-button>` ``). Custom elements are checked only under the prefixes the design system owns, such as `sl-`. Third-party elements are left alone. Templates tagged `html` or `svg` are read by default; `scan.templateTags` changes that.
+- **Vue single-file components, Svelte components, and Angular component templates** (`.component.html`).
+- **CSS**, plus the style blocks inside those files, gets the color and token checks.
+
+## Starting on an app that already has problems
+
+Most apps won't pass on the first run. Record today's findings as a baseline, then fail only on new ones:
 
 ```bash
-npx decree prepare --from-specs path/to/specs --from-ds-contracts path/to/contracts --restyle
-npx decree verify .
+npx decree verify . --write-baseline decree.baseline.json
+npx decree verify . --baseline decree.baseline.json   # fails only on new findings
 ```
 
-**You have a design-system package** — declare sources, compile, hand the contract to apps:
+Existing problems can stay for now, and new ones can't be added. Fix a batch, write the baseline again, and repeat until it's empty. We ran this on a real open-source app: [demos/PILOT-taxonomy.md](./demos/PILOT-taxonomy.md).
+
+To set Decree up on your own design system package:
 
 ```bash
 npx decree sources ./packages/ui   # scaffold decree.sources.json — fill include + tokens
@@ -130,82 +136,52 @@ npx decree use ./packages/ui       # copies the contract into the consuming app
 npx decree verify .
 ```
 
-**You have an existing app with drift** — snapshot today’s violations and only fail on new ones:
-
-```bash
-npx decree verify . --write-baseline decree.baseline.json
-npx decree verify . --baseline decree.baseline.json   # fails only on new findings
-```
-
-That ratchet ran against a real open-source app: [demos/PILOT-taxonomy.md](./demos/PILOT-taxonomy.md).
-
-Install as a dependency: `npm install -D github:stevendeeds2/decree` ([docs/INSTALL.md](./docs/INSTALL.md)). CI template: [`.github/examples/decree-verify.yml`](./.github/examples/decree-verify.yml). Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md).
-
-## What refusal looks like
-
-Every finding has a stable code — greppable, baselineable, never renamed without a migration note:
-
-| Code | Refuses |
-|------|---------|
-| `DECREE_UNKNOWN_COMPONENT` | Components not on the allowlist |
-| `DECREE_INVALID_PROP_VALUE` / `DECREE_UNKNOWN_PROP` | Props and values the API doesn’t define |
-| `DECREE_INVALID_PROP_COMBO` | Combinations the spec forbids |
-| `DECREE_DEPRECATED_COMPONENT` / `DECREE_DEPRECATED_TOKEN` | Retired names, with the replacement in the message |
-| `DECREE_NATIVE_ELEMENT` | Raw `<button>` where the system has one |
-| `DECREE_RESTYLE_STYLE` / `DECREE_RESTYLE_SX` / `DECREE_RESTYLE_ARBITRARY_CLASS` | Painting over allowlisted components |
-| `DECREE_HARDCODED_HEX` / `DECREE_HARDCODED_COLOR` / `DECREE_ARBITRARY_VALUE` | Colors and values outside the token set |
-| `DECREE_UNKNOWN_TOKEN` | Token names the system never published |
+Install: `npm install -D github:stevendeeds2/decree` ([docs/INSTALL.md](./docs/INSTALL.md)). CI template: [`.github/examples/decree-verify.yml`](./.github/examples/decree-verify.yml). Full walkthrough: [docs/GETTING_STARTED.md](./docs/GETTING_STARTED.md).
 
 ## FAQ
 
-**Isn’t this just a linter?**
-A linter yells after someone wrote the wrong Button — and yells softly. Decree refuses: verify exits nonzero with a stable code per finding, and the same contract is what agents see over MCP, so off-contract UI never gets suggested in the first place. A linter acts at review. Decree acts at generation *and* merge.
+**Is this just a linter?**
+It works like one in CI: it reads your code and fails on problems. Two things are different. The list comes from the design system team, so app teams don't maintain their own rules. And the same list is available to AI agents through MCP, so they can check before they write code.
 
-**Our product has components the system doesn’t cover. Do we get exceptions?**
-There is no exception contract — that would undo the product. Product-local components are handled by scan settings (`scan.profile: "app"`, `localComponentPrefixes`), so your own wrappers are recognized rather than treated as forgeries. Existing debt is handled by the baseline. Neither is a side door for inventing new UI outside the system.
+**Our product has its own components. Do we need exceptions?**
+No. Set `scan.profile: "app"` and `localComponentPrefixes` in the contract's scan settings, and Decree recognizes your own components as yours. Components from libraries the app relies on, like a router or drag-and-drop, go in `hostPackages`. Existing problems go in the baseline. None of these let new, off-system UI through.
 
-**We have 400 violations today. We can’t turn this on.**
-You don’t have to go green on day one. `decree verify . --write-baseline decree.baseline.json` snapshots today’s findings; from then on CI fails only on *new* ones. Debt can stay; debt cannot grow. Fix a batch, rewrite the baseline, repeat, then go absolute. It’s an on-ramp, not a waiver.
+**We have 400 violations today. Can we still turn this on?**
+Yes. Write a baseline (`--write-baseline`) and CI fails only on new findings. Pay down the old ones in batches.
 
-**Why didn’t Decree catch a weird prop, or an `sx` restyle?**
-That layer isn’t on. No `componentApis` means props aren’t judged; `restyle` off means paint isn’t judged. That’s not a silent pass — that question isn’t being asked yet. Turn a layer on when you mean it; once on, it refuses. There is no warn mode.
+**Why didn't it catch a wrong prop or an `sx` restyle?**
+Those checks are optional, and they're off. Without `componentApis` in the contract, props aren't checked. Without `restyle`, `style=` and `sx=` aren't checked. Turn them on when your team is ready.
 
 **Can we still write plain HTML?**
-Yes. `nativeElementMap` is not a ban on HTML — it’s a replacement map. Map `button` → `Button` and a raw `<button>` fails as a forgery of the system Button. Tags not in the map are never native-element findings; `<div>` and `<span>` are fine as HTML.
+Yes. `nativeElementMap` only lists HTML tags that have a system component. If `button` maps to `Button`, a raw `<button>` fails. Tags that aren't in the map, like `<div>` and `<span>`, are fine. Hardcoded colors still fail on any tag, because the color check is always on.
 
-**Then why did my raw `<button style={{background:'#3b82f6'}}>` fail with restyle off?**
-The hex. Color checks are the token layer, always on — `DECREE_HARDCODED_HEX`. Invented paint fails even on a raw tag.
+**What happens when we retire a component?**
+It stays in the contract, marked as retired. Any use fails with `DECREE_DEPRECATED_COMPONENT`, and the message names the replacement. Existing uses can go in the baseline. If you remove it from the contract entirely, uses fail as unknown components.
 
-**What happens when we deprecate a component?**
-It stays on the allowlist — it’s still in the system — but any use fails with `DECREE_DEPRECATED_COMPONENT` and the replacement in the message. Existing use can sit on a baseline; new use blocks. Removing the name entirely is a different story: then it’s an unknown component.
-
-**Does Decree replace our spec, read Figma, or generate the Button?**
-No, no, and no. Specs 2, DS Contracts, and Figma author the system. Decree compiles only the slice it can refuse and judges apps and agents against it. They stay the authors; Decree stays the judge.
+**Does it replace our spec or read Figma?**
+No. Your specs, DS Contracts files, and Figma stay where they are. Decree reads the specs and DS Contracts files and builds a contract from the parts it can check. It doesn't read Figma, and it doesn't generate components.
 
 **Who owns the contract?**
-The design system team. They compile it from truth they already maintain (`decree prepare`) and ship `decree.contract.json` in the package like any other artifact. Product teams consume it (`decree use`), run verify in CI, and wire MCP. They don’t author a second system — they get judged against the one that shipped.
-
-**Does it check CSS?**
-As the token layer: hardcoded hex, `rgb()`/`hsl()`, arbitrary values like `[32px]`, and `var(--names)` the system never published — in `.css` and in JS/TSX. It’s a token check that happens to run on CSS files, not a style-matching engine.
+The design system team. They build it with `decree prepare` and publish `decree.contract.json` in their package like any other file. App teams copy it in with `decree use`, run `decree verify` in CI, and set up MCP for their agents.
 
 ## Demos
 
-Same product under established systems — start at [`demos/index.html`](./demos/index.html).
+Start at [`demos/index.html`](./demos/index.html).
 
 | Demo | System | Entry |
-|------|--------|--------|
-| **together** | Specs 2 + DS Contracts + Decree | [`demos/together/`](./demos/together/) · `npm run demo:together` |
-| **shadcn** | shadcn/ui (`@demo/shadcn-ui`) | [`demos/shadcn/`](./demos/shadcn/) · 5180 / 5181 |
-| **mui** | Material UI (`@demo/mui-ui`) | [`demos/mui/`](./demos/mui/) · 5190 / 5191 |
-| **antd** | Ant Design (`@demo/antd-ui`) | [`demos/antd/`](./demos/antd/) · 5200 / 5201 |
+|------|--------|-------|
+| **together** | Specs 2 + DS Contracts | [`demos/together/`](./demos/together/) · `npm run demo:together` |
+| **shadcn** | shadcn/ui (`@demo/shadcn-ui`) | [`demos/shadcn/`](./demos/shadcn/) · ports 5180 / 5181 |
+| **mui** | Material UI (`@demo/mui-ui`) | [`demos/mui/`](./demos/mui/) · ports 5190 / 5191 |
+| **antd** | Ant Design (`@demo/antd-ui`) | [`demos/antd/`](./demos/antd/) · ports 5200 / 5201 |
 
-Plus a brownfield pilot on a real app: [demos/PILOT-taxonomy.md](./demos/PILOT-taxonomy.md).
+There is also a pilot on a real app that already had problems: [demos/PILOT-taxonomy.md](./demos/PILOT-taxonomy.md).
 
-## Layout
+## Repo layout
 
-| Path | Role |
-|------|------|
-| `bin/`, `src/` | Product CLI + MCP |
-| `docs/` | Install, adopt, init, sources, adapters, MCP |
-| `demos/` | Runnable case studies (not in the npm tarball) |
+| Path | What's there |
+|------|--------------|
+| `bin/`, `src/` | The CLI and MCP server |
+| `docs/` | Install, adoption, setup, sources, adapters, MCP |
+| `demos/` | Runnable examples (not in the npm package) |
 | `tests/` | Unit tests |
