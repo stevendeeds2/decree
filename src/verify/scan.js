@@ -1,7 +1,7 @@
 import parser from '@babel/parser';
 import { CODES } from './codes.js';
 import { collectImportBindings } from './imports.js';
-import { extractJsxTags } from './ast-scan.js';
+import { isTemplateFile, readMarkup } from './readers/index.js';
 import {
   extractCssVars,
   extractCssVarsFromJs,
@@ -73,7 +73,9 @@ function tryParse(source) {
  * @returns {Finding[]}
  */
 export function scanSource(source, file, contract, options = {}) {
-  if (!JSX_EXT.test(file) && !file.endsWith('.css')) {
+  const isScript = JSX_EXT.test(file);
+  const isTemplate = !isScript && isTemplateFile(file);
+  if (!isScript && !isTemplate && !file.endsWith('.css')) {
     return [];
   }
 
@@ -81,8 +83,9 @@ export function scanSource(source, file, contract, options = {}) {
   const findings = [];
   const lines = source.split(/\r?\n/);
   const allow = new Set(contract.components || []);
+  const elementPrefixes = ownedElementPrefixes(contract);
   const localComponents = options.localComponents || new Set();
-  const { aliases, hosts } = JSX_EXT.test(file)
+  const { aliases, hosts } = isScript || isTemplate
     ? collectImportBindings(source)
     : { aliases: new Map(), hosts: new Set() };
 
@@ -127,11 +130,29 @@ export function scanSource(source, file, contract, options = {}) {
     }
   }
 
-  // --- JSX components + native elements (AST, regex fallback) ---
-  if (JSX_EXT.test(file)) {
-    const { tags, ok } = extractJsxTags(source, file);
+  // --- Components, custom elements, native elements (readers, regex fallback) ---
+  if (isScript || isTemplate) {
+    const { tags, ok } = readMarkup(source, file, {
+      templateTags: contract.scan?.templateTags,
+    });
     if (ok) {
       for (const tag of tags) {
+        if (tag.kind === 'element') {
+          if (allow.has(tag.name)) {
+            const finding = deprecatedComponentFinding(tag.name, contract, file, tag.line);
+            if (finding) findings.push(finding);
+            findings.push(...componentApiFindings(tag.name, tag, contract, file));
+            findings.push(...restyleFindings(tag.name, tag, contract, file));
+          } else if (elementPrefixes.some((p) => tag.name.startsWith(p))) {
+            findings.push({
+              code: CODES.UNKNOWN_COMPONENT,
+              message: `Unknown component <${tag.name}> — not in the Decree contract allowlist`,
+              file,
+              line: tag.line,
+            });
+          }
+          continue;
+        }
         if (tag.native) {
           const component = contract.nativeElementMap?.[tag.name];
           if (component && allow.has(component)) {
@@ -170,7 +191,7 @@ export function scanSource(source, file, contract, options = {}) {
           line: tag.line,
         });
       }
-    } else {
+    } else if (isScript) {
       // Legacy regex fallback
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
@@ -220,7 +241,7 @@ export function scanSource(source, file, contract, options = {}) {
   // --- Positive token enforcement (only when contract lists tokens) ---
   const knownTokens = tokenNameSet(contract);
   if (knownTokens.size > 0) {
-    if (file.endsWith('.css')) {
+    if (file.endsWith('.css') || isTemplate) {
       for (let i = 0; i < lines.length; i++) {
         for (const name of extractCssVars(lines[i])) {
           if (!knownTokens.has(name)) {
@@ -254,6 +275,25 @@ export function scanSource(source, file, contract, options = {}) {
   }
 
   return findings;
+}
+
+/**
+ * Custom-element prefixes the design system owns (`sl-`, `md-`).
+ * `scan.customElementPrefixes` wins; otherwise inferred from hyphenated
+ * contract names, so third-party elements like `<model-viewer>` stay quiet.
+ * @param {import('../contract/index.js').DecreeContract} contract
+ * @returns {string[]}
+ */
+function ownedElementPrefixes(contract) {
+  if (Array.isArray(contract.scan?.customElementPrefixes)) {
+    return contract.scan.customElementPrefixes;
+  }
+  const prefixes = new Set();
+  for (const name of contract.components || []) {
+    const dash = name.indexOf('-');
+    if (dash > 0 && /^[a-z]/.test(name)) prefixes.add(name.slice(0, dash + 1));
+  }
+  return [...prefixes];
 }
 
 /**

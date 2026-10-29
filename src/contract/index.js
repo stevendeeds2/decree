@@ -27,6 +27,8 @@ import { parseRestyle } from '../verify/restyle.js';
  *   localComponentPrefixes?: string[],
  *   excludePrefixes?: string[],
  *   excludeDefaults?: boolean,
+ *   templateTags?: string[],
+ *   customElementPrefixes?: string[],
  * }} DecreeScanConfig
  * @typedef {{
  *   version: number,
@@ -104,6 +106,13 @@ export function validateContract(input) {
       typeof scan.excludeDefaults !== 'boolean'
     ) {
       throw new Error('Decree scan.excludeDefaults must be a boolean');
+    }
+    for (const key of ['templateTags', 'customElementPrefixes']) {
+      const value = scan[key];
+      if (value === undefined) continue;
+      if (!Array.isArray(value) || value.some((v) => typeof v !== 'string' || !v)) {
+        throw new Error(`Decree scan.${key} must be an array of non-empty strings`);
+      }
     }
   }
   if (c.deprecations !== undefined) {

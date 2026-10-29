@@ -5,7 +5,7 @@ export const API_ENTRY_KEYS = Object.freeze(['props', 'forbiddenCombinations']);
 export const PROP_TYPES = Object.freeze(['boolean', 'string', 'number']);
 
 export const PASSTHROUGH_EXACT = Object.freeze(
-  new Set(['className', 'style', 'children', 'key', 'ref', 'id', 'sx']),
+  new Set(['className', 'class', 'style', 'children', 'key', 'ref', 'id', 'sx']),
 );
 
 /**
