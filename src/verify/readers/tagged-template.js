@@ -175,6 +175,8 @@ function componentNameFromExpression(expr) {
   if (!expr) return null;
   if (expr.type === 'Identifier') return /^[A-Z]/.test(expr.name) ? expr.name : null;
   if (expr.type === 'MemberExpression') {
+    const prop = expr.property?.name;
+    if (prop === 'Provider' || prop === 'Consumer') return null;
     let root = expr;
     while (root?.type === 'MemberExpression') root = root.object;
     if (root?.type === 'Identifier' && /^[A-Z]/.test(root.name)) return root.name;

@@ -91,6 +91,11 @@ export const A = () => html\`<p>ok</p>\`;
     assert.equal(codes(scanSource(source, 'src/A.js', htmContract), CODES.UNKNOWN_COMPONENT).length, 0);
   });
 
+  it('treats context providers as plumbing', () => {
+    const source = 'export const A = () => html`<${ThemeContext.Provider} value=${t}><${Surface} /><//>`;';
+    assert.deepEqual(scanSource(source, 'src/A.js', htmContract), []);
+  });
+
   it('reads custom template tag names from the contract', () => {
     const contract = { ...htmContract, scan: { templateTags: ['ui'] } };
     const source = `export const A = () => ui\`<\${Ghost} />\`;`;

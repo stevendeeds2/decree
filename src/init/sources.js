@@ -22,6 +22,7 @@ import { parseRestyle } from '../verify/restyle.js';
  *     mode?: 'dtcg-only' | 'css-allowlist' | 'legacy-scan',
  *     files?: string[],
  *     cssAllowlist?: string[],
+ *     modes?: string[],
  *   },
  *   ignoreComponentNames?: string[],
  *   nativeElementMap?: Record<string, string>,
@@ -174,10 +175,12 @@ export function validateSources(input, pathForErrors = 'decree.sources.json') {
     for (const p of [...files, ...cssAllowlist]) {
       assertSafeScanPrefix(p, 'tokens path');
     }
+    const modes = normalizeStringList(t.modes, `${pathForErrors} tokens.modes`);
     out.tokens = {
       mode: /** @type {'dtcg-only' | 'css-allowlist' | 'legacy-scan'} */ (mode),
       files,
       cssAllowlist,
+      ...(modes.length > 0 ? { modes } : {}),
     };
   }
 
