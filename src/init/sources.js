@@ -51,6 +51,7 @@ export function sourcesScaffoldTemplate() {
       mode: 'css-allowlist',
       files: [],
       cssAllowlist: [],
+      modes: [],
     },
     ignoreComponentNames: [],
     nativeElementMap: {},

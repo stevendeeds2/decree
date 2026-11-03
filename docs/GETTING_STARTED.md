@@ -22,6 +22,8 @@ npx decree prepare     # writes decree.contract.json
 
 Decree finds components in `components.include`: PascalCase files (`Button.jsx`, `Button.tsx`, `Button.vue`, `Button.svelte`), kebab-case files in a `components/` folder, and custom elements registered with `customElements.define` or `@customElement`. Tokens come from your DTCG `tokens.json`.
 
+If that file has theme segments such as `theme.light` and `theme.dark`, and the public CSS name leaves the segment out, set `tokens.modes` before `decree prepare`. That is not `tokens.mode`, which only chooses which files prepare reads. Walk-through: [SOURCES.md — Theme modes in a DTCG path](./SOURCES.md#theme-modes-in-a-dtcg-path).
+
 Then ship the contract: add `decree.contract.json` to `files` in `package.json`, and add `"decree": "./decree.contract.json"`. Details and every option: [SOURCES.md](./SOURCES.md).
 
 If you already describe components in Specs 2 or DS Contracts files, Decree can build the contract from those: [ADAPTERS.md](./ADAPTERS.md).
