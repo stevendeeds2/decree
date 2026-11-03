@@ -29,6 +29,7 @@ describe('decree sources scaffold', () => {
     assert.equal(validated.tokens?.mode, 'css-allowlist');
     assert.deepEqual(validated.tokens?.files, []);
     assert.deepEqual(validated.tokens?.cssAllowlist, []);
+    assert.deepEqual(template.tokens.modes, []);
     assert.deepEqual(validated.ignoreComponentNames, []);
     assert.deepEqual(validated.nativeElementMap, {});
     assert.deepEqual(validated.deprecations?.components, {});
@@ -50,6 +51,7 @@ describe('decree sources scaffold', () => {
     assert.equal(raw.version, 1);
     assert.ok('components' in raw);
     assert.ok('tokens' in raw);
+    assert.deepEqual(raw.tokens.modes, []);
     assert.ok('ignoreComponentNames' in raw);
     assert.ok('nativeElementMap' in raw);
     assert.ok('deprecations' in raw);

@@ -20,6 +20,8 @@ npx decree prepare
 
 `decree prepare` reads those sources and writes `decree.contract.json`. It picks up PascalCase component files (`.jsx`, `.tsx`, `.vue`, `.svelte`), kebab-case files in a components folder, and custom elements registered with `customElements.define` or `@customElement`.
 
+If colors live under `theme.light` and `theme.dark` in `tokens.json`, and the CSS apps use drops `light` or `dark` from the variable name, set `tokens.modes` to `["light", "dark"]` before you prepare. `tokens.mode` (singular) only chooses which files prepare reads. The two settings are not the same. The walk from a DTCG path to the names in the contract is in [docs/SOURCES.md](./docs/SOURCES.md#theme-modes-in-a-dtcg-path).
+
 Ship the contract with the package. In `package.json`, add:
 
 ```json

@@ -59,5 +59,6 @@ describe('decree sources fills in the obvious', () => {
     assert.deepEqual(sources.components.include, ['src/components']);
     assert.equal(sources.tokens.mode, 'dtcg-only');
     assert.deepEqual(sources.tokens.files, ['tokens.json']);
+    assert.deepEqual(sources.tokens.modes, []);
   });
 });
