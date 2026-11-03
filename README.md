@@ -55,20 +55,21 @@ npx decree setup
 npm run decree
 ```
 
-`decree setup` finds the design system in the app's dependencies, copies its contract, notes where the app's own components live and which libraries it may use freely (such as a router), records today's problems in `decree.baseline.json`, and adds `npm run decree`. Commit `decree.contract.json` and `decree.baseline.json`. Running setup again is safe: it keeps your settings and your baseline.
+`decree setup` finds the design system in the app's dependencies and writes a small `decree.contract.json`. That file names the package and records how to scan this app. It does not copy the allowlist. Verify and MCP read components, tokens, props, deprecations, and restyle from the contract shipped inside the installed package (`package.json` `"decree"`, usually `./decree.contract.json`). Setup also notes where the app's own components live and which libraries it may use freely (such as a router), records today's problems in `decree.baseline.json`, and adds `npm run decree`. Commit `decree.contract.json` and `decree.baseline.json`. Running setup again is safe: it keeps your settings and your baseline.
 
 If setup says it couldn't find a design system that ships a contract, the package you depend on doesn't have the `"decree"` field yet. Create the contract in that package (above) and publish it. Pointing setup at a folder works before the publish: `npx decree setup ../your-design-system`.
 
-When the design system ships a new contract, update the copy and keep this app's scan settings:
+A new design-system release changes what verify allows when this app upgrades that dependency. The new version is in `package.json` and the lockfile. Editing the allowlist in the app is not possible, because the allowlist is not in the app.
 
-```bash
-npx decree use @your/design-system
-npx decree use @your/design-system --check
-```
+Who owns what:
 
-`--check` fails when this app's copy is behind the package, which makes a good CI step.
+| File | Owner | What it is |
+|------|--------|------------|
+| `decree.contract.json` inside the design-system package | Design system team | The allowlist: components, tokens, props, deprecations, restyle |
+| `decree.contract.json` in the app | App team | Which package supplies the allowlist, plus `scan` (where this app's components live, which libraries it may use freely) |
+| `decree.baseline.json` | App team | A temporary record of problems already in the app. Not a second allowlist |
 
-`scan` belongs to the app. It says where the app's own components live (`localComponentPrefixes`) and which packages it may use freely (`hostPackages`). Everything else in the contract belongs to the design system.
+Apps that already committed a full copy of the contract can keep it. `decree verify` still reads that file until you migrate. `decree use` still refreshes a copy and keeps the app's `scan` settings, and `decree use --check` still fails when the copy is behind. That is the old path. After `decree setup`, the app file points at the installed package instead, and `--check` is not how the allowlist stays honest.
 
 `npm run decree` runs `decree verify`. Put it in CI on every pull request. Each problem has a stable `DECREE_*` code, and any new finding fails the check.
 
@@ -135,7 +136,7 @@ It stays in the contract, marked as retired. Any use fails with `DECREE_DEPRECAT
 No. Your specs, DS Contracts files, and Figma stay where they are. Decree reads the specs and DS Contracts files and builds a contract from the parts it can check. It doesn't read Figma, and it doesn't generate components.
 
 **Who owns the contract?**
-The design system team. They build it with `decree prepare` and publish `decree.contract.json` in their package like any other file. App teams copy it in with `decree use`, run `decree verify` in CI, and set up MCP for their agents.
+The design system team owns the allowlist. They build it with `decree prepare` and publish `decree.contract.json` in their package. The app owns `scan` and `decree.baseline.json`. Verify reads the allowlist from the installed package, so changing a component or a token means publishing and upgrading that package.
 
 
 ## Try the sample in this repository

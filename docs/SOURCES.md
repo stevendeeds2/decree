@@ -12,7 +12,7 @@ Design-system teams should:
 2. Fill `components.include` + token paths  
 3. Run `decree prepare` on every release  
 4. Ship `decree.contract.json` inside the package  
-5. Let apps `decree use @acme/ds` — copy the curated contract  
+5. Apps run `decree setup` and commit a pointer plus `scan`. They do not copy the allowlist. `decree use` still copies it for apps that already committed a full `decree.contract.json`  
 
 The contract is a **governance backend artifact**, updated at the tail of a DS change.
 
@@ -176,9 +176,13 @@ decree prepare --from-ds-contracts <dir>     # build the contract from DS Contra
 decree init ./packages/ds --force
 # warns if no decree.sources.json
 
-# consumer app
-decree use @acme/ds --force    # copy published contract → ./decree.contract.json
+# consumer app (the allowlist stays in the design-system package)
+decree setup @acme/ds
 decree verify .
+
+# older path: apps that already committed a full copy
+decree use @acme/ds             # refresh the copy; keeps the app's scan settings
+decree use @acme/ds --check     # fail if that copy is behind the package
 ```
 
 Point `package.json` at the shipped contract:

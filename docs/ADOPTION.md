@@ -5,15 +5,20 @@ Absolute `decree verify` is correct for greenfield and for the MUI flagship demo
 ## Day 1
 
 ```bash
-# 1) Prefer: copy curated contract from the DS package
-npx decree use @your/ds --force
+# 1) Point this app at the installed design system.
+#    decree.contract.json names the package and records scan.
+#    The allowlist stays in the package.
+npx decree setup @your/ds
 
-# Or bootstrap (DS authors): decree prepare with decree.sources.json — see SOURCES.md
-# Or build it from Specs 2 / DS Contracts files: decree prepare --from-specs / --from-ds-contracts (ADAPTERS.md)
-# Legacy: npx decree init ./node_modules/@your/ds --force   # noisy without sources
+# Or, if the package is already a dependency that ships a contract:
+npx decree setup
 
-# 2) Tune scan (typical consumer app)
-# In decree.contract.json:
+# Design-system authors build that contract with decree prepare (SOURCES.md)
+# or from Specs 2 / DS Contracts files (ADAPTERS.md).
+
+# 2) Tune scan if setup guessed wrong (typical consumer app)
+# In the app's decree.contract.json:
+#   "designSystem": "@your/ds",
 #   "scan": { "profile": "app", "localComponentPrefixes": ["src/components"] }
 
 # 3) Snapshot current debt
@@ -22,6 +27,10 @@ npx decree verify . --write-baseline decree.baseline.json
 ```
 
 Commit `decree.contract.json` + `decree.baseline.json`.
+
+The allowlist (components, tokens, props, deprecations, restyle) belongs to the design-system package. `scan` belongs to the app. `decree.baseline.json` belongs to the app: it is a temporary record of debt, not a second contract.
+
+Apps that already committed a full copy of `decree.contract.json` keep working. That copy is the old path. `decree use` still refreshes it. `decree setup` replaces it with a pointer and keeps `scan`.
 
 ## CI (ongoing)
 
@@ -45,12 +54,16 @@ npx decree verify . --baseline decree.baseline.json --max-new 5
 
 ## Picking up a new design-system release
 
+Upgrade the design-system dependency. Verify then reads the contract that version ships. The app's `scan` and baseline stay as they are.
+
+Apps still on a copied contract can refresh the copy:
+
 ```bash
 npx decree use @your/ds --check   # fails if this app's copy is behind the package
 npx decree use @your/ds           # updates the copy and keeps this app's scan settings
 ```
 
-The app owns `scan` (`profile`, `localComponentPrefixes`, `hostPackages`, `excludePrefixes`). Everything else in the contract comes from the design system.
+That check is for the old copied file. It is not how a pointer stays honest. The pin is the package version in the lockfile.
 
 Baselines match findings by code, file, and the thing found (a color, a name, a prop value), not by message wording. Baselines written before that change need one `--write-baseline` run after upgrading.
 

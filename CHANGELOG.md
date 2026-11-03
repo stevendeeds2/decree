@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.3.0
+
+### New
+
+- **Installed contract.** `decree verify` and MCP judge an app against the contract shipped by the design-system package named in the app's `decree.contract.json` (`designSystem`). That file holds `scan` only. Components, tokens, props, deprecations, and restyle stay in the package. A new allowlist arrives when the app upgrades the dependency.
+- **`tokens.mode` vs `tokens.modes`.** The docs walk one light/dark DTCG path from `tokens.json` to the names in the contract, including mode-less public CSS names. `decree sources` writes `"modes": []` so the key is visible.
+
+### Changed
+
+- **`decree setup` writes a pointer**, not a copy of the allowlist. Running it again keeps the app's `scan` and baseline. An existing full `decree.contract.json` (a `components` list) is replaced by the pointer and keeps `scan`.
+- A full local contract still verifies. That is the old copied allowlist. `decree use` and `decree use --check` still refresh and compare that copy.
+
 ## 0.2.1
 
 ### Changed

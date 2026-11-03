@@ -1,13 +1,14 @@
 /**
  * `decree setup`: everything an app team needs to start, in one command.
- * Finds the design system, copies its contract, writes the app's own scan
- * settings, records today's findings as a baseline, and adds an npm script.
+ * Finds the design system, points this app at the contract that package
+ * ships, writes the app's own scan settings, records today's findings as a
+ * baseline, and adds an npm script. The allowlist stays in the package.
  */
 
-import { existsSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { resolvePackageRoot } from '../init/resolve.js';
-import { usePackageContract } from '../init/index.js';
+import { loadProjectContract } from '../contract/resolve.js';
 import { verifyPath } from '../verify/index.js';
 
 /**
@@ -144,15 +145,31 @@ export function setupApp(appRoot, opts = {}) {
   }
 
   const hadContract = existsSync(contractPath);
-  const used = usePackageContract(designSystem, appRoot, { outPath: contractPath });
-
-  // Fill in app settings only the first time; after that the app owns them.
-  const contract = JSON.parse(readFileSync(contractPath, 'utf8'));
-  const appScan = detectAppScan(appRoot, pkg);
-  if (!used.keptAppSettings) {
-    contract.scan = { ...(contract.scan ?? {}), ...appScan };
-    writeFileSync(contractPath, `${JSON.stringify(contract, null, 2)}\n`, 'utf8');
+  /** @type {Record<string, unknown> | null} */
+  let existing = null;
+  if (hadContract) {
+    existing = JSON.parse(readFileSync(contractPath, 'utf8'));
   }
+  const keptAppSettings = Boolean(existing && existing.scan && typeof existing.scan === 'object');
+  const appScan = keptAppSettings ? existing.scan : detectAppScan(appRoot, pkg);
+  const pointer = {
+    version: 1,
+    designSystem,
+    scan: appScan,
+  };
+  const previous = hadContract ? readFileSync(contractPath, 'utf8') : null;
+  writeFileSync(contractPath, `${JSON.stringify(pointer, null, 2)}\n`, 'utf8');
+  // Fail here if the installed package has no contract, before writing a baseline.
+  /** @type {ReturnType<typeof loadProjectContract>} */
+  let loaded;
+  try {
+    loaded = loadProjectContract(contractPath);
+  } catch (err) {
+    if (previous === null) rmSync(contractPath, { force: true });
+    else writeFileSync(contractPath, previous, 'utf8');
+    throw err;
+  }
+  const contract = { scan: loaded.contract.scan };
 
   // Re-running setup must not quietly absorb new problems into an existing baseline.
   let findings = null;
@@ -184,7 +201,7 @@ export function setupApp(appRoot, opts = {}) {
   const deps = dependencyNames(pkg);
   return {
     designSystem,
-    from: used.from,
+    from: loaded.packageContractPath,
     contractPath,
     updated: hadContract,
     scan: contract.scan,
@@ -230,7 +247,9 @@ export function describeSetup(r) {
   const lines = [];
   lines.push(`Decree is set up against ${r.designSystem}.`);
   lines.push('');
-  lines.push(`  ${r.updated ? 'Updated' : 'Copied'} the design system's contract to decree.contract.json`);
+  lines.push(
+    `  ${r.updated ? 'Updated' : 'Wrote'} decree.contract.json. It names ${r.designSystem}; the allowlist stays in that package.`,
+  );
   const where = r.scan?.localComponentPrefixes?.join(', ');
   if (where) lines.push(`  Your app's own components are read from: ${where}`);
   if (r.scan?.hostPackages?.length) {
@@ -257,9 +276,10 @@ export function describeSetup(r) {
     lines.push('  npm install -D @stevendeeds/decree   (so the script works on every machine)');
   }
   lines.push('  npm run decree                       (run it before you merge)');
-  lines.push(`  decree use ${r.designSystem} --check   (in CI: fails when the design system ships a new contract)`);
+  lines.push(`  Upgrade ${r.designSystem} when you want a new allowlist.`);
   lines.push('  decree mcp decree.contract.json      (give AI agents the same list)');
   lines.push('');
   lines.push('Commit decree.contract.json and decree.baseline.json.');
+  lines.push('decree.contract.json is this app\'s scan settings, not a copy of the allowlist.');
   return lines.join('\n');
 }
