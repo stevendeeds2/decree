@@ -22,6 +22,8 @@ It prints a block like this. Paste it into `.cursor/mcp.json` (Cursor) or `claud
 
 The paths are relative to the app's folder, so the block works for teammates too. Claude Code: `claude mcp add decree -- npx decree-mcp decree.contract.json`.
 
+`decree.contract.json` in an app names the installed design-system package and this app's `scan` settings. The server reads components and tokens from that package, the same way `decree verify` does. A file that still contains a `components` list is the older copied allowlist, and the server reads that file directly.
+
 ## Tools
 
 | Tool | Arguments | What it returns |

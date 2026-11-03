@@ -9,12 +9,12 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
 import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { resolve } from 'node:path';
 
 const DECREE_VERSION = JSON.parse(
   readFileSync(new URL('../../package.json', import.meta.url), 'utf8'),
 ).version;
-import { loadContract } from '../contract/index.js';
+import { loadProjectContract } from '../contract/resolve.js';
 import { collectLocalComponents } from '../verify/local-components.js';
 import { resolveExcludePrefixes } from '../verify/excludes.js';
 import {
@@ -30,8 +30,9 @@ import {
  */
 export function loadMcpContext(contractPath) {
   const abs = resolve(contractPath);
-  const contract = loadContract(abs);
-  const projectRoot = dirname(abs);
+  const loaded = loadProjectContract(abs);
+  const contract = loaded.contract;
+  const projectRoot = loaded.projectRoot;
   const scan = contract.scan || {};
   const excludePrefixes = resolveExcludePrefixes(scan);
   const profile = scan.profile === 'app' ? 'app' : 'strict';

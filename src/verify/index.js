@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
 import { join, relative, resolve } from 'node:path';
-import { loadContract } from '../contract/index.js';
+import { loadProjectContract } from '../contract/resolve.js';
 import { scanSource } from './scan.js';
 import { collectLocalComponents } from './local-components.js';
 import { resolveExcludePrefixes, assertSafeScanPrefix } from './excludes.js';
@@ -74,7 +74,7 @@ export function verifyPath(targetPath, options = {}) {
 
   let contract;
   try {
-    contract = loadContract(contractPath);
+    contract = loadProjectContract(contractPath).contract;
   } catch (err) {
     return {
       ok: false,

@@ -10,7 +10,7 @@ npx decree setup
 npm run decree
 ```
 
-`decree setup` needs a design system in your dependencies that ships `decree.contract.json`. If yours doesn't yet, ask the design system team to follow the next section, or point setup at a path: `npx decree setup ../my-design-system`.
+`decree setup` needs a design system in your dependencies that ships `decree.contract.json`. It writes a small file in the app that names that package and records `scan`. The allowlist stays in the package. If yours doesn't yet, ask the design system team to follow the next section, or point setup at a path: `npx decree setup ../my-design-system`.
 
 ## In a design system package
 

@@ -60,6 +60,9 @@ describe('decree setup', () => {
       assert.match(setup.stdout, /Recorded 1 problem/);
 
       const contract = JSON.parse(readFileSync(join(app, 'decree.contract.json'), 'utf8'));
+      assert.equal(contract.designSystem, '@acme/ui');
+      assert.equal(contract.components, undefined);
+      assert.equal(contract.tokens, undefined);
       assert.deepEqual(contract.scan, {
         profile: 'app',
         localComponentPrefixes: ['src'],
@@ -100,6 +103,36 @@ describe('decree setup', () => {
       const verify = run(app, 'verify', '.', '--baseline', 'decree.baseline.json');
       assert.equal(verify.status, 1, 'a new problem added before re-running setup still fails');
       assert.deepEqual(JSON.parse(readFileSync(path, 'utf8')).scan.localComponentPrefixes, ['src/ui']);
+    } finally {
+      rmSync(app, { recursive: true, force: true });
+    }
+  });
+
+  it('replaces a copied allowlist and keeps the app scan', () => {
+    const app = makeApp();
+    try {
+      writeFileSync(
+        join(app, 'decree.contract.json'),
+        JSON.stringify({
+          version: 1,
+          components: ['OnlyLocal'],
+          tokens: [],
+          nativeElementMap: {},
+          scan: { profile: 'app', localComponentPrefixes: ['src/ui'], hostPackages: ['wouter'] },
+        }),
+      );
+      const setup = run(app, 'setup');
+      assert.equal(setup.status, 0, setup.stderr);
+      const contract = JSON.parse(readFileSync(join(app, 'decree.contract.json'), 'utf8'));
+      assert.equal(contract.designSystem, '@acme/ui');
+      assert.equal(contract.components, undefined);
+      assert.deepEqual(contract.scan.localComponentPrefixes, ['src/ui']);
+      const verify = run(app, 'verify', '.');
+      assert.equal(verify.status, 1);
+      const out = verify.stdout + verify.stderr;
+      assert.match(out, /<button>/);
+      assert.doesNotMatch(out, /<Button> isn't/);
+      assert.doesNotMatch(out, /<Card> isn't/);
     } finally {
       rmSync(app, { recursive: true, force: true });
     }

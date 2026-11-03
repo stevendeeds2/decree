@@ -22,15 +22,16 @@ function printHelp() {
   console.log(`decree — design system enforcement
 
 Start here (in your app):
-  setup [design-system]  Copy the design system's contract, detect your app's settings,
-                         record today's problems as a baseline, and add "npm run decree"
+  setup [design-system]  Point this app at the installed design-system contract,
+                         detect your app's settings, record today's problems as a
+                         baseline, and add "npm run decree"
 
 Commands:
   sources [path]  Scaffold decree.sources.json (all options, empty values)
   init <pkg>      Build decree.contract.json from a design-system package
   prepare [path]  Regenerate contract from decree.sources.json (DS publish)
-  use <pkg>       Copy a published package contract into the current app
-  verify [path]   Fail if source invents UI outside the contract (default: .)
+  use <pkg>       Copy a published contract into the app (older path; prefer setup)
+  verify [path]   Fail if source invents UI outside the installed contract (default: .)
   mcp [contract]  Print MCP client config for the allowlist server
   help            Show this help
 
@@ -43,7 +44,8 @@ Sources / prepare:
   decree prepare --from-specs <dir> --from-ds-contracts <dir> [--out decree.contract.json] [--check] [--restyle]
     --restyle also refuses style= / sx= / paint-and-size CSS on allowlisted components
   decree use <path-or-package-name> [--out decree.contract.json] [--check]
-    updates keep the app's own scan settings; --check fails if the app's copy is out of date
+    older path: copies the allowlist into the app and keeps the app's scan settings
+    --check fails if that copy is behind the package. New apps use decree setup instead
 
 Verify (brownfield ratchet):
   decree verify [path] [--baseline file] [--write-baseline file] [--max-new N]

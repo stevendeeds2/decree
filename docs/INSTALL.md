@@ -27,8 +27,9 @@ See [SOURCES.md](./SOURCES.md). To build a contract from Specs 2 or DS Contracts
 
 ```bash
 npm run decree
-npx decree use <your-design-system> --check
 ```
+
+Upgrading the design-system dependency is what changes the allowlist. `npx decree use <your-design-system> --check` is only for apps that still keep a copied `decree.contract.json`.
 
 Template: [`.github/examples/decree-verify.yml`](../.github/examples/decree-verify.yml). Apps that already have problems: [ADOPTION.md](./ADOPTION.md).
 

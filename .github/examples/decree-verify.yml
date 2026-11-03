@@ -27,5 +27,7 @@ jobs:
       - name: Check against the design system (fails only on new problems)
         run: npm run decree
 
-      # Optional: fail when the design system ships a newer contract than this app has.
+      # The allowlist is the design-system package you installed.
+      # Upgrade that dependency to accept a new contract.
+      # Apps that still keep a copied decree.contract.json can also run:
       # - run: npx decree use @your/design-system --check
